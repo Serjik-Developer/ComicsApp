@@ -36,7 +36,8 @@ android {
 }
 
 dependencies {
-
+    api("com.theartofdev.edmodo:android-image-cropper:2.8.+")
+    implementation("com.github.CanHub:Android-Image-Cropper:4.5.0")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
