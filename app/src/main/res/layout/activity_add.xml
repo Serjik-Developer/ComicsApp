@@ -1,31 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/add"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".AddActivity">
+    android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:scaleType="matrix" />
-
-    <com.example.texnostrelka_2025_otbor.DrawingView
-        android:id="@+id/drawingView"
+    <com.example.texnostrelka_2025_otbor.PaintView
+        android:id="@+id/paintView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone" />
+        android:background="@android:color/white" />
 
-    <Button
-        android:id="@+id/btnSelectImage"
+
+
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Select Image"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="16dp" />
+        android:orientation="horizontal"
+        android:padding="16dp">
+
+        <Button
+            android:id="@+id/colorBlack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Black" />
+
+        <Button
+            android:id="@+id/colorRed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Red" />
+
+        <Button
+            android:id="@+id/colorBlue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Blue" />
+
+        <Button
+            android:id="@+id/fillButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Fill" />
+
+        <SeekBar
+            android:id="@+id/strokeWidthSeekBar"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:max="50"
+            android:progress="10" />
+    </LinearLayout>
 </RelativeLayout>

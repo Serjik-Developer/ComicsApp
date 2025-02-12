@@ -1,5 +1,4 @@
-package com.example.texnostrelka_2025_otbor
-
+package com.example.myapp
 
 import android.content.Context
 import android.graphics.*
@@ -11,52 +10,58 @@ class DrawingView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
 
-    private var bitmap: Bitmap? = null
-    private val canvas = Canvas()
-    private val paint = Paint().apply {
-        color = Color.RED
-        strokeWidth = 10f
+    private val paths = mutableListOf<Path>()
+    private val paints = mutableListOf<Paint>()
+    private var currentPath = Path()
+    private var currentPaint = Paint().apply {
+        color = Color.BLACK
         style = Paint.Style.STROKE
-        strokeJoin = Paint.Join.ROUND // Сглаживание углов
-        strokeCap = Paint.Cap.ROUND // Сглаживание концов линий
+        strokeWidth = 5f
+        isAntiAlias = true
     }
 
-    private var lastX: Float = 0f
-    private var lastY: Float = 0f
-
-    fun setBitmap(bitmap: Bitmap) {
-        this.bitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true)
-        canvas.setBitmap(this.bitmap)
-    }
-    fun setPaintColor(color: Int) {
-        paint.color = color
+    init {
+        paints.add(currentPaint)
     }
 
-    fun setPaintStrokeWidth(width: Float) {
-        paint.strokeWidth = width
-    }
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        bitmap?.let { canvas.drawBitmap(it, 0f, 0f, null) }
+        for (i in paths.indices) {
+            canvas.drawPath(paths[i], paints[i])
+        }
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
+        val x = event.x
+        val y = event.y
+
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
-                // Запоминаем начальные координаты
-                lastX = event.x
-                lastY = event.y
+                currentPath.moveTo(x, y)
+                paths.add(currentPath)
+                paints.add(currentPaint)
             }
-            MotionEvent.ACTION_MOVE -> {
-                // Рисуем линию от предыдущей точки до текущей
-                canvas.drawLine(lastX, lastY, event.x, event.y, paint)
-                // Обновляем последние координаты
-                lastX = event.x
-                lastY = event.y
-                // Перерисовываем View
-                invalidate()
+            MotionEvent.ACTION_MOVE -> currentPath.lineTo(x, y)
+            MotionEvent.ACTION_UP -> {
+                currentPath = Path()
+                currentPaint = Paint(currentPaint)
             }
         }
+        invalidate()
         return true
+    }
+
+    fun setColor(color: Int) {
+        currentPaint.color = color
+    }
+
+    fun setStrokeWidth(width: Float) {
+        currentPaint.strokeWidth = width
+    }
+
+    fun clear() {
+        paths.clear()
+        paints.clear()
+        invalidate()
     }
 }

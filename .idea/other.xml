@@ -101,6 +101,7 @@
           <option name="screenDensity" value="600" />
           <option name="screenX" value="1440" />
           <option name="screenY" value="3088" />
+          <option name="selected" value="true" />
         </PersistentDeviceSelectionData>
         <PersistentDeviceSelectionData>
           <option name="api" value="32" />
@@ -211,6 +212,7 @@
           <option name="screenDensity" value="420" />
           <option name="screenX" value="2208" />
           <option name="screenY" value="1840" />
+          <option name="selected" value="true" />
         </PersistentDeviceSelectionData>
         <PersistentDeviceSelectionData>
           <option name="api" value="34" />
@@ -266,6 +268,7 @@
           <option name="screenDensity" value="320" />
           <option name="screenX" value="1848" />
           <option name="screenY" value="2960" />
+          <option name="selected" value="true" />
         </PersistentDeviceSelectionData>
         <PersistentDeviceSelectionData>
           <option name="api" value="34" />
@@ -332,6 +335,7 @@
           <option name="screenDensity" value="420" />
           <option name="screenX" value="1080" />
           <option name="screenY" value="2400" />
+          <option name="selected" value="true" />
         </PersistentDeviceSelectionData>
         <PersistentDeviceSelectionData>
           <option name="api" value="33" />
@@ -424,5 +428,6 @@
         </PersistentDeviceSelectionData>
       </list>
     </option>
+    <option name="selectedCloudProject" value="dalboy" />
   </component>
 </project>

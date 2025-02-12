@@ -1,91 +1,150 @@
 package com.example.texnostrelka_2025_otbor
 
-import android.annotation.SuppressLint
-import android.app.Activity
-import android.content.Intent
+import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.net.Uri
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.Path
+import android.graphics.Point
 import android.os.Bundle
-import android.provider.MediaStore
+import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import android.widget.Button
-import android.widget.ImageView
+import android.widget.SeekBar
 import androidx.appcompat.app.AppCompatActivity
+import java.util.LinkedList
+import java.util.Queue
 
 
 class AddActivity : AppCompatActivity() {
+    private lateinit var paintView: PaintView
 
-    private lateinit var imageView: ImageView
-    private lateinit var drawingView: DrawingView
-    private lateinit var btnSelectImage: Button
-
-    @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add)
 
-        imageView = findViewById(R.id.imageView)
-        drawingView = findViewById(R.id.drawingView)
-        btnSelectImage = findViewById(R.id.btnSelectImage)
+        paintView = findViewById(R.id.paintView)
 
-        btnSelectImage.setOnClickListener {
-            openGallery()
+        findViewById<Button>(R.id.colorBlack).setOnClickListener {
+            paintView.setColor(Color.BLACK)
+        }
+        findViewById<Button>(R.id.colorRed).setOnClickListener {
+            paintView.setColor(Color.RED)
+        }
+        findViewById<Button>(R.id.colorBlue).setOnClickListener {
+            paintView.setColor(Color.BLUE)
+        }
+        findViewById<Button>(R.id.fillButton).setOnClickListener {
+            paintView.setFillMode()
         }
 
-        // Перемещение изображения
-        imageView.setOnTouchListener { _, event ->
-            when (event.action) {
-                MotionEvent.ACTION_DOWN -> {
-                    // Запоминаем начальные координаты касания
-                    lastX = event.rawX
-                    lastY = event.rawY
-                }
-                MotionEvent.ACTION_MOVE -> {
-                    // Вычисляем смещение
-                    val deltaX = event.rawX - lastX
-                    val deltaY = event.rawY - lastY
-
-                    // Перемещаем ImageView
-                    imageView.translationX += deltaX
-                    imageView.translationY += deltaY
-
-                    // Обновляем последние координаты
-                    lastX = event.rawX
-                    lastY = event.rawY
-
-                }
+        findViewById<SeekBar>(R.id.strokeWidthSeekBar).setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                paintView.setStrokeWidth(progress.toFloat())
             }
-            true
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+        })
+    }
+}
+
+class PaintView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
+    private val path = Path()
+    private val paint = Paint().apply {
+        color = Color.BLACK
+        strokeWidth = 10f
+        style = Paint.Style.STROKE
+        isAntiAlias = true
+    }
+    private val paths = mutableListOf<Pair<Path, Paint>>()
+    private var canvasBitmap: Bitmap? = null
+    private var canvas: Canvas? = null
+    private var isFillMode = false
+
+    init {
+        post {
+            canvasBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+            canvas = Canvas(canvasBitmap!!)
         }
     }
 
-    private var lastX: Float = 0f
-    private var lastY: Float = 0f
-
-    private fun openGallery() {
-        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-        startActivityForResult(intent, PICK_IMAGE_REQUEST)
+    fun setColor(color: Int) {
+        paint.color = color
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
+    fun setStrokeWidth(width: Float) {
+        paint.strokeWidth = width
+    }
 
-        if (resultCode == Activity.RESULT_OK && requestCode == PICK_IMAGE_REQUEST) {
-            val selectedImageUri = data?.data
-            selectedImageUri?.let {
-                val bitmap = BitmapFactory.decodeStream(contentResolver.openInputStream(it))
-                imageView.setImageBitmap(bitmap)
-                drawingView.setBitmap(bitmap)
-                drawingView.visibility = View.VISIBLE
+    fun setFillMode() {
+        isFillMode = true
+    }
 
+    override fun onDraw(canvas: Canvas) {
+        super.onDraw(canvas)
+        canvasBitmap?.let { canvas.drawBitmap(it, 0f, 0f, null) }
+        paths.forEach { (p, paint) ->
+            canvas.drawPath(p, paint)
+        }
+    }
+
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        if (isFillMode) {
+            floodFill(event.x.toInt(), event.y.toInt(), paint.color)
+            isFillMode = false
+            invalidate()
+            return true
+        }
+
+        when (event.action) {
+            MotionEvent.ACTION_DOWN -> {
+                path.moveTo(event.x, event.y)
+                paths.add(Pair(Path(path), Paint(paint)))
+            }
+            MotionEvent.ACTION_MOVE -> {
+                path.lineTo(event.x, event.y)
+                invalidate()
+            }
+            MotionEvent.ACTION_UP -> {
+                paths.add(Pair(Path(path), Paint(paint)))
+                canvas?.drawPath(path, paint)
+                path.reset()
             }
         }
+        return true
     }
 
-    companion object {
-        private const val PICK_IMAGE_REQUEST = 1
-    }
+    private fun floodFill(x: Int, y: Int, newColor: Int) {
+        val bitmap = canvasBitmap ?: return
+        val width = bitmap.width
+        val height = bitmap.height
+        val pixels = IntArray(width * height)
+        bitmap.getPixels(pixels, 0, width, 0, 0, width, height)
 
+        val targetColor = pixels[y * width + x]
+        if (targetColor == newColor) return
+
+        val queue: Queue<Point> = LinkedList()
+        queue.add(Point(x, y))
+
+        while (queue.isNotEmpty()) {
+            val point = queue.remove()
+            val px = point.x
+            val py = point.y
+
+            if (px < 0 || py < 0 || px >= width || py >= height) continue
+            if (pixels[py * width + px] != targetColor) continue
+
+            pixels[py * width + px] = newColor
+            queue.add(Point(px + 1, py))
+            queue.add(Point(px - 1, py))
+            queue.add(Point(px, py + 1))
+            queue.add(Point(px, py - 1))
+        }
+
+        bitmap.setPixels(pixels, 0, width, 0, 0, width, height)
+        invalidate()
+    }
 }
