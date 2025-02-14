@@ -20,7 +20,7 @@ import java.util.Queue
 
 class AddActivity : AppCompatActivity() {
     private lateinit var paintView: PaintView
-
+//Сегодня 14 февраля, всемирный день программиста и мой день рождение(мне судьбой решено стать программистом) вообще этим коммитом хотел просто всех программистов поздравить с нашим проффесиональным праздником :)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add)
