@@ -7,6 +7,8 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.Point
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffXfermode
 import android.os.Bundle
 import android.util.AttributeSet
 import android.view.MotionEvent
@@ -25,29 +27,32 @@ class AddActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add)
 
-        paintView = findViewById(R.id.paintView)
+    paintView = findViewById(R.id.paintView)
 
-        findViewById<Button>(R.id.colorBlack).setOnClickListener {
-            paintView.setColor(Color.BLACK)
-        }
-        findViewById<Button>(R.id.colorRed).setOnClickListener {
-            paintView.setColor(Color.RED)
-        }
-        findViewById<Button>(R.id.colorBlue).setOnClickListener {
-            paintView.setColor(Color.BLUE)
-        }
-        findViewById<Button>(R.id.fillButton).setOnClickListener {
-            paintView.setFillMode()
-        }
-
-        findViewById<SeekBar>(R.id.strokeWidthSeekBar).setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                paintView.setStrokeWidth(progress.toFloat())
-            }
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
-        })
+    findViewById<Button>(R.id.colorBlack).setOnClickListener {
+        paintView.setColor(Color.BLACK)
     }
+    findViewById<Button>(R.id.colorRed).setOnClickListener {
+        paintView.setColor(Color.RED)
+    }
+    findViewById<Button>(R.id.colorBlue).setOnClickListener {
+        paintView.setColor(Color.BLUE)
+    }
+    findViewById<Button>(R.id.fillButton).setOnClickListener {
+        paintView.setFillMode()
+    }
+    findViewById<Button>(R.id.eraserButton).setOnClickListener {
+        paintView.setEraserMode()
+    }
+
+    findViewById<SeekBar>(R.id.strokeWidthSeekBar).setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+        override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+            paintView.setStrokeWidth(progress.toFloat())
+        }
+        override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+        override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+    })
+}
 }
 
 class PaintView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
@@ -62,6 +67,7 @@ class PaintView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
     private var canvasBitmap: Bitmap? = null
     private var canvas: Canvas? = null
     private var isFillMode = false
+    private var isEraserMode = false
 
     init {
         post {
@@ -72,6 +78,7 @@ class PaintView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
 
     fun setColor(color: Int) {
         paint.color = color
+        isEraserMode = false
     }
 
     fun setStrokeWidth(width: Float) {
@@ -80,6 +87,11 @@ class PaintView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
 
     fun setFillMode() {
         isFillMode = true
+    }
+
+    fun setEraserMode() {
+        isEraserMode = true
+        paint.color = Color.WHITE
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -101,7 +113,11 @@ class PaintView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
                 path.moveTo(event.x, event.y)
-                paths.add(Pair(Path(path), Paint(paint)))
+                val newPaint = Paint(paint)
+                if (isEraserMode) {
+                    newPaint.xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
+                }
+                paths.add(Pair(Path(path), newPaint))
             }
             MotionEvent.ACTION_MOVE -> {
                 path.lineTo(event.x, event.y)
