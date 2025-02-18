@@ -44,7 +44,13 @@ class AddActivity : AppCompatActivity() {
     findViewById<Button>(R.id.eraserButton).setOnClickListener {
         paintView.setEraserMode()
     }
+    findViewById<Button>(R.id.undoButton).setOnClickListener {
+        paintView.undo()
+    }
 
+    findViewById<Button>(R.id.redoButton).setOnClickListener {
+        paintView.redo()
+    }
     findViewById<SeekBar>(R.id.strokeWidthSeekBar).setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
         override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
             paintView.setStrokeWidth(progress.toFloat())
@@ -56,18 +62,26 @@ class AddActivity : AppCompatActivity() {
 }
 
 class PaintView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
-    private val path = Path()
+    private val currentPath = Path()
     private val paint = Paint().apply {
         color = Color.BLACK
         strokeWidth = 10f
         style = Paint.Style.STROKE
         isAntiAlias = true
     }
-    private val paths = mutableListOf<Pair<Path, Paint>>()
-    private var canvasBitmap: Bitmap? = null
-    private var canvas: Canvas? = null
+    private val paths = mutableListOf<DrawingPath>() // Список всех нарисованных путей
+    private val undoStack = mutableListOf<DrawingPath>() // Стек для отмены
+    private val redoStack = mutableListOf<DrawingPath>() // Стек для возврата
     private var isFillMode = false
     private var isEraserMode = false
+    private var canvasBitmap: Bitmap? = null
+    private var canvas: Canvas? = null
+
+    // Класс для хранения информации о пути и его параметрах
+    private data class DrawingPath(
+        val path: Path,
+        val paint: Paint
+    )
 
     init {
         post {
@@ -94,17 +108,48 @@ class PaintView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
         paint.color = Color.WHITE
     }
 
-    override fun onDraw(canvas: Canvas) {
-        super.onDraw(canvas)
-        canvasBitmap?.let { canvas.drawBitmap(it, 0f, 0f, null) }
-        paths.forEach { (p, paint) ->
-            canvas.drawPath(p, paint)
+    // Метод для отмены последнего действия
+    fun undo() {
+        if (paths.isNotEmpty()) {
+            val lastPath = paths.removeAt(paths.size - 1)
+            undoStack.add(lastPath)
+            redrawCanvas()
         }
     }
 
+    // Метод для возврата отмененного действия
+    fun redo() {
+        if (undoStack.isNotEmpty()) {
+            val lastUndoPath = undoStack.removeAt(undoStack.size - 1)
+            paths.add(lastUndoPath)
+            redrawCanvas()
+        }
+    }
+
+    // Перерисовывает весь холст
+    private fun redrawCanvas() {
+        canvasBitmap?.eraseColor(Color.TRANSPARENT) // Очищаем холст
+        paths.forEach { drawingPath ->
+            canvas?.drawPath(drawingPath.path, drawingPath.paint)
+        }
+        invalidate()
+    }
+
+    override fun onDraw(canvas: Canvas) {
+        super.onDraw(canvas)
+        canvasBitmap?.let { bitmap ->
+            canvas.drawBitmap(bitmap, 0f, 0f, null)
+        }
+        canvas.drawPath(currentPath, paint)
+    }
+
     override fun onTouchEvent(event: MotionEvent): Boolean {
+        val x = event.x
+        val y = event.y
+
         if (isFillMode) {
-            floodFill(event.x.toInt(), event.y.toInt(), paint.color)
+            currentPath.reset() // Сбрасываем текущий путь
+            floodFill(x.toInt(), y.toInt(), paint.color)
             isFillMode = false
             invalidate()
             return true
@@ -112,26 +157,29 @@ class PaintView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
 
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
-                path.moveTo(event.x, event.y)
-                val newPaint = Paint(paint)
-                if (isEraserMode) {
-                    newPaint.xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
-                }
-                paths.add(Pair(Path(path), newPaint))
+                currentPath.reset()
+                currentPath.moveTo(x, y)
             }
             MotionEvent.ACTION_MOVE -> {
-                path.lineTo(event.x, event.y)
+                currentPath.lineTo(x, y)
                 invalidate()
             }
             MotionEvent.ACTION_UP -> {
-                paths.add(Pair(Path(path), Paint(paint)))
-                canvas?.drawPath(path, paint)
-                path.reset()
+                // Сохраняем текущий путь в список
+                val savedPaint = Paint(paint) // Копируем Paint(не, это не в плане что мы копируем переменную, мы копируем сейчас все приложение)
+                if (isEraserMode) {
+                    savedPaint.xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
+                }
+                paths.add(DrawingPath(Path(currentPath), savedPaint))
+                canvas?.drawPath(currentPath, savedPaint)
+                currentPath.reset()
+                invalidate()
             }
         }
         return true
     }
 
+    // Заливка области
     private fun floodFill(x: Int, y: Int, newColor: Int) {
         val bitmap = canvasBitmap ?: return
         val width = bitmap.width

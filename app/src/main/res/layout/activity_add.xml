@@ -12,7 +12,8 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_above="@+id/a"
+        android:layout_marginBottom="0dp"
         android:orientation="horizontal"
         android:padding="16dp">
 
@@ -46,11 +47,32 @@
             android:layout_height="wrap_content"
             android:text="Eraser" />
 
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/a"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:padding="16dp">
         <SeekBar
             android:id="@+id/strokeWidthSeekBar"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:max="50"
             android:progress="10" />
+        <Button
+            android:id="@+id/undoButton"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:text="Undo" />
+
+        <Button
+            android:id="@+id/redoButton"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:text="Redo" />
     </LinearLayout>
 </RelativeLayout>
