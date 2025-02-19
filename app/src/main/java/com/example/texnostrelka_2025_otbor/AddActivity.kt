@@ -1,5 +1,6 @@
 package com.example.texnostrelka_2025_otbor
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -19,46 +20,45 @@ import androidx.appcompat.app.AppCompatActivity
 import java.util.LinkedList
 import java.util.Queue
 
-
 class AddActivity : AppCompatActivity() {
     private lateinit var paintView: PaintView
-//Сегодня 14 февраля, всемирный день программиста и мой день рождение(мне судьбой решено стать программистом) вообще этим коммитом хотел просто всех программистов поздравить с нашим проффесиональным праздником :)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add)
 
-    paintView = findViewById(R.id.paintView)
+        paintView = findViewById(R.id.paintView)
 
-    findViewById<Button>(R.id.colorBlack).setOnClickListener {
-        paintView.setColor(Color.BLACK)
-    }
-    findViewById<Button>(R.id.colorRed).setOnClickListener {
-        paintView.setColor(Color.RED)
-    }
-    findViewById<Button>(R.id.colorBlue).setOnClickListener {
-        paintView.setColor(Color.BLUE)
-    }
-    findViewById<Button>(R.id.fillButton).setOnClickListener {
-        paintView.setFillMode()
-    }
-    findViewById<Button>(R.id.eraserButton).setOnClickListener {
-        paintView.setEraserMode()
-    }
-    findViewById<Button>(R.id.undoButton).setOnClickListener {
-        paintView.undo()
-    }
-
-    findViewById<Button>(R.id.redoButton).setOnClickListener {
-        paintView.redo()
-    }
-    findViewById<SeekBar>(R.id.strokeWidthSeekBar).setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-        override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-            paintView.setStrokeWidth(progress.toFloat())
+        findViewById<Button>(R.id.colorBlack).setOnClickListener {
+            paintView.setColor(Color.BLACK)
         }
-        override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-        override fun onStopTrackingTouch(seekBar: SeekBar?) {}
-    })
-}
+        findViewById<Button>(R.id.colorRed).setOnClickListener {
+            paintView.setColor(Color.RED)
+        }
+        findViewById<Button>(R.id.colorBlue).setOnClickListener {
+            paintView.setColor(Color.BLUE)
+        }
+        findViewById<Button>(R.id.fillButton).setOnClickListener {
+            paintView.setFillMode()
+        }
+        findViewById<Button>(R.id.eraserButton).setOnClickListener {
+            paintView.setEraserMode()
+        }
+        findViewById<Button>(R.id.undoButton).setOnClickListener {
+            paintView.undo()
+        }
+
+        findViewById<Button>(R.id.redoButton).setOnClickListener {
+            paintView.redo()
+        }
+        findViewById<SeekBar>(R.id.strokeWidthSeekBar).setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                paintView.setStrokeWidth(progress.toFloat())
+            }
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+        })
+    }
 }
 
 class PaintView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
@@ -72,8 +72,8 @@ class PaintView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
     private val paths = mutableListOf<DrawingPath>() // Список всех нарисованных путей
     private val undoStack = mutableListOf<DrawingPath>() // Стек для отмены
     private val redoStack = mutableListOf<DrawingPath>() // Стек для возврата
-    private var isFillMode = false
     private var isEraserMode = false
+    private var isFillMode = false // Режим заливки
     private var canvasBitmap: Bitmap? = null
     private var canvas: Canvas? = null
 
@@ -100,7 +100,7 @@ class PaintView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
     }
 
     fun setFillMode() {
-        isFillMode = true
+        isFillMode = !isFillMode
     }
 
     fun setEraserMode() {
@@ -135,80 +135,80 @@ class PaintView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
         invalidate()
     }
 
+    private fun floodFill(startX: Float, startY: Float, fillColor: Int) {
+        val startPixel = canvasBitmap?.getPixel(startX.toInt(), startY.toInt())
+        if (startPixel == fillColor) return // Avoid refilling the already filled area
+
+        val queue: Queue<Point> = LinkedList()
+        val targetColor = startPixel ?: return // Ensure a valid start color
+
+        queue.add(Point(startX.toInt(), startY.toInt()))
+
+        while (queue.isNotEmpty()) {
+            val point = queue.remove()
+            val x = point.x
+            val y = point.y
+
+            // Check if pixel is within bounds and matches the target color
+            if (x < 0 || x >= canvasBitmap?.width ?: 0 || y < 0 || y >= canvasBitmap?.height ?: 0) continue
+            if (canvasBitmap?.getPixel(x, y) != targetColor) continue
+
+            // Fill the pixel
+            canvasBitmap?.setPixel(x, y, fillColor)
+
+            // Add neighboring points to the queue
+            queue.add(Point(x + 1, y))
+            queue.add(Point(x - 1, y))
+            queue.add(Point(x, y + 1))
+            queue.add(Point(x, y - 1))
+        }
+
+        invalidate() // Refresh the canvas to show the filled area
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        val x = event.x
+        val y = event.y
+
+        when (event.action) {
+            MotionEvent.ACTION_DOWN -> {
+                if (isFillMode) {
+                    // Trigger flood fill if in fill mode
+
+                    floodFill(x, y, paint.color)
+                } else {
+                    currentPath.reset()
+                    currentPath.moveTo(x, y)
+                }
+            }
+            MotionEvent.ACTION_MOVE -> {
+                if (!isFillMode) {
+                    currentPath.lineTo(x, y)
+                    invalidate()
+                }
+            }
+            MotionEvent.ACTION_UP -> {
+                if (!isFillMode) {
+                    val savedPaint = Paint(paint)
+                    if (isEraserMode) {
+                        savedPaint.xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
+                    }
+                    paths.add(DrawingPath(Path(currentPath), savedPaint))
+                    canvas?.drawPath(currentPath, savedPaint)
+                    currentPath.reset()
+                    invalidate()
+                }
+            }
+        }
+        return true
+    }
+
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         canvasBitmap?.let { bitmap ->
             canvas.drawBitmap(bitmap, 0f, 0f, null)
         }
         canvas.drawPath(currentPath, paint)
-    }
-
-    override fun onTouchEvent(event: MotionEvent): Boolean {
-        val x = event.x
-        val y = event.y
-
-        if (isFillMode) {
-            currentPath.reset() // Сбрасываем текущий путь
-            floodFill(x.toInt(), y.toInt(), paint.color)
-            isFillMode = false
-            invalidate()
-            return true
-        }
-
-        when (event.action) {
-            MotionEvent.ACTION_DOWN -> {
-                currentPath.reset()
-                currentPath.moveTo(x, y)
-            }
-            MotionEvent.ACTION_MOVE -> {
-                currentPath.lineTo(x, y)
-                invalidate()
-            }
-            MotionEvent.ACTION_UP -> {
-                // Сохраняем текущий путь в список
-                val savedPaint = Paint(paint) // Копируем Paint(не, это не в плане что мы копируем переменную, мы копируем сейчас все приложение)
-                if (isEraserMode) {
-                    savedPaint.xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
-                }
-                paths.add(DrawingPath(Path(currentPath), savedPaint))
-                canvas?.drawPath(currentPath, savedPaint)
-                currentPath.reset()
-                invalidate()
-            }
-        }
-        return true
-    }
-
-    // Заливка области
-    private fun floodFill(x: Int, y: Int, newColor: Int) {
-        val bitmap = canvasBitmap ?: return
-        val width = bitmap.width
-        val height = bitmap.height
-        val pixels = IntArray(width * height)
-        bitmap.getPixels(pixels, 0, width, 0, 0, width, height)
-
-        val targetColor = pixels[y * width + x]
-        if (targetColor == newColor) return
-
-        val queue: Queue<Point> = LinkedList()
-        queue.add(Point(x, y))
-
-        while (queue.isNotEmpty()) {
-            val point = queue.remove()
-            val px = point.x
-            val py = point.y
-
-            if (px < 0 || py < 0 || px >= width || py >= height) continue
-            if (pixels[py * width + px] != targetColor) continue
-
-            pixels[py * width + px] = newColor
-            queue.add(Point(px + 1, py))
-            queue.add(Point(px - 1, py))
-            queue.add(Point(px, py + 1))
-            queue.add(Point(px, py - 1))
-        }
-
-        bitmap.setPixels(pixels, 0, width, 0, 0, width, height)
-        invalidate()
     }
 }
