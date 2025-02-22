@@ -2,7 +2,9 @@ package com.example.texnostrelka_2025_otbor
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
@@ -10,6 +12,7 @@ import android.graphics.Path
 import android.graphics.Point
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffXfermode
+import android.net.Uri
 import android.os.Bundle
 import android.util.AttributeSet
 import android.view.MotionEvent
@@ -29,6 +32,7 @@ class AddActivity : AppCompatActivity() {
 
         paintView = findViewById(R.id.paintView)
 
+        // Обработчики для кнопок
         findViewById<Button>(R.id.colorBlack).setOnClickListener {
             paintView.setColor(Color.BLACK)
         }
@@ -47,7 +51,6 @@ class AddActivity : AppCompatActivity() {
         findViewById<Button>(R.id.undoButton).setOnClickListener {
             paintView.undo()
         }
-
         findViewById<Button>(R.id.redoButton).setOnClickListener {
             paintView.redo()
         }
@@ -58,9 +61,34 @@ class AddActivity : AppCompatActivity() {
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
             override fun onStopTrackingTouch(seekBar: SeekBar?) {}
         })
+
+        // Обработчик для кнопки добавления изображения
+        findViewById<Button>(R.id.addImageButton).setOnClickListener {
+            val intent = Intent(Intent.ACTION_PICK)
+            intent.type = "image/*"
+            startActivityForResult(intent, PICK_IMAGE_REQUEST)
+        }
+
+        // Обработчик для кнопки активации режима перемещения изображения
+        findViewById<Button>(R.id.moveImageButton).setOnClickListener {
+            paintView.setMoveImageMode(true)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null) {
+            val imageUri = data.data
+            imageUri?.let {
+                paintView.addImageFromUri(it)
+            }
+        }
+    }
+
+    companion object {
+        private const val PICK_IMAGE_REQUEST = 1
     }
 }
-
 class PaintView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
     private val currentPath = Path()
     private val paint = Paint().apply {
@@ -77,10 +105,24 @@ class PaintView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
     private var canvasBitmap: Bitmap? = null
     private var canvas: Canvas? = null
 
+    // Список для хранения изображений на холсте
+    private val images = mutableListOf<DraggableImage>()
+
+    // Режим перемещения изображения
+    private var isMoveImageMode = false
+
     // Класс для хранения информации о пути и его параметрах
     private data class DrawingPath(
         val path: Path,
         val paint: Paint
+    )
+
+    // Класс для хранения информации об изображении и его координатах
+    private data class DraggableImage(
+        val bitmap: Bitmap,
+        var x: Float,
+        var y: Float,
+        var isMoving: Boolean = false
     )
 
     init {
@@ -89,9 +131,17 @@ class PaintView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
             canvas = Canvas(canvasBitmap!!)
         }
     }
+    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+        super.onSizeChanged(w, h, oldw, oldh)
+        if (w > 0 && h > 0) {
+            canvasBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
+            canvas = Canvas(canvasBitmap!!)
+        }
+    }
 
     fun setColor(color: Int) {
         paint.color = color
+        paint.xfermode = null // Сбросить режим
         isEraserMode = false
     }
 
@@ -101,11 +151,13 @@ class PaintView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
 
     fun setFillMode() {
         isFillMode = !isFillMode
+        paint.xfermode = null // Сбросить режим
+        isEraserMode = false
     }
 
     fun setEraserMode() {
+        paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
         isEraserMode = true
-        paint.color = Color.WHITE
     }
 
     // Метод для отмены последнего действия
@@ -128,43 +180,68 @@ class PaintView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
 
     // Перерисовывает весь холст
     private fun redrawCanvas() {
-        canvasBitmap?.eraseColor(Color.TRANSPARENT) // Очищаем холст
+        canvas?.drawColor(Color.WHITE) // Очищаем холст перед перерисовкой
+        canvasBitmap?.let { canvas?.drawBitmap(it, 0f, 0f, null) } // Восстанавливаем пиксели (заливку)
+
+        // Затем рисуем изображения поверх
+        images.forEach { image ->
+            canvas?.drawBitmap(image.bitmap, image.x, image.y, null)
+        }
+
+        // Рисуем уже нарисованные пути
         paths.forEach { drawingPath ->
             canvas?.drawPath(drawingPath.path, drawingPath.paint)
         }
+
         invalidate()
     }
 
-    private fun floodFill(startX: Float, startY: Float, fillColor: Int) {
-        val startPixel = canvasBitmap?.getPixel(startX.toInt(), startY.toInt())
-        if (startPixel == fillColor) return // Avoid refilling the already filled area
+    private fun floodFill(startX: Int, startY: Int, fillColor: Int) {
+        if (canvasBitmap == null) return
 
+        // Создаем временный Bitmap, который будет содержать объединенные данные
+        val tempBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+        val tempCanvas = Canvas(tempBitmap)
+
+        // Рисуем canvasBitmap на временном Bitmap
+        canvasBitmap?.let { tempCanvas.drawBitmap(it, 0f, 0f, null) }
+
+        // Рисуем изображения на временном Bitmap
+        images.forEach { image ->
+            tempCanvas.drawBitmap(image.bitmap, image.x, image.y, null)
+        }
+
+        // Выполняем заливку на временном Bitmap
         val queue: Queue<Point> = LinkedList()
-        val targetColor = startPixel ?: return // Ensure a valid start color
+        val targetColor = tempBitmap.getPixel(startX, startY)
 
-        queue.add(Point(startX.toInt(), startY.toInt()))
+        if (targetColor == fillColor) return // Уже залито
+
+        queue.add(Point(startX, startY))
 
         while (queue.isNotEmpty()) {
             val point = queue.remove()
             val x = point.x
             val y = point.y
 
-            // Check if pixel is within bounds and matches the target color
-            if (x < 0 || x >= canvasBitmap?.width ?: 0 || y < 0 || y >= canvasBitmap?.height ?: 0) continue
-            if (canvasBitmap?.getPixel(x, y) != targetColor) continue
+            // Проверка выхода за границы
+            if (x < 0 || x >= tempBitmap.width || y < 0 || y >= tempBitmap.height) continue
+            if (tempBitmap.getPixel(x, y) != targetColor) continue
 
-            // Fill the pixel
-            canvasBitmap?.setPixel(x, y, fillColor)
+            tempBitmap.setPixel(x, y, fillColor)
 
-            // Add neighboring points to the queue
             queue.add(Point(x + 1, y))
             queue.add(Point(x - 1, y))
             queue.add(Point(x, y + 1))
             queue.add(Point(x, y - 1))
         }
 
-        invalidate() // Refresh the canvas to show the filled area
+        // Обновляем canvasBitmap и изображения
+        canvasBitmap = tempBitmap
+        redrawCanvas()
     }
+
+
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
@@ -174,28 +251,54 @@ class PaintView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
                 if (isFillMode) {
-                    // Trigger flood fill if in fill mode
-
-                    floodFill(x, y, paint.color)
+                    floodFill(x.toInt(), y.toInt(), paint.color)
+                } else if (isMoveImageMode) {
+                    images.forEach { image ->
+                        if (x >= image.x && x <= image.x + image.bitmap.width &&
+                            y >= image.y && y <= image.y + image.bitmap.height) {
+                            image.isMoving = true
+                        }
+                    }
                 } else {
                     currentPath.reset()
                     currentPath.moveTo(x, y)
                 }
             }
+
             MotionEvent.ACTION_MOVE -> {
-                if (!isFillMode) {
+                if (isMoveImageMode) {
+                    images.forEach { image ->
+                        if (image.isMoving) {
+                            image.x = x - image.bitmap.width / 2
+                            image.y = y - image.bitmap.height / 2
+                            redrawCanvas()
+                        }
+                    }
+                } else if (!isFillMode) {
                     currentPath.lineTo(x, y)
                     invalidate()
                 }
             }
+
             MotionEvent.ACTION_UP -> {
-                if (!isFillMode) {
+                if (isMoveImageMode) {
+                    images.forEach { it.isMoving = false }
+                    isMoveImageMode = false
+                } else if (!isFillMode) {
                     val savedPaint = Paint(paint)
                     if (isEraserMode) {
                         savedPaint.xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
                     }
+
+                    // Сохранение пути в список
                     paths.add(DrawingPath(Path(currentPath), savedPaint))
-                    canvas?.drawPath(currentPath, savedPaint)
+
+                    // Теперь рисуем путь непосредственно на canvasBitmap
+                    canvasBitmap?.let { bmp ->
+                        val tempCanvas = Canvas(bmp)
+                        tempCanvas.drawPath(currentPath, savedPaint)
+                    }
+
                     currentPath.reset()
                     invalidate()
                 }
@@ -204,11 +307,46 @@ class PaintView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
         return true
     }
 
+
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        canvasBitmap?.let { bitmap ->
-            canvas.drawBitmap(bitmap, 0f, 0f, null)
+
+        // Сначала рисуем изображения
+        images.forEach { image ->
+            canvas.drawBitmap(image.bitmap, image.x, image.y, null)
         }
+
+        // Затем рисуем уже сохраненные пути
+        paths.forEach { drawingPath ->
+            canvas.drawPath(drawingPath.path, drawingPath.paint)
+        }
+        canvasBitmap?.let {
+            canvas.drawBitmap(it, 0f, 0f, null)
+        }
+        // И поверх всего рисуем текущий путь
         canvas.drawPath(currentPath, paint)
+
+        // Если режим заливки активен, рисуем залитые области
+
+    }
+
+
+
+
+
+    fun addImageFromUri(uri: Uri) {
+        val inputStream = context.contentResolver.openInputStream(uri)
+        val bitmap = BitmapFactory.decodeStream(inputStream)
+        inputStream?.close()
+
+        bitmap?.let {
+            val scaledBitmap = Bitmap.createScaledBitmap(it, width, height, true)
+            images.add(DraggableImage(scaledBitmap, 0f, 0f))
+            redrawCanvas()
+        }
+    }
+
+    fun setMoveImageMode(enabled: Boolean) {
+        isMoveImageMode = enabled
     }
 }
