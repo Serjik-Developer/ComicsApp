@@ -131,6 +131,7 @@ class PaintView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
             canvas = Canvas(canvasBitmap!!)
         }
     }
+
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
         if (w > 0 && h > 0) {
@@ -156,8 +157,9 @@ class PaintView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
     }
 
     fun setEraserMode() {
-        paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
         isEraserMode = true
+        paint.color = Color.WHITE // Используем белый цвет для стирания
+        paint.xfermode = null // Сбросить режим
     }
 
     // Метод для отмены последнего действия
@@ -241,8 +243,6 @@ class PaintView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
         redrawCanvas()
     }
 
-
-
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
         val x = event.x
@@ -287,7 +287,7 @@ class PaintView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
                 } else if (!isFillMode) {
                     val savedPaint = Paint(paint)
                     if (isEraserMode) {
-                        savedPaint.xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
+                        savedPaint.color = Color.WHITE // Используем белый цвет для стирания
                     }
 
                     // Сохранение пути в список
@@ -307,7 +307,6 @@ class PaintView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
         return true
     }
 
-
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
@@ -325,14 +324,7 @@ class PaintView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
         }
         // И поверх всего рисуем текущий путь
         canvas.drawPath(currentPath, paint)
-
-        // Если режим заливки активен, рисуем залитые области
-
     }
-
-
-
-
 
     fun addImageFromUri(uri: Uri) {
         val inputStream = context.contentResolver.openInputStream(uri)
@@ -340,7 +332,7 @@ class PaintView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
         inputStream?.close()
 
         bitmap?.let {
-            val scaledBitmap = Bitmap.createScaledBitmap(it, width, height, true)
+            val scaledBitmap = Bitmap.createScaledBitmap(it, width / 2, height / 2, true) // Масштабируем изображение
             images.add(DraggableImage(scaledBitmap, 0f, 0f))
             redrawCanvas()
         }
