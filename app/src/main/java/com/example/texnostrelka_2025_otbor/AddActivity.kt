@@ -97,6 +97,7 @@ class PaintView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
         style = Paint.Style.STROKE
         isAntiAlias = true
     }
+    private val boundaryColors = listOf(Color.BLACK, Color.RED, Color.BLUE)
     private val paths = mutableListOf<DrawingPath>() // Список всех нарисованных путей
     private val undoStack = mutableListOf<DrawingPath>() // Стек для отмены
     private val redoStack = mutableListOf<DrawingPath>() // Стек для возврата
@@ -110,6 +111,10 @@ class PaintView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
 
     // Режим перемещения изображения
     private var isMoveImageMode = false
+
+    // Отдельный слой для заливки
+    private var fillBitmap: Bitmap? = null
+    private var fillCanvas: Canvas? = null
 
     // Класс для хранения информации о пути и его параметрах
     private data class DrawingPath(
@@ -129,6 +134,8 @@ class PaintView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
         post {
             canvasBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
             canvas = Canvas(canvasBitmap!!)
+            fillBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+            fillCanvas = Canvas(fillBitmap!!)
         }
     }
 
@@ -137,6 +144,8 @@ class PaintView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
         if (w > 0 && h > 0) {
             canvasBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
             canvas = Canvas(canvasBitmap!!)
+            fillBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
+            fillCanvas = Canvas(fillBitmap!!)
         }
     }
 
@@ -155,7 +164,6 @@ class PaintView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
         paint.xfermode = null // Сбросить режим
         isEraserMode = false
     }
-
     fun setEraserMode() {
         isEraserMode = true
         paint.color = Color.WHITE // Используем белый цвет для стирания
@@ -199,26 +207,23 @@ class PaintView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
     }
 
     private fun floodFill(startX: Int, startY: Int, fillColor: Int) {
-        if (canvasBitmap == null) return
+        if (canvasBitmap == null || fillBitmap == null) return
 
         // Создаем временный Bitmap, который будет содержать объединенные данные
         val tempBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
         val tempCanvas = Canvas(tempBitmap)
 
+        // Рисуем изображение на временном Bitmap
+
+
         // Рисуем canvasBitmap на временном Bitmap
         canvasBitmap?.let { tempCanvas.drawBitmap(it, 0f, 0f, null) }
 
-        // Рисуем изображения на временном Bitmap
-        images.forEach { image ->
-            tempCanvas.drawBitmap(image.bitmap, image.x, image.y, null)
-        }
-
-        // Выполняем заливку на временном Bitmap
-        val queue: Queue<Point> = LinkedList()
+        // Получаем целевой цвет из временного Bitmap
         val targetColor = tempBitmap.getPixel(startX, startY)
-
         if (targetColor == fillColor) return // Уже залито
 
+        val queue: Queue<Point> = LinkedList()
         queue.add(Point(startX, startY))
 
         while (queue.isNotEmpty()) {
@@ -228,19 +233,29 @@ class PaintView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
 
             // Проверка выхода за границы
             if (x < 0 || x >= tempBitmap.width || y < 0 || y >= tempBitmap.height) continue
-            if (tempBitmap.getPixel(x, y) != targetColor) continue
 
-            tempBitmap.setPixel(x, y, fillColor)
+            // Проверка цвета текущего пикселя на временном Bitmap
+            val currentColor = tempBitmap.getPixel(x, y)
 
-            queue.add(Point(x + 1, y))
-            queue.add(Point(x - 1, y))
-            queue.add(Point(x, y + 1))
-            queue.add(Point(x, y - 1))
+            // Если текущий цвет является границей (находится в списке boundaryColors), пропускаем его
+            if (boundaryColors.contains(currentColor)) continue
+
+
+
+            // Проверка, чтобы не заливать уже залитые пиксели
+            if (fillBitmap!!.getPixel(x, y) == fillColor) continue
+
+            // Заливаем текущий пиксель на fillBitmap
+            fillBitmap!!.setPixel(x, y, fillColor)
+
+            // Добавляем соседние пиксели в очередь
+            queue.add(Point(x + 1, y)) // Вправо
+            queue.add(Point(x - 1, y)) // Влево
+            queue.add(Point(x, y + 1)) // Вниз
+            queue.add(Point(x, y - 1)) // Вверх
         }
 
-        // Обновляем canvasBitmap и изображения
-        canvasBitmap = tempBitmap
-        redrawCanvas()
+        invalidate()
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -315,13 +330,16 @@ class PaintView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
             canvas.drawBitmap(image.bitmap, image.x, image.y, null)
         }
 
+        // Затем рисуем слой заливки
+        fillBitmap?.let {
+            canvas.drawBitmap(it, 0f, 0f, null)
+        }
+
         // Затем рисуем уже сохраненные пути
         paths.forEach { drawingPath ->
             canvas.drawPath(drawingPath.path, drawingPath.paint)
         }
-        canvasBitmap?.let {
-            canvas.drawBitmap(it, 0f, 0f, null)
-        }
+
         // И поверх всего рисуем текущий путь
         canvas.drawPath(currentPath, paint)
     }
