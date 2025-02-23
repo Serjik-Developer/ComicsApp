@@ -73,6 +73,17 @@ class AddActivity : AppCompatActivity() {
         findViewById<Button>(R.id.moveImageButton).setOnClickListener {
             paintView.setMoveImageMode(true)
         }
+
+        // Обработчики для кнопок масштабирования
+        findViewById<Button>(R.id.zoomInButton).setOnClickListener {
+            paintView.zoomIn()
+        }
+        findViewById<Button>(R.id.zoomOutButton).setOnClickListener {
+            paintView.zoomOut()
+        }
+        findViewById<Button>(R.id.panButton).setOnClickListener {
+            paintView.setPanMode()
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -105,7 +116,12 @@ class PaintView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
     private var isFillMode = false // Режим заливки
     private var canvasBitmap: Bitmap? = null
     private var canvas: Canvas? = null
-
+    private var scaleFactor = 1.0f
+    private var panX = 0f
+    private var panY = 0f
+    private var isPanMode = false
+    private var lastTouchX = 0f
+    private var lastTouchY = 0f
     // Список для хранения изображений на холсте
     private val images = mutableListOf<DraggableImage>()
 
@@ -187,7 +203,19 @@ class PaintView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
             redrawCanvas()
         }
     }
+    fun zoomIn() {
+        scaleFactor *= 1.2f
+        invalidate()
+    }
 
+    fun zoomOut() {
+        scaleFactor /= 1.2f
+        invalidate()
+    }
+
+    fun setPanMode() {
+        isPanMode = !isPanMode
+    }
     // Перерисовывает весь холст
     private fun redrawCanvas() {
         canvas?.drawColor(Color.WHITE) // Очищаем холст перед перерисовкой
@@ -205,54 +233,55 @@ class PaintView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
 
         invalidate()
     }
-
     private fun floodFill(startX: Int, startY: Int, fillColor: Int) {
         if (canvasBitmap == null || fillBitmap == null) return
+
+        // Корректируем координаты с учетом смещения холста и масштаба
+        val x = ((startX - panX) / scaleFactor).toInt()
+        val y = ((startY - panY) / scaleFactor).toInt()
+
+        // Проверяем, что координаты находятся в пределах холста
+        if (x < 0 || x >= width || y < 0 || y >= height) return
 
         // Создаем временный Bitmap, который будет содержать объединенные данные
         val tempBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
         val tempCanvas = Canvas(tempBitmap)
 
-        // Рисуем изображение на временном Bitmap
-
-
         // Рисуем canvasBitmap на временном Bitmap
         canvasBitmap?.let { tempCanvas.drawBitmap(it, 0f, 0f, null) }
 
         // Получаем целевой цвет из временного Bitmap
-        val targetColor = tempBitmap.getPixel(startX, startY)
+        val targetColor = tempBitmap.getPixel(x, y)
         if (targetColor == fillColor) return // Уже залито
 
         val queue: Queue<Point> = LinkedList()
-        queue.add(Point(startX, startY))
+        queue.add(Point(x, y))
 
         while (queue.isNotEmpty()) {
             val point = queue.remove()
-            val x = point.x
-            val y = point.y
+            val currentX = point.x
+            val currentY = point.y
 
             // Проверка выхода за границы
-            if (x < 0 || x >= tempBitmap.width || y < 0 || y >= tempBitmap.height) continue
+            if (currentX < 0 || currentX >= tempBitmap.width || currentY < 0 || currentY >= tempBitmap.height) continue
 
             // Проверка цвета текущего пикселя на временном Bitmap
-            val currentColor = tempBitmap.getPixel(x, y)
+            val currentColor = tempBitmap.getPixel(currentX, currentY)
 
             // Если текущий цвет является границей (находится в списке boundaryColors), пропускаем его
             if (boundaryColors.contains(currentColor)) continue
 
-
-
             // Проверка, чтобы не заливать уже залитые пиксели
-            if (fillBitmap!!.getPixel(x, y) == fillColor) continue
+            if (fillBitmap!!.getPixel(currentX, currentY) == fillColor) continue
 
             // Заливаем текущий пиксель на fillBitmap
-            fillBitmap!!.setPixel(x, y, fillColor)
+            fillBitmap!!.setPixel(currentX, currentY, fillColor)
 
             // Добавляем соседние пиксели в очередь
-            queue.add(Point(x + 1, y)) // Вправо
-            queue.add(Point(x - 1, y)) // Влево
-            queue.add(Point(x, y + 1)) // Вниз
-            queue.add(Point(x, y - 1)) // Вверх
+            queue.add(Point(currentX + 1, currentY)) // Вправо
+            queue.add(Point(currentX - 1, currentY)) // Влево
+            queue.add(Point(currentX, currentY + 1)) // Вниз
+            queue.add(Point(currentX, currentY - 1)) // Вверх
         }
 
         invalidate()
@@ -260,13 +289,21 @@ class PaintView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        val x = event.x
-        val y = event.y
+        // Корректируем координаты с учетом смещения холста и масштаба
+        val x = (event.x - panX) / scaleFactor
+        val y = (event.y - panY) / scaleFactor
 
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
-                if (isFillMode) {
-                    floodFill(x.toInt(), y.toInt(), paint.color)
+                if (isPanMode) {
+                    // Запоминаем начальные координаты касания для перемещения холста
+                    lastTouchX = event.x
+                    lastTouchY = event.y
+                } else if (isFillMode) {
+                    // Проверяем, что координаты находятся в пределах холста
+                    if (x >= 0 && x < width && y >= 0 && y < height) {
+                        floodFill(x.toInt(), y.toInt(), paint.color)
+                    }
                 } else if (isMoveImageMode) {
                     images.forEach { image ->
                         if (x >= image.x && x <= image.x + image.bitmap.width &&
@@ -275,13 +312,24 @@ class PaintView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
                         }
                     }
                 } else {
+                    // Начинаем новый путь с учетом смещения холста
                     currentPath.reset()
                     currentPath.moveTo(x, y)
                 }
             }
 
             MotionEvent.ACTION_MOVE -> {
-                if (isMoveImageMode) {
+                if (isPanMode) {
+                    // Перемещаем холст
+                    val dx = event.x - lastTouchX
+                    val dy = event.y - lastTouchY
+                    panX += dx
+                    panY += dy
+                    lastTouchX = event.x
+                    lastTouchY = event.y
+                    invalidate()
+                } else if (isMoveImageMode) {
+                    // Перемещаем изображение
                     images.forEach { image ->
                         if (image.isMoving) {
                             image.x = x - image.bitmap.width / 2
@@ -290,15 +338,20 @@ class PaintView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
                         }
                     }
                 } else if (!isFillMode) {
+                    // Рисуем линию с учетом смещения холста
                     currentPath.lineTo(x, y)
                     invalidate()
                 }
             }
 
             MotionEvent.ACTION_UP -> {
-                if (isMoveImageMode) {
+                if (isPanMode) {
+                    isPanMode= !isPanMode
+                } else if (isMoveImageMode) {
                     images.forEach { it.isMoving = false }
                     isMoveImageMode = false
+                } else if (isFillMode) {
+                    isFillMode = !isFillMode
                 } else if (!isFillMode) {
                     val savedPaint = Paint(paint)
                     if (isEraserMode) {
@@ -308,7 +361,7 @@ class PaintView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
                     // Сохранение пути в список
                     paths.add(DrawingPath(Path(currentPath), savedPaint))
 
-                    // Теперь рисуем путь непосредственно на canvasBitmap
+                    // Рисуем путь на canvasBitmap с учетом смещения холста
                     canvasBitmap?.let { bmp ->
                         val tempCanvas = Canvas(bmp)
                         tempCanvas.drawPath(currentPath, savedPaint)
@@ -324,6 +377,10 @@ class PaintView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
+
+        canvas.save()
+        canvas.translate(panX, panY) // Применяем смещение холста
+        canvas.scale(scaleFactor, scaleFactor) // Применяем масштабирование
 
         // Сначала рисуем изображения
         images.forEach { image ->
@@ -342,6 +399,8 @@ class PaintView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
 
         // И поверх всего рисуем текущий путь
         canvas.drawPath(currentPath, paint)
+
+        canvas.restore()
     }
 
     fun addImageFromUri(uri: Uri) {
@@ -359,4 +418,5 @@ class PaintView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
     fun setMoveImageMode(enabled: Boolean) {
         isMoveImageMode = enabled
     }
+
 }
