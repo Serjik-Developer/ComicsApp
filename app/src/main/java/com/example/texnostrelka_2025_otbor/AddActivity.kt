@@ -122,6 +122,15 @@ class PaintView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
     private var isPanMode = false
     private var lastTouchX = 0f
     private var lastTouchY = 0f
+    // Минимальный и максимальный масштаб
+    private val minScaleFactor = 1.0f
+    private val maxScaleFactor = 3.0f
+
+    // Стандартные границы холста
+    private val defaultPanX = 0f
+    private val defaultPanY = 0f
+    private var maxPanX = 0f
+    private var maxPanY = 0f
     // Список для хранения изображений на холсте
     private val images = mutableListOf<DraggableImage>()
 
@@ -162,6 +171,10 @@ class PaintView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
             canvas = Canvas(canvasBitmap!!)
             fillBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
             fillCanvas = Canvas(fillBitmap!!)
+
+            // Инициализация границ перемещения
+            maxPanX = w * (scaleFactor - 1)
+            maxPanY = h * (scaleFactor - 1)
         }
     }
 
@@ -204,13 +217,23 @@ class PaintView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
         }
     }
     fun zoomIn() {
-        scaleFactor *= 1.2f
-        invalidate()
+        if (scaleFactor < maxScaleFactor) {
+            scaleFactor *= 1.2f
+            // Обновляем границы перемещения при увеличении масштаба
+            maxPanX = width * (scaleFactor - 1)
+            maxPanY = height * (scaleFactor - 1)
+            invalidate()
+        }
     }
 
     fun zoomOut() {
-        scaleFactor /= 1.2f
-        invalidate()
+        if (scaleFactor > minScaleFactor) {
+            scaleFactor /= 1.2f
+            // Обновляем границы перемещения при уменьшении масштаба
+            maxPanX = width * (scaleFactor - 1)
+            maxPanY = height * (scaleFactor - 1)
+            invalidate()
+        }
     }
 
     fun setPanMode() {
@@ -237,11 +260,9 @@ class PaintView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
         if (canvasBitmap == null || fillBitmap == null) return
 
         // Корректируем координаты с учетом смещения холста и масштаба
-        val x = ((startX - panX) / scaleFactor).toInt()
-        val y = ((startY - panY) / scaleFactor).toInt()
+        val x = startX
+        val y = startY
 
-        // Проверяем, что координаты находятся в пределах холста
-        if (x < 0 || x >= width || y < 0 || y >= height) return
 
         // Создаем временный Bitmap, который будет содержать объединенные данные
         val tempBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
@@ -323,8 +344,19 @@ class PaintView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
                     // Перемещаем холст
                     val dx = event.x - lastTouchX
                     val dy = event.y - lastTouchY
-                    panX += dx
-                    panY += dy
+
+                    // Ограничиваем перемещение холста
+                    val newPanX = panX + dx
+                    val newPanY = panY + dy
+
+                    // Проверяем, чтобы не выйти за границы
+                    if (newPanX >= -maxPanX && newPanX <= maxPanX) {
+                        panX = newPanX
+                    }
+                    if (newPanY >= -maxPanY && newPanY <= maxPanY) {
+                        panY = newPanY
+                    }
+
                     lastTouchX = event.x
                     lastTouchY = event.y
                     invalidate()
@@ -346,7 +378,7 @@ class PaintView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
 
             MotionEvent.ACTION_UP -> {
                 if (isPanMode) {
-                    isPanMode= !isPanMode
+                    isPanMode = !isPanMode
                 } else if (isMoveImageMode) {
                     images.forEach { it.isMoving = false }
                     isMoveImageMode = false
@@ -374,6 +406,7 @@ class PaintView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
         }
         return true
     }
+
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
