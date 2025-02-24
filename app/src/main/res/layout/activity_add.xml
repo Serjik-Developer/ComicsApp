@@ -112,5 +112,10 @@
             android:layout_width="70dp"
             android:layout_height="wrap_content"
             android:text="Pan" />
+        <Button
+            android:id="@+id/saveButton"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:text="Save" />
     </LinearLayout>
 </RelativeLayout>

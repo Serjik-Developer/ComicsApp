@@ -19,18 +19,23 @@ import android.view.MotionEvent
 import android.view.View
 import android.widget.Button
 import android.widget.SeekBar
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.texnostrelka_2025_otbor.database.ComicsDatabase
+import com.example.texnostrelka_2025_otbor.models.ImageModel
 import java.util.LinkedList
 import java.util.Queue
 
 class AddActivity : AppCompatActivity() {
     private lateinit var paintView: PaintView
-
+    private lateinit var databaseHelper: ComicsDatabase
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add)
-
+        databaseHelper = ComicsDatabase(this)
         paintView = findViewById(R.id.paintView)
+        //TODO СДЕЛАТЬ ЗДЕСЬ INTENT ID КОМИКСА И КАКОЕ ЭТО ИЗОБРАЖЕНИЕ ПО СЧЕТУ(СТРАНИЦА ТИПО)(НУЖНО ДЛЯ СЕЙВА В БД)!!!
 
         // Обработчики для кнопок
         findViewById<Button>(R.id.colorBlack).setOnClickListener {
@@ -53,6 +58,9 @@ class AddActivity : AppCompatActivity() {
         }
         findViewById<Button>(R.id.redoButton).setOnClickListener {
             paintView.redo()
+        }
+        findViewById<Button>(R.id.saveButton).setOnClickListener {
+            savePainting()
         }
         findViewById<SeekBar>(R.id.strokeWidthSeekBar).setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
@@ -98,6 +106,11 @@ class AddActivity : AppCompatActivity() {
 
     companion object {
         private const val PICK_IMAGE_REQUEST = 1
+    }
+    private fun savePainting() {
+        val bitmap = paintView.getBitmap()
+        databaseHelper.insertPainting(bitmap, 1, "TESTID")
+        Toast.makeText(this, "Painting saved!", Toast.LENGTH_SHORT).show()
     }
 }
 class PaintView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
@@ -500,5 +513,11 @@ class PaintView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
 
     fun setMoveImageMode(enabled: Boolean) {
         isMoveImageMode = enabled
+    }
+    fun getBitmap(): Bitmap {
+        val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        draw(canvas)
+        return bitmap
     }
 }

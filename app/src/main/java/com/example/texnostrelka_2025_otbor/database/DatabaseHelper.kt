@@ -18,14 +18,24 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
                 image TEXT
             )
         """
+        private const val CREATE_TABLE_IMAGE = """
+            CREATE TABLE image (
+                id TEXT PRIMARY KEY,
+                comicsId TEXT,
+                number INTEGER NOT NULL,
+                image BLOB NOT NULL
+            )
+        """
     }
 
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL(CREATE_TABLE_COMICS)
+        db.execSQL(CREATE_TABLE_IMAGE)
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
         db.execSQL("DROP TABLE IF EXISTS comics")
+        db.execSQL("DROP TABLE IF EXISTS image")
         onCreate(db)
     }
 }
