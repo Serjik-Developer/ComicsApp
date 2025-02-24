@@ -144,9 +144,10 @@ class PaintView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
         val bitmap: Bitmap,
         var x: Float,
         var y: Float,
-        var isMoving: Boolean = false
+        var isMoving: Boolean = false,
+        var startX: Float = x, // Начальная позиция X
+        var startY: Float = y  // Начальная позиция Y
     )
-
     // Интерфейс для действий, которые можно отменить и вернуть
     private interface Action {
         fun undo()
@@ -191,19 +192,21 @@ class PaintView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
     // Класс для действия перемещения изображения
     private inner class MoveImageAction(
         private val image: DraggableImage,
-        private val oldX: Float,
-        private val oldY: Float,
-        private val newX: Float,
-        private val newY: Float
+        private val startX: Float, // Начальная позиция X
+        private val startY: Float, // Начальная позиция Y
+        private val endX: Float,   // Конечная позиция X
+        private val endY: Float    // Конечная позиция Y
     ) : Action {
         override fun undo() {
-            image.x = oldX
-            image.y = oldY
+            // Возвращаем изображение в начальную позицию
+            image.x = startX
+            image.y = startY
         }
 
         override fun redo() {
-            image.x = newX
-            image.y = newY
+            // Перемещаем изображение в конечную позицию
+            image.x = endX
+            image.y = endY
         }
     }
 
@@ -357,12 +360,16 @@ class PaintView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
                         floodFill(x.toInt(), y.toInt(), paint.color)
                         val newFillBitmap = fillBitmap?.copy(Bitmap.Config.ARGB_8888, true)
                         undoStack.add(FillAction(oldFillBitmap!!, newFillBitmap!!))
+                        redoStack.clear()
                     }
                 } else if (isMoveImageMode) {
                     images.forEach { image ->
                         if (x >= image.x && x <= image.x + image.bitmap.width &&
                             y >= image.y && y <= image.y + image.bitmap.height) {
                             image.isMoving = true
+                            // Сохраняем начальную позицию изображения
+                            image.startX = image.x
+                            image.startY = image.y
                         }
                     }
                 } else {
@@ -392,11 +399,9 @@ class PaintView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
                 } else if (isMoveImageMode) {
                     images.forEach { image ->
                         if (image.isMoving) {
-                            val oldX = image.x
-                            val oldY = image.y
+                            // Обновляем позицию изображения
                             image.x = x - image.bitmap.width / 2
                             image.y = y - image.bitmap.height / 2
-                            undoStack.add(MoveImageAction(image, oldX, oldY, image.x, image.y))
                             redrawCanvas()
                         }
                     }
@@ -410,7 +415,18 @@ class PaintView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
                 if (isPanMode) {
                     isPanMode = !isPanMode
                 } else if (isMoveImageMode) {
-                    images.forEach { it.isMoving = false }
+                    images.forEach { image ->
+                        if (image.isMoving) {
+                            // Сохраняем конечную позицию изображения
+                            val endX = image.x
+                            val endY = image.y
+
+                            // Добавляем действие в стек отмены
+                            undoStack.add(MoveImageAction(image, image.startX, image.startY, endX, endY))
+                            redoStack.clear()
+                            image.isMoving = false
+                        }
+                    }
                     isMoveImageMode = false
                 } else if (isFillMode) {
                     isFillMode = !isFillMode
@@ -429,7 +445,7 @@ class PaintView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
 
                     // Добавляем действие в стек отмены
                     undoStack.add(DrawAction(savedPath, savedPaint))
-
+                    redoStack.clear()
                     // Рисуем путь на canvasBitmap
                     canvasBitmap?.let { bmp ->
                         val tempCanvas = Canvas(bmp)
@@ -477,6 +493,7 @@ class PaintView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
             val image = DraggableImage(scaledBitmap, 0f, 0f)
             images.add(image)
             undoStack.add(AddImageAction(image))
+            redoStack.clear()
             redrawCanvas()
         }
     }
