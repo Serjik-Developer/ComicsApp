@@ -132,5 +132,11 @@
             android:layout_width="70dp"
             android:layout_height="wrap_content"
             android:text="Edit Text"/>
+        <Button
+            android:id="@+id/clearCanvasButton"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:text="Clear"
+            android:layout_margin="8dp"/>
     </LinearLayout>
 </RelativeLayout>

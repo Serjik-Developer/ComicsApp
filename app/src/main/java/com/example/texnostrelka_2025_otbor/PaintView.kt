@@ -279,10 +279,18 @@ class PaintView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
         isMoveImageMode = false // Отключаем режим перемещения изображений
         isPanMode = false // Отключаем режим панорамирования
     }
-
+    fun clearCanvas() {
+        paths.clear()
+        images.clear()
+        textClouds.clear()
+        fillBitmap?.eraseColor(Color.TRANSPARENT)
+        undoStack.clear()
+        redoStack.clear()
+        redrawCanvas()
+    }
     private fun redrawCanvas() {
+        canvas?.drawColor(Color.WHITE, PorterDuff.Mode.CLEAR)
         canvas?.drawColor(Color.WHITE)
-        canvasBitmap?.let { canvas?.drawBitmap(it, 0f, 0f, null) }
         images.forEach { image ->
             canvas?.drawBitmap(image.bitmap, image.x, image.y, null)
         }
@@ -290,11 +298,31 @@ class PaintView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
             canvas?.drawPath(drawingPath.path, drawingPath.paint)
         }
         textClouds.forEach { textCloud ->
+            val cloudPath = createTextCloudPath(
+                textCloud.text,
+                textCloud.x,
+                textCloud.y,
+                textCloud.width,
+                textCloud.height
+            )
+            val fillPaint = Paint().apply {
+                color = Color.WHITE
+                style = Paint.Style.FILL
+            }
+            canvas?.drawPath(cloudPath, fillPaint)
+            val strokePaint = Paint().apply {
+                color = Color.BLACK
+                style = Paint.Style.STROKE
+                strokeWidth = 5f
+            }
+            canvas?.drawPath(cloudPath, strokePaint)
             val textPaint = Paint().apply {
                 color = Color.BLACK
                 textSize = 40f
             }
-            canvas?.drawText(textCloud.text, textCloud.x, textCloud.y, textPaint)
+            val textX = textCloud.x + 20f
+            val textY = textCloud.y + 50f
+            canvas?.drawText(textCloud.text, textX, textY, textPaint)
         }
         invalidate()
     }

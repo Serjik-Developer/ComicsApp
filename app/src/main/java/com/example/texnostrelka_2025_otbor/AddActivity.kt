@@ -85,6 +85,9 @@ class AddActivity : AppCompatActivity() {
         findViewById<Button>(R.id.editTextCloudButton).setOnClickListener {
             paintView.setEditTextCloudMode(true)
         }
+        findViewById<Button>(R.id.clearCanvasButton).setOnClickListener {
+            paintView.clearCanvas()
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
