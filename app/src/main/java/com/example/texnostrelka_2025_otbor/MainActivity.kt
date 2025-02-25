@@ -1,10 +1,11 @@
 package com.example.texnostrelka_2025_otbor
 
-import android.content.Context
+
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.Button
+import android.widget.ImageView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -14,11 +15,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.texnostrelka_2025_otbor.adapters.komiksAdapter
 import com.example.texnostrelka_2025_otbor.database.ComicsDatabase
 import com.example.texnostrelka_2025_otbor.interfaces.OnItemClickListener
-import com.example.texnostrelka_2025_otbor.models.komiks_main
-
+import com.example.texnostrelka_2025_otbor.models.ComicsModel
 class MainActivity : AppCompatActivity(), OnItemClickListener {
     private lateinit var database: ComicsDatabase
-    private lateinit var comics_list: MutableList<komiks_main>
+    private lateinit var comics_list: MutableList<ComicsModel>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
 
     override fun onItemClick(id: String) {
         val intent = Intent(this, ViewActivity::class.java)
-        intent.putExtra("COMICS_IS", id)
+        intent.putExtra("COMICS_ID", id)
         startActivity(intent)
 
     }
@@ -56,7 +56,7 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
         val recycler_view = findViewById<RecyclerView>(R.id.rv_komiks)
         recycler_view.layoutManager = LinearLayoutManager(this)
         val sharedPref = getSharedPreferences("AppPreferences", MODE_PRIVATE)
-        komiks_main(sharedPref.javaClass.toString())
+        ComicsModel(sharedPref.javaClass.toString())
         val komiks_adaper = komiksAdapter(comics_list, this)
         recycler_view.adapter = komiks_adaper
     }

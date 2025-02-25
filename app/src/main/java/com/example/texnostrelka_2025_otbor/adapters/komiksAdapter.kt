@@ -10,10 +10,9 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.texnostrelka_2025_otbor.R
 import com.example.texnostrelka_2025_otbor.interfaces.OnItemClickListener
-import com.example.texnostrelka_2025_otbor.models.komiks_main
+import com.example.texnostrelka_2025_otbor.models.ComicsModel
 
-
-class komiksAdapter(private val komikslist: MutableList<komiks_main>, private val listener: OnItemClickListener) : RecyclerView.Adapter<komiksAdapter.KomiksViewHolder>() {
+class komiksAdapter(private val komikslist: MutableList<ComicsModel>, private val listener: OnItemClickListener) : RecyclerView.Adapter<komiksAdapter.KomiksViewHolder>() {
 
     inner class KomiksViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val textView: TextView = itemView.findViewById(R.id.komiks_name)

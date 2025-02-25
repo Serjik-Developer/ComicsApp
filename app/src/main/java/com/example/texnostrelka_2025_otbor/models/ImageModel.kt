@@ -6,5 +6,6 @@ data class ImageModel(
     val id:String? = null,
     val comicsId:String? = null,
     val number:Int? = null,
+    val page:Int? = null,
     val image:Bitmap? = null
 )

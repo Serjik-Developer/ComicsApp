@@ -6,8 +6,8 @@ import android.content.Context
 import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import com.example.texnostrelka_2025_otbor.models.ComicsModel
 import com.example.texnostrelka_2025_otbor.models.ImageModel
-import com.example.texnostrelka_2025_otbor.models.komiks_main
 import java.io.ByteArrayOutputStream
 import java.util.UUID
 
@@ -33,8 +33,8 @@ class ComicsDatabase(context: Context) {
     }
 
     @SuppressLint("Range")
-    fun getAll(): MutableList<komiks_main> {
-        val list = mutableListOf<komiks_main>()
+    fun getAll(): MutableList<ComicsModel> {
+        val list = mutableListOf<ComicsModel>()
 
         val db = databaseHelper.readableDatabase
 
@@ -42,10 +42,11 @@ class ComicsDatabase(context: Context) {
 
         while (cursor.moveToNext()) {
             val id = cursor.getString(cursor.getColumnIndex("id"))
-            val name = cursor.getString(cursor.getColumnIndex("text"))
-            val code = cursor.getString(cursor.getColumnIndex("description"))
-            val image = cursor.getString(cursor.getColumnIndex("image"))
-            list.add(komiks_main(id, name, code, image))
+            val text = cursor.getString(cursor.getColumnIndex("text"))
+            val description = cursor.getString(cursor.getColumnIndex("description"))
+            val imageByteArray = cursor.getBlob(cursor.getColumnIndex("image"))  // Corrected column name
+            val bitmap = BitmapFactory.decodeByteArray(imageByteArray, 0, imageByteArray.size)
+            list.add(ComicsModel(id, text, description, bitmap))
         }
 
     // close the cursor and database connection
@@ -98,7 +99,7 @@ class ComicsDatabase(context: Context) {
     @SuppressLint("Range")
     fun getPainting(comicsId: String): List<ImageModel> {
         val db = databaseHelper.readableDatabase
-        val cursor: Cursor = db.rawQuery("SELECT * FROM image WHERE comicsId=$comicsId", null)
+        val cursor: Cursor = db.rawQuery("SELECT * FROM image WHERE comicsId=?", arrayOf(comicsId))
 
         val imageList = mutableListOf<ImageModel>()
 
@@ -107,9 +108,10 @@ class ComicsDatabase(context: Context) {
                 val id = cursor.getString(cursor.getColumnIndex("id"))
                 val comicsIdReturn = cursor.getString(cursor.getColumnIndex("comicsId"))
                 val number = cursor.getInt(cursor.getColumnIndex("number"))
-                val imageByteArray = cursor.getBlob(cursor.getColumnIndex("id"))
+                val page = cursor.getInt(cursor.getColumnIndex("page"))
+                val imageByteArray = cursor.getBlob(cursor.getColumnIndex("image"))  // Corrected column name
                 val bitmap = BitmapFactory.decodeByteArray(imageByteArray, 0, imageByteArray.size)
-                val imageModel = ImageModel(id, comicsIdReturn, number, bitmap)
+                val imageModel = ImageModel(id, comicsIdReturn, number, page, bitmap)
                 imageList.add(imageModel)
             } while (cursor.moveToNext())
         }

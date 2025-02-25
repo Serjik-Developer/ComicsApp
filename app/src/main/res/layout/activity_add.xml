@@ -92,7 +92,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginTop="200dp"
+        android:layout_marginTop="50dp"
         android:layout_marginEnd="8dp"
         android:orientation="vertical">
 
@@ -117,5 +117,20 @@
             android:layout_width="70dp"
             android:layout_height="wrap_content"
             android:text="Save" />
+        <Button
+            android:id="@+id/moveTextCloudButton"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:text="Move Text"/>
+        <Button
+            android:id="@+id/addTextCloudButton"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:text="Add Text"/>
+        <Button
+            android:id="@+id/editTextCloudButton"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:text="Edit Text"/>
     </LinearLayout>
 </RelativeLayout>

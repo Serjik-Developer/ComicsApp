@@ -7,15 +7,15 @@ import android.database.sqlite.SQLiteOpenHelper
 class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
     companion object {
-        private const val DATABASE_NAME = "Comic.db"
-        private const val DATABASE_VERSION = 1
+        private const val DATABASE_NAME = "Comics.db"
+        private const val DATABASE_VERSION = 4
 
         private const val CREATE_TABLE_COMICS = """
             CREATE TABLE comics (
                 id TEXT PRIMARY KEY,
                 text TEXT,
                 description TEXT,
-                image TEXT
+                image BLOB NOT NULL
             )
         """
         private const val CREATE_TABLE_IMAGE = """
@@ -23,6 +23,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
                 id TEXT PRIMARY KEY,
                 comicsId TEXT,
                 number INTEGER NOT NULL,
+                page INTEGER NOT NULL,
                 image BLOB NOT NULL
             )
         """
