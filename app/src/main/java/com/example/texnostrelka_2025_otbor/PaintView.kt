@@ -11,14 +11,12 @@ import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.Point
 import android.graphics.PorterDuff
-import android.graphics.PorterDuffXfermode
 import android.graphics.RectF
 import android.net.Uri
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import android.widget.EditText
-import com.example.texnostrelka_2025_otbor.models.ImageModel
 import java.util.LinkedList
 import java.util.Queue
 

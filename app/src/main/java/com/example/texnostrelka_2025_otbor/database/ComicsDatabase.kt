@@ -8,6 +8,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import com.example.texnostrelka_2025_otbor.models.ComicsModel
 import com.example.texnostrelka_2025_otbor.models.ImageModel
+import com.example.texnostrelka_2025_otbor.models.Page
 import java.io.ByteArrayOutputStream
 import java.util.UUID
 
@@ -44,7 +45,7 @@ class ComicsDatabase(context: Context) {
             val id = cursor.getString(cursor.getColumnIndex("id"))
             val text = cursor.getString(cursor.getColumnIndex("text"))
             val description = cursor.getString(cursor.getColumnIndex("description"))
-            val imageByteArray = cursor.getBlob(cursor.getColumnIndex("image"))  // Corrected column name
+            val imageByteArray = cursor.getBlob(cursor.getColumnIndex("image"))
             val bitmap = BitmapFactory.decodeByteArray(imageByteArray, 0, imageByteArray.size)
             list.add(ComicsModel(id, text, description, bitmap))
         }
@@ -82,6 +83,59 @@ class ComicsDatabase(context: Context) {
         // close the database connection
         db.close()
     }
+    fun deletePage(pageId:String) {
+        val db = databaseHelper.writableDatabase
+
+        // delete the data from the table
+        db.delete("pages", "pageId = ?", arrayOf(pageId))
+
+        // close the database connection
+        db.close()
+    }
+    @SuppressLint("Range")
+    fun getAllPages(comicsId: String) : MutableList<Page> {
+        val list = mutableListOf<Page>()
+
+        val db = databaseHelper.readableDatabase
+
+        val cursor = db.rawQuery("SELECT * FROM pages WHERE comicsId = ?", arrayOf(comicsId))
+
+        while (cursor.moveToNext()) {
+            val pageId = cursor.getString(cursor.getColumnIndex("pageId"))
+            val comicsId = cursor.getString(cursor.getColumnIndex("comicsId"))
+            val number = cursor.getInt(cursor.getColumnIndex("number"))
+            val rows = cursor.getInt(cursor.getColumnIndex("rows"))
+            val columns = cursor.getInt(cursor.getColumnIndex("columns"))
+            list.add(Page(pageId, comicsId, number, rows, columns))
+        }
+
+        // close the cursor and database connection
+        cursor.close()
+        db.close()
+
+        return list
+    }
+    @SuppressLint("Range")
+    fun getAllImagesOnPage(pageId: String) : MutableList<ImageModel> {
+        val list = mutableListOf<ImageModel>()
+
+        val db = databaseHelper.readableDatabase
+
+        val cursor = db.rawQuery("SELECT * FROM image WHERE pageId = ?", arrayOf(pageId))
+
+        while (cursor.moveToNext()) {
+            val id = cursor.getString(cursor.getColumnIndex("id"))
+            val pageId = cursor.getString(cursor.getColumnIndex("pageId"))
+            val number = cursor.getInt(cursor.getColumnIndex("number"))
+            val page = cursor.getInt(cursor.getColumnIndex("page"))
+            val imageByteArray = cursor.getBlob(cursor.getColumnIndex("image"))
+            val bitmap = BitmapFactory.decodeByteArray(imageByteArray, 0, imageByteArray.size)
+            list.add(ImageModel(id, pageId, number, page, bitmap))
+        }
+        cursor.close()
+        db.close()
+        return list
+    }
     fun insertPainting(bitmap: Bitmap, number:Int, comicsId: String) {
         val db = databaseHelper.writableDatabase
         val stream = ByteArrayOutputStream()
@@ -118,5 +172,5 @@ class ComicsDatabase(context: Context) {
         cursor.close()
         return imageList
     }
-
+    //TODO DELETE AND UPDATE PAINTINGS
 }
