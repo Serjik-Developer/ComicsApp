@@ -1,9 +1,12 @@
 package com.example.texnostrelka_2025_otbor
 
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
+import android.widget.EditText
+import android.widget.LinearLayout
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -14,6 +17,8 @@ import com.example.texnostrelka_2025_otbor.adapters.ComiksAdapter
 import com.example.texnostrelka_2025_otbor.database.ComicsDatabase
 import com.example.texnostrelka_2025_otbor.interfaces.OnItemClickListener
 import com.example.texnostrelka_2025_otbor.models.ComicsModel
+import java.util.UUID
+
 class MainActivity : AppCompatActivity(), OnItemClickListener {
     private lateinit var database: ComicsDatabase
     private lateinit var comics_list: MutableList<ComicsModel>
@@ -30,7 +35,37 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
         val add_btn = findViewById<Button>(R.id.btn_new)
         getData()
         add_btn.setOnClickListener {
-            startActivity(Intent(this, EditActivity::class.java).putExtra("COMICS_ID", "new"))
+                val inputName = EditText(this)
+                val inputDesc = EditText(this)
+                inputName.hint = "Введите название комикса"
+                inputDesc.hint = "Введите описание комикса"
+
+                // Создаем контейнер для EditText
+                val container = LinearLayout(this).apply {
+                    orientation = LinearLayout.VERTICAL
+                    setPadding(50, 20, 50, 20)
+                    addView(inputName)
+                    addView(inputDesc)
+                }
+
+                val dialog = AlertDialog.Builder(this)
+                    .setTitle("Добавить комикс")
+                    .setView(container) // Передаем контейнер с EditText
+                    .setPositiveButton("Save") { _, _ ->
+                        val desc = inputDesc.text.toString()
+                        val name = inputName.text.toString()
+                        if (desc.isNotEmpty() && name.isNotEmpty()) {
+                            val comicsId = UUID.randomUUID().toString()
+                            database.insert(comicsId, name, desc)
+                            getData()
+
+                        }
+                    }
+                    .setNegativeButton("Cancel") { _, _ -> }
+                    .create()
+
+                dialog.show()
+
         }
     }
 
@@ -56,4 +91,9 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
         val komiks_adaper = ComiksAdapter(comics_list, this)
         recycler_view.adapter = komiks_adaper
     }
+    override fun onResume() {
+        super.onResume()
+        getData() // Обновляем данные при каждом переходе на активность
+    }
+
 }

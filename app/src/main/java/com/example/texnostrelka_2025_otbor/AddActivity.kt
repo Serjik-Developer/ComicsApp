@@ -13,13 +13,14 @@ import com.example.texnostrelka_2025_otbor.database.ComicsDatabase
 class AddActivity : AppCompatActivity() {
     private lateinit var paintView: PaintView
     private lateinit var databaseHelper: ComicsDatabase
+    private lateinit var pageId: String
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add)
         databaseHelper = ComicsDatabase(this)
         paintView = findViewById(R.id.paintView)
-        //TODO СДЕЛАТЬ ЗДЕСЬ INTENT ID КОМИКСА И КАКОЕ ЭТО ИЗОБРАЖЕНИЕ ПО СЧЕТУ(СТРАНИЦА ТИПО)(НУЖНО ДЛЯ СЕЙВА В БД)!!!
+        pageId = intent.getStringExtra("PAGE_ID")!!
 
         // Обработчики для кнопок
         findViewById<Button>(R.id.colorBlack).setOnClickListener {
@@ -105,7 +106,29 @@ class AddActivity : AppCompatActivity() {
     }
     private fun savePainting() {
         val bitmap = paintView.getBitmap()
-        databaseHelper.insertPainting(bitmap, 1, "TESTID")
-        Toast.makeText(this, "Painting saved!", Toast.LENGTH_SHORT).show()
+        val cellIndex = intent.getIntExtra("CELL_INDEX", -1)
+        val imageId = intent.getStringExtra("IMAGE_ID") // Получаем ID изображения, если оно есть
+
+        if (cellIndex != -1) {
+            if (imageId != null) {
+                // Если изображение существует, обновляем его
+                databaseHelper.updatePainting(imageId, bitmap)
+                Toast.makeText(this, "Painting updated in cell $cellIndex!", Toast.LENGTH_SHORT).show()
+            } else {
+                // Если изображение новое, добавляем его
+                databaseHelper.insertPainting(bitmap, pageId, cellIndex)
+                Toast.makeText(this, "Painting saved in cell $cellIndex!", Toast.LENGTH_SHORT).show()
+            }
+        } else {
+            Toast.makeText(this, "Error: Cell index not found!", Toast.LENGTH_SHORT).show()
+        }
+
+        // Обновляем EditPageActivity
+        val intent = Intent(this, EditPageActivity::class.java).apply {
+            putExtra("PAGE_ID", pageId)
+            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+        }
+        startActivity(intent)
+        finish() // Закрываем текущую активность
     }
 }

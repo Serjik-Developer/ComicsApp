@@ -6,6 +6,7 @@ import android.content.Context
 import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.util.Log
 import com.example.texnostrelka_2025_otbor.models.ComicsModel
 import com.example.texnostrelka_2025_otbor.models.ImageModel
 import com.example.texnostrelka_2025_otbor.models.Page
@@ -16,23 +17,21 @@ class ComicsDatabase(context: Context) {
 
     private val databaseHelper = DatabaseHelper(context)
 
-    fun insert(id:String, text: String, description: String, image: String) {
+    fun insert(id: String, text: String, description: String) {
         val db = databaseHelper.writableDatabase
-
         val values = ContentValues().apply {
-        put("id", id)
-        put("text", text)
-        put("description", description)
-        put("image", image)
+            put("id", id)
+            put("text", text)
+            put("description", description)
         }
-
-        // insert the data into the table
-        db.insert("comics", null, values)
-
-        // close the database connection
+        val result = db.insert("comics", null, values)
+        if (result == -1L) {
+            Log.w("DB", "Ошибка при добавлении данных в базу данных")
+        } else {
+            Log.w("DB", "Данные успешно добавлены в базу данных")
+        }
         db.close()
     }
-
     @SuppressLint("Range")
     fun getAll(): MutableList<ComicsModel> {
         val list = mutableListOf<ComicsModel>()
@@ -45,24 +44,39 @@ class ComicsDatabase(context: Context) {
             val id = cursor.getString(cursor.getColumnIndex("id"))
             val text = cursor.getString(cursor.getColumnIndex("text"))
             val description = cursor.getString(cursor.getColumnIndex("description"))
-            val imageByteArray = cursor.getBlob(cursor.getColumnIndex("image"))
-            val bitmap = BitmapFactory.decodeByteArray(imageByteArray, 0, imageByteArray.size)
-            list.add(ComicsModel(id, text, description, bitmap))
-        }
+            val cursor1 = db.rawQuery("SELECT pageId, number FROM pages WHERE comicsId = ?", arrayOf(id))
+            if (cursor1.count == 0) {
+                list.add(ComicsModel(id, text, description, null))
+            }
+            else {
+            while (cursor1.moveToNext()){
+                val pageId = cursor1.getString(cursor1.getColumnIndex("pageId"))
+                val number = cursor1.getInt(cursor1.getColumnIndex("number"))
+                if (number == 0) {
+                    val cursor2 = db.rawQuery("SELECT image FROM image WHERE pageId = ?", arrayOf(pageId))
+                    if (cursor2.count == 0) list.add(ComicsModel(id, text, description, null))
+                    while (cursor2.moveToNext()){
+                        val imageByteArray = cursor2.getBlob(cursor2.getColumnIndex("image"))
+                        val bitmap = BitmapFactory.decodeByteArray(imageByteArray, 0, imageByteArray.size)
+                        list.add(ComicsModel(id, text, description, bitmap))
+                    }
 
-    // close the cursor and database connection
+                }
+            }}
+
+
+        }
         cursor.close()
         db.close()
 
         return list
     }
 
-    fun update(id: String, text: String, description: String, image: String) {
+    fun update(id: String, image: String) {
         val db = databaseHelper.writableDatabase
 
         val values = ContentValues().apply {
-            put("text", text)
-            put("description", description)
+
             put("image", image)
         }
 
@@ -79,6 +93,22 @@ class ComicsDatabase(context: Context) {
 
         // delete the data from the table
         db.delete("comics", "id = ?", arrayOf(id))
+
+        // close the database connection
+        db.close()
+    }
+    fun insertPage(pageId: String, comicsId:String, rows: Int, columns: Int, number: Int) {
+        val db = databaseHelper.writableDatabase
+        val values = ContentValues().apply {
+            put("pageId", pageId)
+            put("comicsId", comicsId)
+            put("number", number)
+            put("rows", rows)
+            put("columns", columns)
+        }
+
+        // insert the data into the table
+        db.insert("pages", null, values)
 
         // close the database connection
         db.close()
@@ -116,61 +146,87 @@ class ComicsDatabase(context: Context) {
         return list
     }
     @SuppressLint("Range")
-    fun getAllImagesOnPage(pageId: String) : MutableList<ImageModel> {
-        val list = mutableListOf<ImageModel>()
+    fun getMyPage(pageId: String) : MutableList<Page> {
+        val list = mutableListOf<Page>()
 
         val db = databaseHelper.readableDatabase
 
-        val cursor = db.rawQuery("SELECT * FROM image WHERE pageId = ?", arrayOf(pageId))
+        val cursor = db.rawQuery("SELECT * FROM pages WHERE pageId = ?", arrayOf(pageId))
+
+        while (cursor.moveToNext()) {
+            val pageId = cursor.getString(cursor.getColumnIndex("pageId"))
+            val comicsId = cursor.getString(cursor.getColumnIndex("comicsId"))
+            val number = cursor.getInt(cursor.getColumnIndex("number"))
+            val rows = cursor.getInt(cursor.getColumnIndex("rows"))
+            val columns = cursor.getInt(cursor.getColumnIndex("columns"))
+            list.add(Page(pageId, comicsId, number, rows, columns))
+        }
+
+        // close the cursor and database connection
+        cursor.close()
+        db.close()
+
+        return list
+    }
+    @SuppressLint("Range")
+    fun getAllImagesOnPage(pageId: String): List<ImageModel> {
+        val list = mutableListOf<ImageModel>()
+        val db = databaseHelper.readableDatabase
+        val cursor = db.rawQuery("SELECT * FROM image WHERE pageId = ? ORDER BY cellIndex", arrayOf(pageId))
 
         while (cursor.moveToNext()) {
             val id = cursor.getString(cursor.getColumnIndex("id"))
             val pageId = cursor.getString(cursor.getColumnIndex("pageId"))
-            val number = cursor.getInt(cursor.getColumnIndex("number"))
-            val page = cursor.getInt(cursor.getColumnIndex("page"))
+            val cellIndex = cursor.getInt(cursor.getColumnIndex("cellIndex"))
             val imageByteArray = cursor.getBlob(cursor.getColumnIndex("image"))
             val bitmap = BitmapFactory.decodeByteArray(imageByteArray, 0, imageByteArray.size)
-            list.add(ImageModel(id, pageId, number, page, bitmap))
+            list.add(ImageModel(id, pageId, bitmap, cellIndex))
         }
         cursor.close()
         db.close()
         return list
     }
-    fun insertPainting(bitmap: Bitmap, number:Int, comicsId: String) {
+    fun updatePainting(imageId: String, bitmap: Bitmap) {
+        val db = databaseHelper.writableDatabase
+        val stream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
+        val values = ContentValues().apply {
+            put("image", stream.toByteArray())
+        }
+        db.update("image", values, "id = ?", arrayOf(imageId))
+        db.close()
+    }
+    fun insertPainting(bitmap: Bitmap, pageId: String, cellIndex: Int) {
         val db = databaseHelper.writableDatabase
         val stream = ByteArrayOutputStream()
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
         val values = ContentValues().apply {
             put("id", UUID.randomUUID().toString())
-            put("comicsId", comicsId)
-            put("number", number)
+            put("pageId", pageId)
+            put("cellIndex", cellIndex) // Сохраняем индекс ячейки
             put("image", stream.toByteArray())
         }
         db.insert("image", null, values)
         db.close()
     }
-
     @SuppressLint("Range")
-    fun getPainting(comicsId: String): List<ImageModel> {
+    fun getImageById(imageId: String): ImageModel? {
         val db = databaseHelper.readableDatabase
-        val cursor: Cursor = db.rawQuery("SELECT * FROM image WHERE comicsId=?", arrayOf(comicsId))
+        val cursor = db.rawQuery("SELECT * FROM image WHERE id = ?", arrayOf(imageId))
 
-        val imageList = mutableListOf<ImageModel>()
-
-        if (cursor.moveToFirst()) {
-            do {
-                val id = cursor.getString(cursor.getColumnIndex("id"))
-                val comicsIdReturn = cursor.getString(cursor.getColumnIndex("comicsId"))
-                val number = cursor.getInt(cursor.getColumnIndex("number"))
-                val page = cursor.getInt(cursor.getColumnIndex("page"))
-                val imageByteArray = cursor.getBlob(cursor.getColumnIndex("image"))  // Corrected column name
-                val bitmap = BitmapFactory.decodeByteArray(imageByteArray, 0, imageByteArray.size)
-                val imageModel = ImageModel(id, comicsIdReturn, number, page, bitmap)
-                imageList.add(imageModel)
-            } while (cursor.moveToNext())
+        return if (cursor.moveToFirst()) {
+            val id = cursor.getString(cursor.getColumnIndex("id"))
+            val pageId = cursor.getString(cursor.getColumnIndex("pageId"))
+            val imageByteArray = cursor.getBlob(cursor.getColumnIndex("image"))
+            val bitmap = BitmapFactory.decodeByteArray(imageByteArray, 0, imageByteArray.size)
+            cursor.close()
+            ImageModel(id, pageId, bitmap)
+        } else {
+            cursor.close()
+            null
         }
-        cursor.close()
-        return imageList
     }
+
+
     //TODO DELETE AND UPDATE PAINTINGS
 }

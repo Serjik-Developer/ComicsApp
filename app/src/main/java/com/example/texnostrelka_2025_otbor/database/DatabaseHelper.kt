@@ -8,14 +8,13 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
 
     companion object {
         private const val DATABASE_NAME = "Comics.db"
-        private const val DATABASE_VERSION = 4
+        private const val DATABASE_VERSION = 8
 
         private const val CREATE_TABLE_COMICS = """
             CREATE TABLE comics (
                 id TEXT PRIMARY KEY,
                 text TEXT,
-                description TEXT,
-                image BLOB NOT NULL
+                description TEXT
             )
         """
         private const val CREATE_TABLE_PAGES = """
@@ -31,8 +30,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
             CREATE TABLE image (
                 id TEXT PRIMARY KEY,
                 pageId TEXT,
-                number INTEGER NOT NULL,
-                page INTEGER NOT NULL,
+                cellIndex INTEGER,
                 image BLOB NOT NULL
             )
         """

@@ -53,7 +53,10 @@ class ComiksAdapter(private val komikslist: MutableList<ComicsModel>, private va
         val komiksItem = komikslist[position]
         holder.textView.text = komiksItem.text
         holder.textViewDesc.text = komiksItem.description
-        holder.imageView.setImageBitmap(komiksItem.image)
+        if (komiksItem.image != null) {
+            holder.imageView.setImageBitmap(komiksItem.image)
+        }
+
     }
 
     override fun getItemCount(): Int = komikslist.size
