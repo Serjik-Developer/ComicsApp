@@ -59,7 +59,7 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
             val dialog = MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialog_Rounded)
                 .setTitle("Добавить комикс")
                 .setView(container) // Передаем контейнер с EditText
-                .setPositiveButton("Save") { _, _ ->
+                .setPositiveButton("Сохранить") { _, _ ->
                     val desc = inputDesc.text.toString()
                     val name = inputName.text.toString()
                     if (desc.isNotEmpty() && name.isNotEmpty()) {
@@ -68,7 +68,7 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
                         getData()
                     }
                 }
-                .setNegativeButton("Cancel") { _, _ -> }
+                .setNegativeButton("Отмена") { _, _ -> }
                 .create()
 
 // Настройка кнопок

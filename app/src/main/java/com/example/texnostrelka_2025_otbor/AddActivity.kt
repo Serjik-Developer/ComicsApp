@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.SeekBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -63,10 +64,10 @@ class AddActivity : AppCompatActivity() {
         findViewById<Button>(R.id.eraserButton).setOnClickListener {
             paintView.setEraserMode()
         }
-        findViewById<Button>(R.id.undoButton).setOnClickListener {
+        findViewById<ImageButton>(R.id.undoButton).setOnClickListener {
             paintView.undo()
         }
-        findViewById<Button>(R.id.redoButton).setOnClickListener {
+        findViewById<ImageButton>(R.id.redoButton).setOnClickListener {
             paintView.redo()
         }
         findViewById<Button>(R.id.saveButton).setOnClickListener {
@@ -93,13 +94,13 @@ class AddActivity : AppCompatActivity() {
         }
 
         // Обработчики для кнопок масштабирования
-        findViewById<Button>(R.id.zoomInButton).setOnClickListener {
+        findViewById<ImageButton>(R.id.zoomInButton).setOnClickListener {
             paintView.zoomIn()
         }
-        findViewById<Button>(R.id.zoomOutButton).setOnClickListener {
+        findViewById<ImageButton>(R.id.zoomOutButton).setOnClickListener {
             paintView.zoomOut()
         }
-        findViewById<Button>(R.id.panButton).setOnClickListener {
+        findViewById<ImageButton>(R.id.panButton).setOnClickListener {
             paintView.setPanMode()
         }
         findViewById<Button>(R.id.moveTextCloudButton).setOnClickListener {
@@ -111,7 +112,7 @@ class AddActivity : AppCompatActivity() {
         findViewById<Button>(R.id.editTextCloudButton).setOnClickListener {
             paintView.setEditTextCloudMode(true)
         }
-        findViewById<Button>(R.id.clearCanvasButton).setOnClickListener {
+        findViewById<ImageButton>(R.id.clearCanvasButton).setOnClickListener {
             paintView.clearCanvas()
         }
     }
