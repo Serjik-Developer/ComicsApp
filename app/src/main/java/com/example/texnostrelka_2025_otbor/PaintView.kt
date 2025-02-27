@@ -17,6 +17,7 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import android.widget.EditText
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.util.LinkedList
 import java.util.Queue
 
@@ -29,7 +30,7 @@ class PaintView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
         isAntiAlias = true
     }
     private var isEditTextCloudMode = false // Режим редактирования текстовых облаков
-    private val boundaryColors = listOf(Color.BLACK, Color.RED, Color.BLUE)
+    private val boundaryColors = listOf(Color.BLACK, Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW, Color.rgb(128,0,128), Color.CYAN,Color.rgb(255, 165, 0), Color.rgb(255, 192, 203), Color.rgb(128, 128, 128), Color.rgb(71, 37, 0))
     private val paths = mutableListOf<DrawingPath>() // Список всех нарисованных путей
     private val undoStack = mutableListOf<Action>() // Стек для отмены
     private val redoStack = mutableListOf<Action>() // Стек для возврата
@@ -533,13 +534,20 @@ class PaintView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
     }
     private fun showEditTextDialog(textCloud: TextCloud) {
         val context = context
-        val input = EditText(context)
-        input.setText(textCloud.text)
 
-        val dialog = AlertDialog.Builder(context)
-            .setTitle("Edit Text")
-            .setView(input)
-            .setPositiveButton("Save") { _, _ ->
+        // Создаем EditText с Material Design стилем
+        val input = EditText(context).apply {
+            setText(textCloud.text)
+            hint = "Введите текст"
+            setTextAppearance(R.style.TextAppearance_MaterialComponents_Body1) // Стиль текста
+
+        }
+
+        // Создаем Material диалог
+        val dialog = MaterialAlertDialogBuilder(context, R.style.MaterialAlertDialog_Rounded)
+            .setTitle("Редактировать текст")
+            .setView(input) // Передаем EditText
+            .setPositiveButton("Сохранить") { _, _ ->
                 val newText = input.text.toString()
                 if (newText.isNotEmpty()) {
                     textCloud.text = newText
@@ -557,10 +565,20 @@ class PaintView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
                 }
                 isEditTextCloudMode = false // Сбрасываем режим редактирования
             }
-            .setNegativeButton("Cancel") { _, _ ->
+            .setNegativeButton("Отмена") { _, _ ->
                 isEditTextCloudMode = false // Сбрасываем режим редактирования
             }
             .create()
+
+        // Настройка кнопок
+        dialog.setOnShowListener {
+            val positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+            val negativeButton = dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
+
+            // Применяем стили к кнопкам
+            positiveButton.setTextAppearance(R.style.TextAppearance_MaterialComponents_Button)
+            negativeButton.setTextAppearance(R.style.TextAppearance_MaterialComponents_Button)
+        }
 
         dialog.show()
     }

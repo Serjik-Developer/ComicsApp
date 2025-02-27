@@ -1,142 +1,321 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!-- Панель инструментов сверху -->
+    <HorizontalScrollView
+        android:id="@+id/toolsScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:background="#FFFFFF"
+        android:elevation="4dp"
+        android:padding="8dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <!-- Кнопки инструментов -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/fillButton"
+                style="@style/ModernButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Fill"
+                app:icon="@drawable/ic_fill"
+                app:iconTint="@android:color/white" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/eraserButton"
+                style="@style/ModernButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="Eraser"
+                app:icon="@drawable/ic_eraser"
+                app:iconTint="@android:color/white" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/addTextCloudButton"
+                style="@style/ModernButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="Add Text"
+                app:icon="@drawable/ic_add_text"
+                app:iconTint="@android:color/white" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/editTextCloudButton"
+                style="@style/ModernButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="Edit Text"
+                app:icon="@drawable/ic_edit_text"
+                app:iconTint="@android:color/white" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/moveTextCloudButton"
+                style="@style/ModernButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="Move Text"
+                app:icon="@drawable/ic_move_text"
+                app:iconTint="@android:color/white" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/addImageButton"
+                style="@style/ModernButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="Add Image"
+                app:icon="@drawable/ic_add_image"
+                app:iconTint="@android:color/white" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/moveImageButton"
+                style="@style/ModernButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="Move Image"
+                app:icon="@drawable/ic_move_image"
+                app:iconTint="@android:color/white" />
+
+            <!-- Кнопка сохранения -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/saveButton"
+                style="@style/ModernButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="Save"
+                app:icon="@drawable/ic_save"
+                app:iconTint="@android:color/white" />
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <!-- Основное поле для рисования -->
     <com.example.texnostrelka_2025_otbor.PaintView
         android:id="@+id/paintView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/toolsScrollView"
+        android:layout_above="@id/colorPalette"
         android:background="@android:color/white" />
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/a"
-        android:layout_marginBottom="0dp"
-        android:orientation="horizontal"
-        android:padding="16dp">
+    <!-- Панель цветов внизу -->
+    <HorizontalScrollView
 
-        <Button
-            android:id="@+id/colorBlack"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:backgroundTint="#0F0D0D" />
-
-        <Button
-            android:id="@+id/colorRed"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:backgroundTint="#F20606" />
-
-        <Button
-            android:id="@+id/colorBlue"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:backgroundTint="#032AFF" />
-
-        <Button
-            android:id="@+id/fillButton"
-            android:layout_width="70dp"
-            android:layout_height="wrap_content"
-            android:text="Fill" />
-
-        <Button
-            android:id="@+id/eraserButton"
-            android:layout_width="90dp"
-            android:layout_height="wrap_content"
-            android:text="Eraser" />
-
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/a"
+        android:id="@+id/colorPalette"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:background="#FFFFFF"
+        android:padding="8dp"
+        android:elevation="4dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <!-- Кнопки цветов -->
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/colorBlack"
+                style="@style/ColorButtonStyle"
+                android:backgroundTint="#000000" />
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/colorRed"
+                style="@style/ColorButtonStyle"
+                android:backgroundTint="#FF0000"
+                android:layout_marginStart="8dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/colorBlue"
+                style="@style/ColorButtonStyle"
+                android:backgroundTint="#0000FF"
+                android:layout_marginStart="8dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/colorGreen"
+                style="@style/ColorButtonStyle"
+                android:backgroundTint="#00FF00"
+                android:layout_marginStart="8dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/colorYellow"
+                style="@style/ColorButtonStyle"
+                android:backgroundTint="#FFFF00"
+                android:layout_marginStart="8dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/colorPurple"
+                style="@style/ColorButtonStyle"
+                android:backgroundTint="#800080"
+                android:layout_marginStart="8dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/colorCyan"
+                style="@style/ColorButtonStyle"
+                android:backgroundTint="#00FFFF"
+                android:layout_marginStart="8dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/colorOrange"
+                style="@style/ColorButtonStyle"
+                android:backgroundTint="#FFA500"
+                android:layout_marginStart="8dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/colorPink"
+                style="@style/ColorButtonStyle"
+                android:backgroundTint="#FFC0CB"
+                android:layout_marginStart="8dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/colorGrey"
+                style="@style/ColorButtonStyle"
+                android:backgroundTint="#808080"
+                android:layout_marginStart="8dp" />
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/colorBrown"
+                style="@style/ColorButtonStyle"
+                android:backgroundTint="#472500"
+                android:layout_marginStart="8dp" />
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <!-- Кнопки Undo и Redo (плавающие внизу справа) -->
+    <LinearLayout
+        android:id="@+id/undoRedoPanel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/colorPalette"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
         android:orientation="horizontal"
-        android:padding="16dp">
-        <Button
-            android:id="@+id/moveImageButton"
-            android:layout_width="70dp"
+        android:padding="8dp">
+
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Move"/>
-        <Button
-            android:id="@+id/addImageButton"
-            android:layout_width="90dp"
+            android:id="@+id/undoButton"
+            style="@style/ModernButtonStyle"
+            android:text="Undo"
+            app:icon="@drawable/ic_undo"
+            app:iconTint="@android:color/white" />
+
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Add Image"/>
+            android:id="@+id/redoButton"
+            style="@style/ModernButtonStyle"
+            android:text="Redo"
+            app:icon="@drawable/ic_redo"
+            app:iconTint="@android:color/white"
+            android:layout_marginStart="8dp" />
+    </LinearLayout>
+
+    <!-- Панель SeekBar -->
+    <LinearLayout
+        android:id="@+id/SeekbarPanel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/colorPalette"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="8dp"
+        android:orientation="horizontal"
+        android:padding="8dp">
+
         <SeekBar
             android:id="@+id/strokeWidthSeekBar"
-            android:layout_width="70dp"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:max="50"
             android:progress="10" />
-        <Button
-            android:id="@+id/undoButton"
-            android:layout_width="70dp"
-            android:layout_height="wrap_content"
-            android:text="Undo" />
-
-        <Button
-            android:id="@+id/redoButton"
-            android:layout_width="70dp"
-            android:layout_height="wrap_content"
-            android:text="Redo" />
     </LinearLayout>
 
+    <!-- Панель масштабирования -->
     <LinearLayout
+
+        android:id="@+id/zoomControls"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginTop="50dp"
-        android:layout_marginEnd="8dp"
-        android:orientation="vertical">
+        android:layout_centerVertical="true"
+        android:orientation="vertical"
+        android:padding="8dp">
 
-        <Button
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:id="@+id/zoomInButton"
-            android:layout_width="70dp"
-            android:layout_height="wrap_content"
-            android:text="Zoom In" />
+            style="@style/ModernButtonStyle"
+            android:text="Scale"
+            app:icon="@drawable/ic_plus"
+            app:iconTint="@android:color/white" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:id="@+id/zoomOutButton"
-            android:layout_width="70dp"
+            style="@style/ModernButtonStyle"
+            android:text="Scale"
+            app:icon="@drawable/ic_minus"
+            app:iconTint="@android:color/white"
+            android:layout_marginTop="8dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Zoom Out" />
-        <Button
             android:id="@+id/panButton"
-            android:layout_width="70dp"
+            style="@style/ModernButtonStyle"
+            android:text="Move"
+            app:icon="@drawable/ic_move_text"
+            app:iconTint="@android:color/white"
+            android:layout_marginTop="8dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Pan" />
-        <Button
-            android:id="@+id/saveButton"
-            android:layout_width="70dp"
-            android:layout_height="wrap_content"
-            android:text="Save" />
-        <Button
-            android:id="@+id/moveTextCloudButton"
-            android:layout_width="70dp"
-            android:layout_height="wrap_content"
-            android:text="Move Text"/>
-        <Button
-            android:id="@+id/addTextCloudButton"
-            android:layout_width="70dp"
-            android:layout_height="wrap_content"
-            android:text="Add Text"/>
-        <Button
-            android:id="@+id/editTextCloudButton"
-            android:layout_width="70dp"
-            android:layout_height="wrap_content"
-            android:text="Edit Text"/>
-        <Button
             android:id="@+id/clearCanvasButton"
-            android:layout_width="70dp"
-            android:layout_height="wrap_content"
+            style="@style/ModernButtonStyle"
             android:text="Clear"
-            android:layout_margin="8dp"/>
+            app:icon="@drawable/ic_clear"
+            app:iconTint="@android:color/white"
+            android:layout_marginTop="8dp" />
     </LinearLayout>
 </RelativeLayout>

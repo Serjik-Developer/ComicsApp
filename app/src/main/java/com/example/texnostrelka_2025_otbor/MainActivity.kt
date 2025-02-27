@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.LinearLayout
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -17,6 +18,7 @@ import com.example.texnostrelka_2025_otbor.adapters.ComiksAdapter
 import com.example.texnostrelka_2025_otbor.database.ComicsDatabase
 import com.example.texnostrelka_2025_otbor.interfaces.OnItemClickListener
 import com.example.texnostrelka_2025_otbor.models.ComicsModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.util.UUID
 
 class MainActivity : AppCompatActivity(), OnItemClickListener {
@@ -32,40 +34,54 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
             insets
         }
         database = ComicsDatabase(this)
-        val add_btn = findViewById<Button>(R.id.btn_new)
+        val add_btn = findViewById<ImageButton>(R.id.btn_new)
         getData()
         add_btn.setOnClickListener {
-                val inputName = EditText(this)
-                val inputDesc = EditText(this)
-                inputName.hint = "Введите название комикса"
-                inputDesc.hint = "Введите описание комикса"
+            val inputName = EditText(this).apply {
+                hint = "Введите название комикса"
+                setTextAppearance(R.style.TextAppearance_MaterialComponents_Body1) // Стиль текста
+            }
 
-                // Создаем контейнер для EditText
-                val container = LinearLayout(this).apply {
-                    orientation = LinearLayout.VERTICAL
-                    setPadding(50, 20, 50, 20)
-                    addView(inputName)
-                    addView(inputDesc)
-                }
+            val inputDesc = EditText(this).apply {
+                hint = "Введите описание комикса"
+                setTextAppearance(R.style.TextAppearance_MaterialComponents_Body1) // Стиль текста
+            }
 
-                val dialog = AlertDialog.Builder(this)
-                    .setTitle("Добавить комикс")
-                    .setView(container) // Передаем контейнер с EditText
-                    .setPositiveButton("Save") { _, _ ->
-                        val desc = inputDesc.text.toString()
-                        val name = inputName.text.toString()
-                        if (desc.isNotEmpty() && name.isNotEmpty()) {
-                            val comicsId = UUID.randomUUID().toString()
-                            database.insert(comicsId, name, desc)
-                            getData()
+// Создаем контейнер для EditText
+            val container = LinearLayout(this).apply {
+                orientation = LinearLayout.VERTICAL
+                setPadding(50, 20, 50, 20)
+                addView(inputName)
+                addView(inputDesc)
+            }
 
-                        }
+// Создаем Material диалог
+            val dialog = MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialog_Rounded)
+                .setTitle("Добавить комикс")
+                .setView(container) // Передаем контейнер с EditText
+                .setPositiveButton("Save") { _, _ ->
+                    val desc = inputDesc.text.toString()
+                    val name = inputName.text.toString()
+                    if (desc.isNotEmpty() && name.isNotEmpty()) {
+                        val comicsId = UUID.randomUUID().toString()
+                        database.insert(comicsId, name, desc)
+                        getData()
                     }
-                    .setNegativeButton("Cancel") { _, _ -> }
-                    .create()
+                }
+                .setNegativeButton("Cancel") { _, _ -> }
+                .create()
 
-                dialog.show()
+// Настройка кнопок
+            dialog.setOnShowListener {
+                val positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+                val negativeButton = dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
 
+                // Применяем стили к кнопкам
+                positiveButton.setTextAppearance(R.style.TextAppearance_MaterialComponents_Button)
+                negativeButton.setTextAppearance(R.style.TextAppearance_MaterialComponents_Button)
+            }
+
+            dialog.show()
         }
     }
 

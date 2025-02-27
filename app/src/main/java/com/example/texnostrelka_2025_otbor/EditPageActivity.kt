@@ -34,7 +34,10 @@ class EditPageActivity : AppCompatActivity() {
 
         gridLayout = findViewById(R.id.gridLayout)
 
-
+        val btn = findViewById<Button>(R.id.backButton)
+        btn.setOnClickListener {
+            startActivity(Intent(this, EditActivity::class.java))
+        }
         val pageWithImagesIds = intent.getParcelableExtra<PageWithImagesIds>("PAGE_WITH_IMAGES")
         val pageIdIntent = intent.getStringExtra("PAGE_ID")
         if (pageIdIntent == null) {

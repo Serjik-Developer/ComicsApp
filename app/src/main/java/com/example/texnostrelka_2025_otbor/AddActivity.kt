@@ -23,6 +23,7 @@ class AddActivity : AppCompatActivity() {
         pageId = intent.getStringExtra("PAGE_ID")!!
 
         // Обработчики для кнопок
+        //ЦВЕТА
         findViewById<Button>(R.id.colorBlack).setOnClickListener {
             paintView.setColor(Color.BLACK)
         }
@@ -31,6 +32,30 @@ class AddActivity : AppCompatActivity() {
         }
         findViewById<Button>(R.id.colorBlue).setOnClickListener {
             paintView.setColor(Color.BLUE)
+        }
+        findViewById<Button>(R.id.colorGreen).setOnClickListener {
+            paintView.setColor(Color.GREEN)
+        }
+        findViewById<Button>(R.id.colorYellow).setOnClickListener {
+            paintView.setColor(Color.YELLOW)
+        }
+        findViewById<Button>(R.id.colorPurple).setOnClickListener {
+            paintView.setColor(Color.rgb(128,0,128))
+        }
+        findViewById<Button>(R.id.colorCyan).setOnClickListener {
+            paintView.setColor(Color.CYAN)
+        }
+        findViewById<Button>(R.id.colorOrange).setOnClickListener {
+            paintView.setColor(Color.rgb(255, 165, 0))
+        }
+        findViewById<Button>(R.id.colorPink).setOnClickListener {
+            paintView.setColor(Color.rgb(255, 192, 203))
+        }
+        findViewById<Button>(R.id.colorGrey).setOnClickListener {
+            paintView.setColor(Color.rgb(128, 128, 128))
+        }
+        findViewById<Button>(R.id.colorBrown).setOnClickListener {
+            paintView.setColor(Color.rgb(71, 37, 0))
         }
         findViewById<Button>(R.id.fillButton).setOnClickListener {
             paintView.setFillMode()
