@@ -107,7 +107,7 @@ class AddActivity : AppCompatActivity() {
             paintView.setMoveTextCloudMode(true)
         }
         findViewById<Button>(R.id.addTextCloudButton).setOnClickListener {
-            paintView.addTextCloud("New Text", 100f, 100f, 200f, 100f)
+            paintView.addTextCloud("Новый текст", 100f, 100f, 290f, 100f)
         }
         findViewById<Button>(R.id.editTextCloudButton).setOnClickListener {
             paintView.setEditTextCloudMode(true)
@@ -139,11 +139,11 @@ class AddActivity : AppCompatActivity() {
             if (imageId != null) {
                 // Если изображение существует, обновляем его
                 databaseHelper.updatePainting(imageId, bitmap)
-                Toast.makeText(this, "Painting updated in cell $cellIndex!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Обновлено!", Toast.LENGTH_SHORT).show()
             } else {
                 // Если изображение новое, добавляем его
                 databaseHelper.insertPainting(bitmap, pageId, cellIndex)
-                Toast.makeText(this, "Painting saved in cell $cellIndex!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Сохранено!", Toast.LENGTH_SHORT).show()
             }
         } else {
             Toast.makeText(this, "Error: Cell index not found!", Toast.LENGTH_SHORT).show()

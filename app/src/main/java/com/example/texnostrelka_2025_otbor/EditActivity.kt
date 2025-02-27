@@ -93,7 +93,7 @@ class EditActivity : AppCompatActivity(), OnItemPageClickListener {
                         val rows = inputRows.text.toString().toIntOrNull() ?: 1
                         val columns = inputColumns.text.toString().toIntOrNull() ?: 1
                         val pageId = UUID.randomUUID().toString()
-                        database.insertPage(pageId, comicsId, rows, columns, pageList.size)
+                        database.insertPage(pageId, AppData.comicsId, rows, columns, pageList.size)
                         startActivity(
                             Intent(this@EditActivity, EditPageActivity::class.java)
                                 .putExtra("ROWS_COUNT", rows)
