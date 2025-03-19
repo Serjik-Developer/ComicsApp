@@ -22,12 +22,10 @@ import com.example.texnostrelka_2025_otbor.interfaces.OnItemPageClickListener
 import com.example.texnostrelka_2025_otbor.models.Page
 import com.example.texnostrelka_2025_otbor.models.PageWithImages
 import com.example.texnostrelka_2025_otbor.models.PageWithImagesIds
+import com.example.texnostrelka_2025_otbor.objects.AppData
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.util.UUID
 
-object AppData {
-    var comicsId: String = ""
-}
 
 class EditActivity : AppCompatActivity(), OnItemPageClickListener {
     private lateinit var database: ComicsDatabase
@@ -43,7 +41,7 @@ class EditActivity : AppCompatActivity(), OnItemPageClickListener {
             if (comicsId.isNotEmpty()) AppData.comicsId = comicsId
         }
         catch (
-            E:Exception
+            _:Exception
         ) {
 
         }
@@ -153,5 +151,4 @@ class EditActivity : AppCompatActivity(), OnItemPageClickListener {
         val adapter = findViewById<RecyclerView>(R.id.RecyclerViewPages).adapter as PagesAdapter
         adapter.updateData(pageList) // Обновляем данные в адаптере
     }
-
 }
