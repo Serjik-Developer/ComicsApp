@@ -17,6 +17,7 @@ import com.example.texnostrelka_2025_otbor.models.Page
 import com.example.texnostrelka_2025_otbor.objects.AppData
 import com.example.texnostrelka_2025_otbor.repositories.ComicsRepository
 import com.example.texnostrelka_2025_otbor.viewmodels.ViewViewModel
+import android.util.Log
 
 class ViewActivity : AppCompatActivity() {
     private lateinit var viewModel: ViewViewModel
@@ -31,6 +32,7 @@ class ViewActivity : AppCompatActivity() {
             insets
         }
         comicsId = intent.getStringExtra("COMICS_ID") ?: throw IllegalArgumentException("COMICS_ID ARE REQUIRED")
+        Log.w("COMICS_ID", comicsId)
         val database = ComicsDatabase(this)
         val repository = ComicsRepository(database)
 
@@ -43,6 +45,8 @@ class ViewActivity : AppCompatActivity() {
             recyclerView.adapter = ViewAdapter(this, pages)
 
         })
+
+        viewModel.fetchData()
     }
 
 }
