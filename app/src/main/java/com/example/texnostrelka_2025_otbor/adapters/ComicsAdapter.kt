@@ -1,5 +1,6 @@
 package com.example.texnostrelka_2025_otbor.adapters
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +12,7 @@ import com.example.texnostrelka_2025_otbor.R
 import com.example.texnostrelka_2025_otbor.interfaces.OnItemClickListener
 import com.example.texnostrelka_2025_otbor.models.ComicsModel
 
-class ComiksAdapter(private val komikslist: MutableList<ComicsModel>, private val listener: OnItemClickListener) : RecyclerView.Adapter<ComiksAdapter.ComiksViewHolder>() {
+class ComicsAdapter(private var comics: MutableList<ComicsModel>, private val listener: OnItemClickListener) : RecyclerView.Adapter<ComicsAdapter.ComiksViewHolder>() {
 
     inner class ComiksViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val textView: TextView = itemView.findViewById(R.id.komiks_name)
@@ -23,25 +24,31 @@ class ComiksAdapter(private val komikslist: MutableList<ComicsModel>, private va
             itemView.setOnClickListener {
                 val position = adapterPosition
                 if (position != RecyclerView.NO_POSITION) {
-                    val id = komikslist[position].id!!
+                    val id = comics[position].id!!
                     listener.onItemClick(id)
                 }
             }
             delete_btn.setOnClickListener {
                 val position = adapterPosition
                 if (position != RecyclerView.NO_POSITION) {
-                    val id = komikslist[position].id!!
+                    val id = comics[position].id!!
                     listener.onDeleteClick(id)
                 }
             }
             edit_btn.setOnClickListener {
                 val position = adapterPosition
                 if (position != RecyclerView.NO_POSITION) {
-                    val id = komikslist[position].id!!
+                    val id = comics[position].id!!
                     listener.onEditClick(id)
                 }
             }
         }
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun updateData(newComics: MutableList<ComicsModel>) {
+        comics = newComics
+        notifyDataSetChanged() // Уведомляем адаптер об изменениях
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ComiksViewHolder {
@@ -50,7 +57,7 @@ class ComiksAdapter(private val komikslist: MutableList<ComicsModel>, private va
     }
 
     override fun onBindViewHolder(holder: ComiksViewHolder, position: Int) {
-        val komiksItem = komikslist[position]
+        val komiksItem = comics[position]
         holder.textView.text = komiksItem.text
         holder.textViewDesc.text = komiksItem.description
         if (komiksItem.image != null) {
@@ -59,5 +66,5 @@ class ComiksAdapter(private val komikslist: MutableList<ComicsModel>, private va
 
     }
 
-    override fun getItemCount(): Int = komikslist.size
+    override fun getItemCount(): Int = comics.size
 }

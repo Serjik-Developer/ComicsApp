@@ -27,11 +27,13 @@ class EditViewModel(private val comicsId: String, private val repository: Comics
         viewModelScope.launch {
             val pageId = UUID.randomUUID().toString()
             repository.insertPage(pageId, comicsId, rows, columns, number)
+            fetchPages()
         }
     }
     fun deletePage(pageId: String) {
         viewModelScope.launch {
             repository.deletePage(pageId)
+            fetchPages()
         }
     }
 }

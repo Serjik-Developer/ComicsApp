@@ -1,6 +1,7 @@
 package com.example.texnostrelka_2025_otbor.repositories
 
 import com.example.texnostrelka_2025_otbor.database.ComicsDatabase
+import com.example.texnostrelka_2025_otbor.models.ComicsModel
 import com.example.texnostrelka_2025_otbor.models.Page
 
 class ComicsRepository(private val database: ComicsDatabase) {
@@ -12,5 +13,14 @@ class ComicsRepository(private val database: ComicsDatabase) {
     }
     suspend fun deletePage(pageId: String) {
         database.deletePage(pageId)
+    }
+    suspend fun getComics() :  MutableList<ComicsModel> {
+        return database.getAll()
+    }
+    suspend fun insertComics(id: String, text: String, description: String) {
+        database.insert(id, text, description)
+    }
+    suspend fun deleteComics(id: String) {
+        database.delete(id)
     }
 }

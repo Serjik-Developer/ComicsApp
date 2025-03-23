@@ -57,7 +57,6 @@ class EditActivity : AppCompatActivity(), OnItemPageClickListener {
 
         viewModel.pages.observe(this, Observer { pages ->
             pageAdapter.updateData(pages)
-
         })
         addPageButton.setOnClickListener {
             showAddPageDialog()
