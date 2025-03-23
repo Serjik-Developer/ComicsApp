@@ -8,20 +8,27 @@ import android.widget.Button
 import android.widget.GridLayout
 import android.widget.ImageView
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.Observer
 import com.example.texnostrelka_2025_otbor.database.ComicsDatabase
+import com.example.texnostrelka_2025_otbor.factories.EditPageViewModelFactory
 import com.example.texnostrelka_2025_otbor.models.ImageModel
 import com.example.texnostrelka_2025_otbor.models.Page
 import com.example.texnostrelka_2025_otbor.models.PageWithImages
 import com.example.texnostrelka_2025_otbor.models.PageWithImagesIds
+import com.example.texnostrelka_2025_otbor.repositories.ComicsRepository
+import com.example.texnostrelka_2025_otbor.viewmodels.EditPageViewModel
 
 class EditPageActivity : AppCompatActivity() {
 
     private lateinit var gridLayout: GridLayout
     private lateinit var pageId: String
-
+    private val viewModel : EditPageViewModel by viewModels {
+        EditPageViewModelFactory(pageId, ComicsRepository(ComicsDatabase(this)))
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -40,23 +47,25 @@ class EditPageActivity : AppCompatActivity() {
         }
         val pageWithImagesIds = intent.getParcelableExtra<PageWithImagesIds>("PAGE_WITH_IMAGES")
         val pageIdIntent = intent.getStringExtra("PAGE_ID")
-        if (pageIdIntent == null) {
-            pageId = pageWithImagesIds!!.page.pageId
-        }
-        else {
-            pageId = pageIdIntent.toString()
-        }
+        pageId = pageIdIntent ?: pageWithImagesIds?.page?.pageId ?: throw IllegalArgumentException("Page ID is required")
         if (pageWithImagesIds != null) {
-            // Отрисовка существующих изображений
             renderImages(pageWithImagesIds)
         } else {
-            // Создание новой сетки
             val rows = intent.getIntExtra("ROWS_COUNT", 1)
             val columns = intent.getIntExtra("COLUMNS_COUNT", 1)
             createNewGrid(rows, columns)
         }
 
+        viewModel.images.observe(this, Observer { images ->
+            updateGridWithImages(images)
+        })
 
+        viewModel.pageWithImages.observe(this, Observer { pageWithImages ->
+            renderImages(pageWithImages)
+        })
+
+        viewModel.fetchPageWithImages()
+        viewModel.fetchImages()
     }
 
     private fun renderImages(pageWithImages: PageWithImagesIds) {
@@ -64,10 +73,8 @@ class EditPageActivity : AppCompatActivity() {
         gridLayout.rowCount = page.rows
         gridLayout.columnCount = page.columns
 
-        // Очищаем GridLayout перед добавлением новых изображений
         gridLayout.removeAllViews()
 
-        val database = ComicsDatabase(this)
         val imageIds = pageWithImages.imageIds
 
         // Создаем список всех ячеек
@@ -82,12 +89,8 @@ class EditPageActivity : AppCompatActivity() {
 
                 // Если изображение есть, загружаем его
                 if (i < imageIds.size) {
-                    val imageModel = database.getImageById(imageIds[i])
-                    if (imageModel != null) {
-                        setImageBitmap(imageModel.image)
-                    }
+                    viewModel.fetchImages()
                 } else {
-                    // Если изображения нет, добавляем серый фон
                     setBackgroundResource(android.R.color.darker_gray)
                 }
 
@@ -134,23 +137,20 @@ class EditPageActivity : AppCompatActivity() {
             gridLayout.addView(imageView)
         }
     }
-    override fun onResume() {
-        super.onResume()
-        val pageWithImagesIds = intent.getParcelableExtra<PageWithImagesIds>("PAGE_WITH_IMAGES")
-        val pageIdIntent = intent.getStringExtra("PAGE_ID")
 
-        if (pageIdIntent == null && pageWithImagesIds != null) {
-            pageId = pageWithImagesIds.page.pageId
-            renderImages(pageWithImagesIds)
-        } else if (pageIdIntent != null) {
-            pageId = pageIdIntent
-            val database = ComicsDatabase(this)
-            val page = database.getMyPage(pageId).find { it.pageId == pageId }
-            if (page != null) {
-                val imageIds = database.getAllImagesOnPage(pageId).map { it.id!! }
-                val pageWithImages = PageWithImagesIds(page, imageIds)
-                renderImages(pageWithImages)
+    private fun updateGridWithImages(images: List<ImageModel>) {
+        for (i in 0 until gridLayout.childCount) {
+            val imageView = gridLayout.getChildAt(i) as ImageView
+            if (i < images.size) {
+                imageView.setImageBitmap(images[i].image)
+            } else {
+                imageView.setBackgroundResource(android.R.color.darker_gray)
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.fetchPageWithImages()
     }
 }
