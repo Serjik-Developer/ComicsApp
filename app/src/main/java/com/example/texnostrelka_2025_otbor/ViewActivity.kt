@@ -38,14 +38,12 @@ class ViewActivity : AppCompatActivity() {
 
         val factory = ViewViewModelFactory(comicsId, repository)
         viewModel = ViewModelProvider(this, factory).get(ViewViewModel::class.java)
-
         viewModel.pages.observe( this, Observer { pages ->
             val recyclerView = findViewById<RecyclerView>(R.id.RecyclerViewView)
             recyclerView.layoutManager = LinearLayoutManager(this)
             recyclerView.adapter = ViewAdapter(this, pages)
 
         })
-
         viewModel.fetchData()
     }
 
