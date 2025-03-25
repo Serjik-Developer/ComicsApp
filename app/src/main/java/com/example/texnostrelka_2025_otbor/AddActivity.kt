@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.SeekBar
@@ -33,9 +34,7 @@ class AddActivity : AppCompatActivity() {
         cellIndex = intent.getIntExtra("CELL_INDEX", -1)
         imageId = intent.getStringExtra("IMAGE_ID")
 
-        // Загружаем существующее изображение, если есть
-
-
+        // TODO Загружаем существующее изображение, если есть
         // Обработчики для кнопок
         //ЦВЕТА
         findViewById<Button>(R.id.colorBlack).setOnClickListener {

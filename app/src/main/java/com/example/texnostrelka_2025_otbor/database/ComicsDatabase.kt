@@ -216,7 +216,7 @@ class ComicsDatabase(context: Context) {
         val db = databaseHelper.readableDatabase
         val cursor = db.rawQuery("SELECT * FROM image WHERE id = ?", arrayOf(imageId))
 
-        while (cursor.moveToFirst()) {
+        while (cursor.moveToNext()) {
             val id = cursor.getString(cursor.getColumnIndex("id"))
             val pageId = cursor.getString(cursor.getColumnIndex("pageId"))
             val imageByteArray = cursor.getBlob(cursor.getColumnIndex("image"))
