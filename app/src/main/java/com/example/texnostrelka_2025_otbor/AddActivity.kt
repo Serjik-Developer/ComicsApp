@@ -8,20 +8,33 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.SeekBar
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import com.example.texnostrelka_2025_otbor.database.ComicsDatabase
+import com.example.texnostrelka_2025_otbor.factories.AddViewModelFactory
+import com.example.texnostrelka_2025_otbor.repositories.ComicsRepository
+import com.example.texnostrelka_2025_otbor.viewmodels.AddViewModel
 
 class AddActivity : AppCompatActivity() {
     private lateinit var paintView: PaintView
-    private lateinit var databaseHelper: ComicsDatabase
     private lateinit var pageId: String
+    private var cellIndex: Int = -1
+    private var imageId: String? = null
+    private val viewModel: AddViewModel by viewModels {
+        AddViewModelFactory(ComicsRepository(ComicsDatabase(this)))
+    }
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add)
-        databaseHelper = ComicsDatabase(this)
         paintView = findViewById(R.id.paintView)
         pageId = intent.getStringExtra("PAGE_ID")!!
+        cellIndex = intent.getIntExtra("CELL_INDEX", -1)
+        imageId = intent.getStringExtra("IMAGE_ID")
+
+        // Загружаем существующее изображение, если есть
+
 
         // Обработчики для кнопок
         //ЦВЕТА
@@ -136,15 +149,7 @@ class AddActivity : AppCompatActivity() {
         val imageId = intent.getStringExtra("IMAGE_ID") // Получаем ID изображения, если оно есть
 
         if (cellIndex != -1) {
-            if (imageId != null) {
-                // Если изображение существует, обновляем его
-                databaseHelper.updatePainting(imageId, bitmap)
-                Toast.makeText(this, "Обновлено!", Toast.LENGTH_SHORT).show()
-            } else {
-                // Если изображение новое, добавляем его
-                databaseHelper.insertPainting(bitmap, pageId, cellIndex)
-                Toast.makeText(this, "Сохранено!", Toast.LENGTH_SHORT).show()
-            }
+            viewModel.savePainting(imageId, bitmap, pageId, cellIndex)
         } else {
             Toast.makeText(this, "Error: Cell index not found!", Toast.LENGTH_SHORT).show()
         }

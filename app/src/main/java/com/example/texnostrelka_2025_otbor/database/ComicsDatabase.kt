@@ -6,6 +6,7 @@ import android.content.Context
 import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.media.Image
 import android.util.Log
 import com.example.texnostrelka_2025_otbor.models.ComicsModel
 import com.example.texnostrelka_2025_otbor.models.ImageModel
@@ -16,6 +17,7 @@ import java.util.UUID
 class ComicsDatabase(context: Context) {
 
     private val databaseHelper = DatabaseHelper(context)
+    private lateinit var image: ImageModel
 
     fun insert(id: String, text: String, description: String) {
         val db = databaseHelper.writableDatabase
@@ -210,21 +212,20 @@ class ComicsDatabase(context: Context) {
         db.close()
     }
     @SuppressLint("Range")
-    fun getImageById(imageId: String): ImageModel? {
+    fun getImageById(imageId: String): ImageModel {
         val db = databaseHelper.readableDatabase
         val cursor = db.rawQuery("SELECT * FROM image WHERE id = ?", arrayOf(imageId))
 
-        return if (cursor.moveToFirst()) {
+        while (cursor.moveToFirst()) {
             val id = cursor.getString(cursor.getColumnIndex("id"))
             val pageId = cursor.getString(cursor.getColumnIndex("pageId"))
             val imageByteArray = cursor.getBlob(cursor.getColumnIndex("image"))
             val bitmap = BitmapFactory.decodeByteArray(imageByteArray, 0, imageByteArray.size)
             cursor.close()
-            ImageModel(id, pageId, bitmap)
-        } else {
-            cursor.close()
-            null
+            image = ImageModel(id, pageId, bitmap)
+
         }
+        return image
     }
 
 
