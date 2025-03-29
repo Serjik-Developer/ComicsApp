@@ -1,5 +1,6 @@
 package com.example.texnostrelka_2025_otbor.repositories
 
+import android.graphics.Bitmap
 import com.example.texnostrelka_2025_otbor.database.ComicsDatabase
 import com.example.texnostrelka_2025_otbor.models.ComicsModel
 import com.example.texnostrelka_2025_otbor.models.ImageModel
@@ -30,7 +31,13 @@ class ComicsRepository(private val database: ComicsDatabase) {
     suspend fun getAllImagesOnPage(pageId: String) : List<ImageModel> {
         return database.getAllImagesOnPage(pageId)
     }
-    suspend fun getImageById(imageId: String)  : ImageModel? {
+    suspend fun getImageById(imageId: String)  : ImageModel {
         return database.getImageById(imageId)
+    }
+    suspend fun updatePainting(imageId: String, bitmap: Bitmap) {
+        database.updatePainting(imageId, bitmap)
+    }
+    suspend fun insertPainting(bitmap: Bitmap, pageId: String, cellIndex: Int) {
+        database.insertPainting(bitmap, pageId, cellIndex)
     }
 }

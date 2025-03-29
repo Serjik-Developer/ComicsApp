@@ -19,7 +19,7 @@
    Откройте терминал и выполните команду:
 
    ```bash
-   git clone https://github.com/Serjik-Developer/Texnostrelka-2025-otbor.git
+   git clone https://github.com/Serjik-Developer/ComicsApp.git
    ```
 
 2. **Открытие проекта в Android Studio**
