@@ -1,8 +1,9 @@
 package com.example.texnostrelka_2025_otbor.repositories
 
 import com.example.texnostrelka_2025_otbor.api.RetrofitApiService
-import com.example.texnostrelka_2025_otbor.models.AuthRequest
-import com.example.texnostrelka_2025_otbor.models.AuthResponse
+import com.example.texnostrelka_2025_otbor.models.authentication.AuthRequest
+import com.example.texnostrelka_2025_otbor.models.authentication.AuthResponse
+import com.example.texnostrelka_2025_otbor.models.authentication.RegisterationRequest
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -17,5 +18,8 @@ class NetworkRepository {
 
     suspend fun authenticate(login: String, password: String) : AuthResponse {
         return apiService.authenticate(AuthRequest(login, password))
+    }
+    suspend fun registration(login: String, password: String, name: String) : AuthResponse {
+        return apiService.registration(RegisterationRequest(login, password, name))
     }
 }

@@ -3,10 +3,9 @@ package com.example.texnostrelka_2025_otbor.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.texnostrelka_2025_otbor.database.PreferencesManager
-import com.example.texnostrelka_2025_otbor.models.AuthResponse
+import com.example.texnostrelka_2025_otbor.models.authentication.AuthResponse
 import com.example.texnostrelka_2025_otbor.repositories.NetworkRepository
 import kotlinx.coroutines.launch
-import java.net.PasswordAuthentication
 
 class AuthViewModel(
     private val networkRepository: NetworkRepository,

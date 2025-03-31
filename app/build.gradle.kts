@@ -40,9 +40,9 @@ android {
 }
 
 dependencies {
-    implementation("androidx.activity:activity-ktx:1.4.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("androidx.activity:activity-ktx:1.4.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.2")
     implementation("androidx.activity:activity-ktx:1.7.2") // для by viewModels()

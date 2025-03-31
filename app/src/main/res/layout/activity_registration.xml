@@ -41,6 +41,22 @@
         app:layout_constraintTop_toBottomOf="@+id/reg_login"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+    <EditText
+        android:id="@+id/reg_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginTop="16dp"
+        android:hint="Enter your name"
+        android:inputType="textPassword"
+        android:backgroundTint="#D1D5DB"
+        android:padding="12dp"
+        android:textColor="#1F2937"
+        android:textColorHint="#9CA3AF"
+        android:drawableStart="@android:drawable/ic_lock_lock"
+        app:layout_constraintTop_toBottomOf="@+id/reg_pasword"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- Кнопка регистрации -->
     <Button
