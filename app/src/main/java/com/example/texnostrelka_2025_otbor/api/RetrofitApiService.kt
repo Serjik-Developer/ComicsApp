@@ -10,6 +10,6 @@ interface RetrofitApiService {
     @POST("/api/user/auth")
     suspend fun authenticate(@Body request: AuthRequest) : AuthResponse
 
-    @POST("/api/user/auth")
+    @POST("/api/user/register")
     suspend fun registration(@Body request: RegisterationRequest) : AuthResponse
 }
