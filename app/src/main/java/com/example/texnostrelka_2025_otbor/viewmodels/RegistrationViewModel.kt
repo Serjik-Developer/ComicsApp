@@ -16,6 +16,7 @@ class RegistrationViewModel(
             try {
                 val response = networkRepository.registration(login, password, name)
                 preferencesManager.saveAuthToken(response.token)
+                preferencesManager.saveName(response.name)
                 onResult(Result.success(response))
             }
             catch (e: Exception) {

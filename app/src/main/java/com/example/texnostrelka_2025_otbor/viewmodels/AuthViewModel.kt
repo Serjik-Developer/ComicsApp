@@ -17,6 +17,7 @@ class AuthViewModel(
             try {
                 val response = networkRepository.authenticate(login, password)
                 preferencesManager.saveAuthToken(response.token)
+                preferencesManager.saveName(response.name)
                 onResult(Result.success(response))
             } catch (e: Exception) {
                 onResult(Result.failure(e))

@@ -35,7 +35,7 @@ class AuthActivity : AppCompatActivity() {
                 runOnUiThread {
                     when {
                         result.isSuccess -> {
-                            Toast.makeText(this, "Успешный вход как ${result.getOrNull()?.login}", Toast.LENGTH_LONG).show()
+                            Toast.makeText(this, "Успешный вход как ${result.getOrNull()?.name}", Toast.LENGTH_LONG).show()
 
                         }
                         result.isFailure -> {
