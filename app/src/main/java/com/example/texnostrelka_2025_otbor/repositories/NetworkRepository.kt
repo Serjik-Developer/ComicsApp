@@ -1,6 +1,7 @@
 package com.example.texnostrelka_2025_otbor.repositories
 
 import com.example.texnostrelka_2025_otbor.api.RetrofitApiService
+import com.example.texnostrelka_2025_otbor.models.ComicsFromNetwork
 import com.example.texnostrelka_2025_otbor.models.ComicsModel
 import com.example.texnostrelka_2025_otbor.models.authentication.AuthRequest
 import com.example.texnostrelka_2025_otbor.models.authentication.AuthResponse
@@ -25,5 +26,8 @@ class NetworkRepository {
     }
     suspend fun getComics(token: String) : MutableList<ComicsModel> {
         return  apiService.getComics(token)
+    }
+    suspend fun getComicPages(id: String, token: String) : ComicsFromNetwork {
+        return apiService.getComicPages(id, token)
     }
 }

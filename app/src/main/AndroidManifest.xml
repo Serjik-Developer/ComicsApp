@@ -17,6 +17,9 @@
         android:theme="@style/Theme.Texnostrelka2025otbor"
         tools:targetApi="31">
         <activity
+            android:name=".PageNetworkActivity"
+            android:exported="false" />
+        <activity
             android:name=".ViewNetworkActivity"
             android:exported="false" />
         <activity

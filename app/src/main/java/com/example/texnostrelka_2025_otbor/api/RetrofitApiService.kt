@@ -1,5 +1,6 @@
 package com.example.texnostrelka_2025_otbor.api
 
+import com.example.texnostrelka_2025_otbor.models.ComicsFromNetwork
 import com.example.texnostrelka_2025_otbor.models.ComicsModel
 import com.example.texnostrelka_2025_otbor.models.authentication.AuthRequest
 import com.example.texnostrelka_2025_otbor.models.authentication.AuthResponse
@@ -8,6 +9,7 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
+import retrofit2.http.Path
 
 interface RetrofitApiService {
     @POST("/api/user/auth")
@@ -18,4 +20,7 @@ interface RetrofitApiService {
 
     @GET("/api/comics")
     suspend fun getComics(@Header("Authorization") token: String) : MutableList<ComicsModel>
+
+    @GET("/api/comics/{id}")
+    suspend fun getComicPages(@Path("id") id: String, @Header("Authorization") token: String) : ComicsFromNetwork
 }
