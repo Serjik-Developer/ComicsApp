@@ -1,6 +1,7 @@
 package com.example.texnostrelka_2025_otbor.repositories
 
 import com.example.texnostrelka_2025_otbor.api.RetrofitApiService
+import com.example.texnostrelka_2025_otbor.models.ComicsModel
 import com.example.texnostrelka_2025_otbor.models.authentication.AuthRequest
 import com.example.texnostrelka_2025_otbor.models.authentication.AuthResponse
 import com.example.texnostrelka_2025_otbor.models.authentication.RegisterationRequest
@@ -21,5 +22,8 @@ class NetworkRepository {
     }
     suspend fun registration(login: String, password: String, name: String) : AuthResponse {
         return apiService.registration(RegisterationRequest(login, password, name))
+    }
+    suspend fun getComics(token: String) : MutableList<ComicsModel> {
+        return  apiService.getComics(token)
     }
 }

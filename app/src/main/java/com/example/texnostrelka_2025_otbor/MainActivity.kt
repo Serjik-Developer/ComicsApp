@@ -24,16 +24,14 @@ import com.example.texnostrelka_2025_otbor.viewmodelslist.MainViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class MainActivity : AppCompatActivity(), OnItemClickListener {
-    private lateinit var database: ComicsDatabase
     private lateinit var comicsAdapter: ComicsAdapter
     private val viewModel: MainViewModel by viewModels {
-        MainViewModelFactory(ComicsRepository(database))
+        MainViewModelFactory(ComicsRepository(ComicsDatabase(this)))
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        database = ComicsDatabase(this)
         comicsAdapter = ComicsAdapter(mutableListOf(), this)
         val add_btn = findViewById<ImageButton>(R.id.btn_new)
         val recycler_view = findViewById<RecyclerView>(R.id.rv_komiks)
