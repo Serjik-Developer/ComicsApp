@@ -45,6 +45,7 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
         add_btn.setOnClickListener {
             showAddComicsDialog()
         }
+        findViewById<ImageButton>(R.id.imageBtnNetwork).setOnClickListener { startActivity(Intent(this,ViewNetworkActivity::class.java)) }
     }
     private fun showAddComicsDialog() {
         val inputName = EditText(this).apply {

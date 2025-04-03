@@ -1,6 +1,8 @@
 package com.example.texnostrelka_2025_otbor.adapters
 
 import android.annotation.SuppressLint
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,8 +14,12 @@ import com.example.texnostrelka_2025_otbor.R
 import com.example.texnostrelka_2025_otbor.interfaces.OnItemClickListener
 import com.example.texnostrelka_2025_otbor.models.ComicsFromNetwork
 import com.example.texnostrelka_2025_otbor.models.ComicsModel
+import com.example.texnostrelka_2025_otbor.models.ComicsNetworkModel
+import kotlin.io.encoding.Base64
+import kotlin.io.encoding.ExperimentalEncodingApi
 
-class ComicsNetworkAdapter(private var comics: MutableList<ComicsModel>, private val listener: OnItemClickListener) : RecyclerView.Adapter<ComicsNetworkAdapter.ComiksViewHolder>() {
+@OptIn(ExperimentalEncodingApi::class)
+class ComicsNetworkAdapter(private var comics: MutableList<ComicsNetworkModel>, private val listener: OnItemClickListener) : RecyclerView.Adapter<ComicsNetworkAdapter.ComiksViewHolder>() {
 
     inner class ComiksViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val textView: TextView = itemView.findViewById(R.id.comics_network_name)
@@ -32,11 +38,18 @@ class ComicsNetworkAdapter(private var comics: MutableList<ComicsModel>, private
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun updateData(newComics: MutableList<ComicsModel>) {
+    fun updateData(newComics: MutableList<ComicsNetworkModel>) {
         comics = newComics
         notifyDataSetChanged() // Уведомляем адаптер об изменениях
     }
-
+    fun String.base64ToBitmap(): Bitmap? {
+        return try {
+            val imageBytes = Base64.decode(this)
+            BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+        } catch (e: Exception) {
+            null
+        }
+    }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ComiksViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.comics_from_network, parent, false)
         return ComiksViewHolder(view)
@@ -46,10 +59,9 @@ class ComicsNetworkAdapter(private var comics: MutableList<ComicsModel>, private
         val komiksItem = comics[position]
         holder.textView.text = komiksItem.text
         holder.textViewDesc.text = komiksItem.description
-        if (komiksItem.image != null) {
-            holder.imageView.setImageBitmap(komiksItem.image)
+        komiksItem.image?.let { base64 ->
+            holder.imageView.setImageBitmap(base64.base64ToBitmap())
         }
-
     }
 
     override fun getItemCount(): Int = comics.size

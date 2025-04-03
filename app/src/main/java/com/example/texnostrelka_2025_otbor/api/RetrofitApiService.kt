@@ -2,6 +2,7 @@ package com.example.texnostrelka_2025_otbor.api
 
 import com.example.texnostrelka_2025_otbor.models.ComicsFromNetwork
 import com.example.texnostrelka_2025_otbor.models.ComicsModel
+import com.example.texnostrelka_2025_otbor.models.ComicsNetworkModel
 import com.example.texnostrelka_2025_otbor.models.authentication.AuthRequest
 import com.example.texnostrelka_2025_otbor.models.authentication.AuthResponse
 import com.example.texnostrelka_2025_otbor.models.authentication.RegisterationRequest
@@ -19,7 +20,7 @@ interface RetrofitApiService {
     suspend fun registration(@Body request: RegisterationRequest) : AuthResponse
 
     @GET("/api/comics")
-    suspend fun getComics(@Header("Authorization") token: String) : MutableList<ComicsModel>
+    suspend fun getComics(@Header("Authorization") token: String) : MutableList<ComicsNetworkModel>
 
     @GET("/api/comics/{id}")
     suspend fun getComicPages(@Path("id") id: String, @Header("Authorization") token: String) : ComicsFromNetwork

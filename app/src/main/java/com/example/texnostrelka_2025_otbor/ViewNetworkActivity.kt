@@ -2,6 +2,7 @@ package com.example.texnostrelka_2025_otbor
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -31,12 +32,18 @@ class ViewNetworkActivity : AppCompatActivity(), OnItemClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityViewNetworkBinding.inflate(layoutInflater)
+        comicsAdapter = ComicsNetworkAdapter(mutableListOf(), this)
         setContentView(binding.root)
         binding.RecyclerViewNetwork.layoutManager = LinearLayoutManager(this)
         binding.RecyclerViewNetwork.adapter = comicsAdapter
         viewModel.comics.observe( this, Observer { comics ->
             comicsAdapter.updateData(comics)
         })
+        viewModel.error.observe(this) { error ->
+            error?.let {
+                Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+            }
+        }
         viewModel.fetchComics()
     }
 
@@ -46,7 +53,7 @@ class ViewNetworkActivity : AppCompatActivity(), OnItemClickListener {
     }
 
     override fun onItemClick(id: String) {
-        val intent = Intent(this, ViewActivity::class.java)
+        val intent = Intent(this, PageNetworkActivity::class.java)
         intent.putExtra("COMICS_ID", id)
         startActivity(intent)
     }
