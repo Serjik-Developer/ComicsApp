@@ -27,17 +27,9 @@ class NetworkRepository {
         return apiService.registration(RegisterationRequest(login, password, name))
     }
     suspend fun getComics(token: String): MutableList<ComicsNetworkModel> {
-        return try {
-            val data = apiService.getComics("Bearer $token")
-            Log.d("NetworkRepository", "Received ${data.size} comics")
-            Log.d("NetworkRepository", "First comic: ${data.firstOrNull()}")
-            data
-        } catch (e: Exception) {
-            Log.e("NetworkRepository", "Error getting comics", e)
-            mutableListOf()
-        }
+        return apiService.getComics("Bearer $token")
     }
     suspend fun getComicPages(id: String, token: String) : ComicsFromNetwork {
-        return apiService.getComicPages(id, token)
+        return apiService.getComicPages(id, "Bearer $token")
     }
 }
