@@ -2,9 +2,9 @@ package com.example.texnostrelka_2025_otbor.repositories
 
 import android.util.Log
 import com.example.texnostrelka_2025_otbor.api.RetrofitApiService
-import com.example.texnostrelka_2025_otbor.models.ComicsFromNetwork
+import com.example.texnostrelka_2025_otbor.models.NetworkModels.ComicsFromNetwork
 import com.example.texnostrelka_2025_otbor.models.ComicsModel
-import com.example.texnostrelka_2025_otbor.models.ComicsNetworkModel
+import com.example.texnostrelka_2025_otbor.models.NetworkModels.ComicsNetworkModel
 import com.example.texnostrelka_2025_otbor.models.authentication.AuthRequest
 import com.example.texnostrelka_2025_otbor.models.authentication.AuthResponse
 import com.example.texnostrelka_2025_otbor.models.authentication.RegisterationRequest

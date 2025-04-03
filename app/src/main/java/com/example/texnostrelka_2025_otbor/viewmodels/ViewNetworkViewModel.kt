@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.texnostrelka_2025_otbor.database.PreferencesManager
-import com.example.texnostrelka_2025_otbor.models.ComicsNetworkModel
+import com.example.texnostrelka_2025_otbor.models.NetworkModels.ComicsNetworkModel
 import com.example.texnostrelka_2025_otbor.repositories.NetworkRepository
 import kotlinx.coroutines.launch
 

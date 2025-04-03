@@ -12,9 +12,9 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.texnostrelka_2025_otbor.R
 import com.example.texnostrelka_2025_otbor.interfaces.OnItemClickListener
-import com.example.texnostrelka_2025_otbor.models.ComicsFromNetwork
+import com.example.texnostrelka_2025_otbor.models.NetworkModels.ComicsFromNetwork
 import com.example.texnostrelka_2025_otbor.models.ComicsModel
-import com.example.texnostrelka_2025_otbor.models.ComicsNetworkModel
+import com.example.texnostrelka_2025_otbor.models.NetworkModels.ComicsNetworkModel
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
 

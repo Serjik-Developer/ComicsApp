@@ -1,4 +1,6 @@
-package com.example.texnostrelka_2025_otbor.models
+package com.example.texnostrelka_2025_otbor.models.NetworkModels
+
+import com.example.texnostrelka_2025_otbor.models.NetworkModels.PageFromNetwork
 
 data class ComicsFromNetwork(
     val id: String,

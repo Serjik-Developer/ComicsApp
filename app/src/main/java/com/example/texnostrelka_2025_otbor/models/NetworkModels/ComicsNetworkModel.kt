@@ -1,4 +1,4 @@
-package com.example.texnostrelka_2025_otbor.models
+package com.example.texnostrelka_2025_otbor.models.NetworkModels
 
 data class ComicsNetworkModel(
     val id: String? = null,
