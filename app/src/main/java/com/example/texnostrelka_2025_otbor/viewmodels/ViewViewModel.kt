@@ -15,8 +15,8 @@ class ViewViewModel(private val comicsId : String, private val repository: Comic
 
     fun fetchData() {
         viewModelScope.launch{
-            val _result = repository.getAllPages(comicsId)
-            _pages.value = _result
+            val result = repository.getAllPages(comicsId)
+            _pages.value = result
         }
     }
 }

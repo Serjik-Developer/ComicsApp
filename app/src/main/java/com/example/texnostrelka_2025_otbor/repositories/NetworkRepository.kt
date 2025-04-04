@@ -5,6 +5,7 @@ import com.example.texnostrelka_2025_otbor.api.RetrofitApiService
 import com.example.texnostrelka_2025_otbor.models.NetworkModels.ComicsFromNetwork
 import com.example.texnostrelka_2025_otbor.models.ComicsModel
 import com.example.texnostrelka_2025_otbor.models.NetworkModels.ComicsNetworkModel
+import com.example.texnostrelka_2025_otbor.models.NetworkModels.PageFromNetwork
 import com.example.texnostrelka_2025_otbor.models.authentication.AuthRequest
 import com.example.texnostrelka_2025_otbor.models.authentication.AuthResponse
 import com.example.texnostrelka_2025_otbor.models.authentication.RegisterationRequest
@@ -29,7 +30,10 @@ class NetworkRepository {
     suspend fun getComics(token: String): MutableList<ComicsNetworkModel> {
         return apiService.getComics("Bearer $token")
     }
-    suspend fun getComicPages(id: String, token: String) : ComicsFromNetwork {
+    suspend fun getComicById(id: String, token: String) : ComicsFromNetwork {
         return apiService.getComicPages(id, "Bearer $token")
+    }
+    suspend fun getComicPages(id: String, token: String) : MutableList<PageFromNetwork>? {
+        return apiService.getComicPages(id, "Bearer $token").pages
     }
 }
