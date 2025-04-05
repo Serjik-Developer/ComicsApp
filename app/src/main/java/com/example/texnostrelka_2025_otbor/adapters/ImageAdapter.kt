@@ -10,7 +10,6 @@ import com.example.texnostrelka_2025_otbor.R
 import com.example.texnostrelka_2025_otbor.models.ImageModel
 
 class ImageAdapter(
-    private val context: Context,
     private val imageList: List<ImageModel>
 ) : RecyclerView.Adapter<ImageAdapter.ImageViewHolder>() {
 

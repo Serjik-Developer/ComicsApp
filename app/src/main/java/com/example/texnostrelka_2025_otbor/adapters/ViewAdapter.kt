@@ -43,7 +43,7 @@ class ViewAdapter(
 
             // Настраиваем RecyclerView для изображений
             imageRecyclerView.layoutManager = GridLayoutManager(context, item.columns)
-            imageRecyclerView.adapter = ImageAdapter(context, imageList)
+            imageRecyclerView.adapter = ImageAdapter(imageList)
 
         }
     }
