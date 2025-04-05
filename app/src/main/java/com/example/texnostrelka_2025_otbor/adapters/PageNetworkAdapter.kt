@@ -9,15 +9,19 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.texnostrelka_2025_otbor.R
 import com.example.texnostrelka_2025_otbor.adapters.PageNetworkAdapter.PageNetworkViewHolder
+import com.example.texnostrelka_2025_otbor.models.NetworkModels.ComicsNetworkModel
 import com.example.texnostrelka_2025_otbor.models.NetworkModels.PageFromNetwork
 
-class PageNetworkAdapter(private val pages: MutableList<PageFromNetwork>, private val context: Context) : RecyclerView.Adapter<PageNetworkViewHolder>() {
+class PageNetworkAdapter(private var pages: MutableList<PageFromNetwork>, private val context: Context) : RecyclerView.Adapter<PageNetworkViewHolder>() {
     override fun getItemCount(): Int = pages.size
 
     override fun onBindViewHolder(holder: PageNetworkViewHolder, position: Int) {
         holder.bind(pages[position])
     }
-
+    fun updateData(newPages: MutableList<PageFromNetwork>) {
+        pages = newPages
+        notifyDataSetChanged() // Уведомляем адаптер об изменениях
+    }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PageNetworkViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.pages_item_view, parent, false)
         return PageNetworkViewHolder(view, context)
@@ -30,5 +34,6 @@ class PageNetworkAdapter(private val pages: MutableList<PageFromNetwork>, privat
             imageRecyclerView.layoutManager = GridLayoutManager(context, item.columns)
             imageRecyclerView.adapter = ImageNetworkAdapter(imagesForPage!!)
         }
+
     }
 }
