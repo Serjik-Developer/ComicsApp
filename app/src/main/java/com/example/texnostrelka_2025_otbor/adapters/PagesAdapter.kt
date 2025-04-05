@@ -16,16 +16,23 @@ import com.example.texnostrelka_2025_otbor.interfaces.OnItemPageClickListener
 import com.example.texnostrelka_2025_otbor.models.ImageModel
 import com.example.texnostrelka_2025_otbor.models.Page
 import com.example.texnostrelka_2025_otbor.models.PageWithImages
+import com.example.texnostrelka_2025_otbor.repositories.ComicsRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class PagesAdapter(
     private val context: Context,
     private var items: MutableList<Page>,
-    private val listener: OnItemPageClickListener
+    private val listener: OnItemPageClickListener,
+    private val comicsRepository: ComicsRepository,
+    private val coroutineScope: CoroutineScope
 ) : RecyclerView.Adapter<PagesAdapter.PageViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PageViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.pages_item, parent, false)
-        return PageViewHolder(context, view, listener)
+        return PageViewHolder(context, view, listener, comicsRepository, coroutineScope)
     }
 
     override fun onBindViewHolder(holder: PageViewHolder, position: Int) {
@@ -41,27 +48,28 @@ class PagesAdapter(
     class PageViewHolder(
         private val context: Context,
         itemView: View,
-        private val listener: OnItemPageClickListener
+        private val listener: OnItemPageClickListener,
+        private val comicsRepository: ComicsRepository,
+        private val coroutineScope: CoroutineScope
     ) : RecyclerView.ViewHolder(itemView) {
         private val imageRecyclerView: RecyclerView = itemView.findViewById(R.id.imageRecyclerView)
         private val editBtn: ImageButton = itemView.findViewById(R.id.edit_page_btn)
         private val deleteBtn: ImageButton = itemView.findViewById(R.id.delete_page_btn)
 
         fun bind(item: Page) {
-            // Получаем все изображения для текущей страницы
-            val database = ComicsDatabase(context)
-            val imageList = database.getAllImagesOnPage(item.pageId)
+            coroutineScope.launch {
+                val imageList = comicsRepository.getAllImagesOnPage(item.pageId)
 
-            // Настраиваем RecyclerView для изображений
-            imageRecyclerView.layoutManager = GridLayoutManager(context, item.columns)
-            imageRecyclerView.adapter = ImageAdapter(context, imageList)
-
-            // Обработка нажатий на кнопки
-            deleteBtn.setOnClickListener {
-                listener.onDeleteClick(item.pageId)
-            }
-            editBtn.setOnClickListener {
-                listener.onEditClick(PageWithImages(item, imageList))
+                withContext(Dispatchers.Main) {
+                    imageRecyclerView.layoutManager = GridLayoutManager(context, item.columns)
+                    imageRecyclerView.adapter = ImageAdapter(imageList)
+                    deleteBtn.setOnClickListener {
+                        listener.onDeleteClick(item.pageId)
+                    }
+                    editBtn.setOnClickListener {
+                        listener.onEditClick(PageWithImages(item, imageList))
+                    }
+                }
             }
         }
     }

@@ -18,6 +18,7 @@ import com.example.texnostrelka_2025_otbor.objects.AppData
 import com.example.texnostrelka_2025_otbor.repositories.ComicsRepository
 import com.example.texnostrelka_2025_otbor.viewmodels.ViewViewModel
 import android.util.Log
+import androidx.lifecycle.lifecycleScope
 
 class ViewActivity : AppCompatActivity() {
     private lateinit var viewModel: ViewViewModel
@@ -41,8 +42,7 @@ class ViewActivity : AppCompatActivity() {
         viewModel.pages.observe( this, Observer { pages ->
             val recyclerView = findViewById<RecyclerView>(R.id.RecyclerViewView)
             recyclerView.layoutManager = LinearLayoutManager(this)
-            recyclerView.adapter = ViewAdapter(this, pages)
-
+            recyclerView.adapter = ViewAdapter(this, pages, repository, lifecycleScope)
         })
         viewModel.fetchData()
     }

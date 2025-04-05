@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.texnostrelka_2025_otbor.adapters.ImageAdapter
@@ -34,7 +35,7 @@ import java.util.UUID
 
 
 class EditActivity : AppCompatActivity(), OnItemPageClickListener {
-    private lateinit var database: ComicsDatabase
+    private val database: ComicsDatabase = ComicsDatabase(this)
     private lateinit var comicsId: String
     private lateinit var pageAdapter: PagesAdapter
     private val viewModel: EditViewModel by viewModels {
@@ -44,15 +45,13 @@ class EditActivity : AppCompatActivity(), OnItemPageClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit)
-
-        database = ComicsDatabase(this)
         comicsId = intent.getStringExtra("COMICS_ID") ?: AppData.comicsId
         Log.w("COMICS_ID", comicsId)
         val addPageButton = findViewById<ImageButton>(R.id.button)
         val recyclerView = findViewById<RecyclerView>(R.id.RecyclerViewPages)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        pageAdapter = PagesAdapter(this, mutableListOf(), this)
+        pageAdapter = PagesAdapter(this, mutableListOf(), this, ComicsRepository(database), lifecycleScope)
         recyclerView.adapter = pageAdapter
 
         viewModel.pages.observe(this, Observer { pages ->
