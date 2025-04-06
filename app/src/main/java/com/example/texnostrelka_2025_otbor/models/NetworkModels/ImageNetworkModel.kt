@@ -4,7 +4,6 @@ import android.graphics.Bitmap
 
 data class ImageNetworkModel(
     val id: String? = null,
-    val pageId: String? = null,
-    val image: String? = null,
-    val cellIndex: Int = -1
+    val cellIndex: Int = -1,
+    val image: String? = null
 )

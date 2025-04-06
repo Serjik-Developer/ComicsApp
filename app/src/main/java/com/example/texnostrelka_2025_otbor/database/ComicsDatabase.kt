@@ -10,7 +10,11 @@ import android.media.Image
 import android.util.Log
 import com.example.texnostrelka_2025_otbor.models.ComicsModel
 import com.example.texnostrelka_2025_otbor.models.ImageModel
+import com.example.texnostrelka_2025_otbor.models.NetworkModels.ComicsFromNetwork
+import com.example.texnostrelka_2025_otbor.models.NetworkModels.ImageNetworkModel
+import com.example.texnostrelka_2025_otbor.models.NetworkModels.PageFromNetwork
 import com.example.texnostrelka_2025_otbor.models.Page
+import com.example.texnostrelka_2025_otbor.utils.toBase64
 import java.io.ByteArrayOutputStream
 import java.util.UUID
 
@@ -227,7 +231,39 @@ class ComicsDatabase(context: Context) {
         }
         return image
     }
+    @SuppressLint("Range")
+    fun getComicsById(id: String) : ComicsFromNetwork {
+        var text = ""
+        var description = ""
+        val db = databaseHelper.readableDatabase
+        val cursor = db.rawQuery("SELECT * FROM comics WHERE id = ?", arrayOf(id))
+        var pages : MutableList<PageFromNetwork> ? = mutableListOf()
+        var images : MutableList<ImageNetworkModel> ? = mutableListOf()
+        while (cursor.moveToNext()) {
+            val comicsId = cursor.getString(cursor.getColumnIndex("id"))
+            text = cursor.getString(cursor.getColumnIndex("text"))
+            description = cursor.getString(cursor.getColumnIndex("description"))
+            val cursorPages = db.rawQuery("SELECT * FROM pages WHERE comicsId = ?", arrayOf(comicsId))
+            while (cursorPages.moveToNext()) {
+                val pageId = cursorPages.getString(cursorPages.getColumnIndex("pageId"))
+                val number = cursorPages.getInt(cursorPages.getColumnIndex("number"))
+                val rows = cursorPages.getInt(cursorPages.getColumnIndex("rows"))
+                val columns = cursorPages.getInt(cursorPages.getColumnIndex("columns"))
+                val cursorImages = db.rawQuery("SELECT * FROM image WHERE pageId = ?", arrayOf(pageId))
+                while (cursorImages.moveToNext()) {
+                    val imageId = cursorImages.getString(cursorImages.getColumnIndex("id"))
+                    val cellIndex = cursorImages.getInt(cursorImages.getColumnIndex("id"))
+                    val imageByteArray = cursorImages.getBlob(cursorImages.getColumnIndex("id"))
+                    val bitmapImage = BitmapFactory.decodeByteArray(imageByteArray, 0, imageByteArray.size)
+                    val image = bitmapImage.toBase64()
+                    images?.add(ImageNetworkModel(imageId, cellIndex, image))
+                }
+                cursorImages.close()
+                pages?.add(PageFromNetwork(pageId, number, rows, columns, images))
+            }
+            cursorPages.close()
 
-
-    //TODO DELETE AND UPDATE PAINTINGS
+        }
+        return ComicsFromNetwork(id, text, description, pages)
+    }
 }

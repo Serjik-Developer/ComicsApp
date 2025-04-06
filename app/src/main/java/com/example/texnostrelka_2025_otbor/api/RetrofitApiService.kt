@@ -24,4 +24,7 @@ interface RetrofitApiService {
 
     @GET("/api/comics/{id}")
     suspend fun getComicPages(@Path("id") id: String, @Header("Authorization") token: String) : ComicsFromNetwork
+
+    @POST("/api/comics/")
+    suspend fun postComics(@Header("Authorization") token: String) : String
 }

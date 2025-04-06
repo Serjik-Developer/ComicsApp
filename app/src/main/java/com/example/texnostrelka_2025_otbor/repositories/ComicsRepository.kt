@@ -4,6 +4,8 @@ import android.graphics.Bitmap
 import com.example.texnostrelka_2025_otbor.database.ComicsDatabase
 import com.example.texnostrelka_2025_otbor.models.ComicsModel
 import com.example.texnostrelka_2025_otbor.models.ImageModel
+import com.example.texnostrelka_2025_otbor.models.NetworkModels.ComicsFromNetwork
+import com.example.texnostrelka_2025_otbor.models.NetworkModels.ComicsNetworkModel
 import com.example.texnostrelka_2025_otbor.models.Page
 
 class ComicsRepository(private val database: ComicsDatabase) {
@@ -39,5 +41,8 @@ class ComicsRepository(private val database: ComicsDatabase) {
     }
     suspend fun insertPainting(bitmap: Bitmap, pageId: String, cellIndex: Int) {
         database.insertPainting(bitmap, pageId, cellIndex)
+    }
+    suspend fun getComicsById(id: String) : ComicsFromNetwork {
+        return database.getComicsById(id)
     }
 }
