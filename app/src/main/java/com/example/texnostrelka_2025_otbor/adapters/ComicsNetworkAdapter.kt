@@ -18,7 +18,6 @@ import com.example.texnostrelka_2025_otbor.models.NetworkModels.ComicsNetworkMod
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
 
-@OptIn(ExperimentalEncodingApi::class)
 class ComicsNetworkAdapter(private var comics: MutableList<ComicsNetworkModel>, private val listener: OnItemClickListener) : RecyclerView.Adapter<ComicsNetworkAdapter.ComiksViewHolder>() {
 
     inner class ComiksViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -44,7 +43,7 @@ class ComicsNetworkAdapter(private var comics: MutableList<ComicsNetworkModel>, 
     }
     fun String.base64ToBitmap(): Bitmap? {
         return try {
-            val imageBytes = Base64.decode(this)
+            val imageBytes = android.util.Base64.decode(this, android.util.Base64.DEFAULT)
             BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
         } catch (e: Exception) {
             null
