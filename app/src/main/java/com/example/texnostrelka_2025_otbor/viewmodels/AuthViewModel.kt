@@ -1,5 +1,7 @@
 package com.example.texnostrelka_2025_otbor.viewmodels
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.texnostrelka_2025_otbor.database.PreferencesManager
@@ -11,7 +13,8 @@ class AuthViewModel(
     private val networkRepository: NetworkRepository,
     private val preferencesManager: PreferencesManager
 ) : ViewModel() {
-
+    private val _error = MutableLiveData<String?>()
+    val error : LiveData<String?> get() = _error
     fun authenticate(login: String, password: String, onResult: (Result<AuthResponse>) -> Unit) {
         viewModelScope.launch {
             try {

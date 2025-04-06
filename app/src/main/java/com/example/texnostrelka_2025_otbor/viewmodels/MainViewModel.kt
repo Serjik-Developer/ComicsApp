@@ -57,9 +57,9 @@ class MainViewModel(private val repository: ComicsRepository, private val networ
             }
             catch (e: NetworkRepository.NotAuthorizedException) {
                 _errorMessage.value = e.message
+                preferencesManager.clearAuthToken()
+                preferencesManager.clearName()
             }
-            preferencesManager.clearAuthToken()
-            preferencesManager.clearName()
         }
     }
 }

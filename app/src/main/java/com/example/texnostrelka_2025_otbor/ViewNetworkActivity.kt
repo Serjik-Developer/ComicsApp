@@ -18,6 +18,7 @@ import com.example.texnostrelka_2025_otbor.factories.ViewNetworkViewModelFactory
 import com.example.texnostrelka_2025_otbor.interfaces.OnItemClickListener
 import com.example.texnostrelka_2025_otbor.repositories.NetworkRepository
 import com.example.texnostrelka_2025_otbor.viewmodels.ViewNetworkViewModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class ViewNetworkActivity : AppCompatActivity(), OnItemClickListener {
     private lateinit var binding: ActivityViewNetworkBinding
@@ -41,13 +42,23 @@ class ViewNetworkActivity : AppCompatActivity(), OnItemClickListener {
         })
         viewModel.error.observe(this) { error ->
             error?.let {
-                if (it == "Auth token is missing") {
+                if (it == "Не авторизован.") {
                     startActivity(Intent(this, AuthActivity::class.java))
                 }
-                Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+                else {
+                    showErrorDialog(error)
+                }
             }
         }
         viewModel.fetchComics()
+    }
+
+    private fun showErrorDialog(message: String) {
+        MaterialAlertDialogBuilder(this)
+            .setTitle("Ошибка")
+            .setMessage(message)
+            .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
+            .show()
     }
 
     override fun onResume() {
