@@ -12,7 +12,6 @@ import com.example.texnostrelka_2025_otbor.adapters.ImageNetworkAdapter.ImageNet
 import com.example.texnostrelka_2025_otbor.models.ImageModel
 import com.example.texnostrelka_2025_otbor.models.NetworkModels.ImageNetworkModel
 import kotlin.io.encoding.Base64
-import kotlin.io.encoding.ExperimentalEncodingApi
 
 class ImageNetworkAdapter(private val imageList: MutableList<ImageNetworkModel>) : RecyclerView.Adapter<ImageNetworkViewHolder>(){
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageNetworkViewHolder {
@@ -28,10 +27,9 @@ class ImageNetworkAdapter(private val imageList: MutableList<ImageNetworkModel>)
     class ImageNetworkViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val imageView: ImageView = itemView.findViewById(R.id.imageView)
 
-        @OptIn(ExperimentalEncodingApi::class)
         fun String.base64ToBitmap(): Bitmap? {
             return try {
-                val imageBytes = Base64.decode(this)
+                val imageBytes = android.util.Base64.decode(this, android.util.Base64.DEFAULT)
                 BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
             } catch (e: Exception) {
                 null

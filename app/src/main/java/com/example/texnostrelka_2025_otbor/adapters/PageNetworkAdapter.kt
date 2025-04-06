@@ -26,12 +26,13 @@ class PageNetworkAdapter(private var pages: MutableList<PageFromNetwork>, privat
         val view = LayoutInflater.from(parent.context).inflate(R.layout.pages_item_view, parent, false)
         return PageNetworkViewHolder(view, context)
     }
-    class PageNetworkViewHolder(private val itemView: View, private val context: Context) : RecyclerView.ViewHolder(itemView) {
-        private val imageRecyclerView: RecyclerView = itemView.findViewById(R.id.imageRecyclerView)
+    class PageNetworkViewHolder(itemView: View, private val context: Context) : RecyclerView.ViewHolder(itemView) {
+        private val imageRecyclerView: RecyclerView = itemView.findViewById(R.id.imageRecyclerViewView)
         fun bind(item: PageFromNetwork) {
             val imagesForPage = item.images
-
-            imageRecyclerView.layoutManager = GridLayoutManager(context, item.columns)
+            var columns = item.columns
+            if (columns == 0) columns = 1
+            imageRecyclerView.layoutManager = GridLayoutManager(context, columns)
             imageRecyclerView.adapter = ImageNetworkAdapter(imagesForPage!!)
         }
 

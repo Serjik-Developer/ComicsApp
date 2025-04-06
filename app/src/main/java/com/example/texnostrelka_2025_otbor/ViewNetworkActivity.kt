@@ -41,6 +41,9 @@ class ViewNetworkActivity : AppCompatActivity(), OnItemClickListener {
         })
         viewModel.error.observe(this) { error ->
             error?.let {
+                if (it == "Auth token is missing") {
+                    startActivity(Intent(this, AuthActivity::class.java))
+                }
                 Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
             }
         }
