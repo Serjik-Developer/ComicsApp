@@ -68,4 +68,8 @@ class ViewNetworkActivity : AppCompatActivity(), OnItemClickListener {
     override fun onEditClick(id: String) {
         TODO("Not yet implemented")
     }
+
+    override fun onSendClick(id: String) {
+        TODO("Not yet implemented")
+    }
 }

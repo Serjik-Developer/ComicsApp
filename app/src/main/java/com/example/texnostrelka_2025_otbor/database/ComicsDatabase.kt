@@ -252,8 +252,8 @@ class ComicsDatabase(context: Context) {
                 val cursorImages = db.rawQuery("SELECT * FROM image WHERE pageId = ?", arrayOf(pageId))
                 while (cursorImages.moveToNext()) {
                     val imageId = cursorImages.getString(cursorImages.getColumnIndex("id"))
-                    val cellIndex = cursorImages.getInt(cursorImages.getColumnIndex("id"))
-                    val imageByteArray = cursorImages.getBlob(cursorImages.getColumnIndex("id"))
+                    val cellIndex = cursorImages.getInt(cursorImages.getColumnIndex("cellIndex"))
+                    val imageByteArray = cursorImages.getBlob(cursorImages.getColumnIndex("image"))
                     val bitmapImage = BitmapFactory.decodeByteArray(imageByteArray, 0, imageByteArray.size)
                     val image = bitmapImage.toBase64()
                     images?.add(ImageNetworkModel(imageId, cellIndex, image))
@@ -264,6 +264,7 @@ class ComicsDatabase(context: Context) {
             cursorPages.close()
 
         }
+        cursor.close()
         return ComicsFromNetwork(id, text, description, pages)
     }
 }

@@ -36,7 +36,7 @@ class NetworkRepository {
     suspend fun getComicPages(id: String, token: String) : MutableList<PageFromNetwork>? {
         return apiService.getComicPages(id, "Bearer $token").pages
     }
-    suspend fun postComics(token: String) : String {
-        return apiService.postComics("Bearer $token")
+    suspend fun postComics(token: String, comics: ComicsFromNetwork)  {
+        apiService.postComics("Bearer $token", comics)
     }
 }

@@ -20,6 +20,7 @@ class ComicsAdapter(private var comics: MutableList<ComicsModel>, private val li
         val delete_btn: ImageButton = itemView.findViewById(R.id.delete_comics_btn)
         val edit_btn: ImageButton = itemView.findViewById(R.id.edit_comics_btn)
         val imageView: ImageView = itemView.findViewById(R.id.imageView)
+        val uploadButton: ImageButton = itemView.findViewById(R.id.upload_comics_btn)
         init {
             itemView.setOnClickListener {
                 val position = adapterPosition
@@ -40,6 +41,12 @@ class ComicsAdapter(private var comics: MutableList<ComicsModel>, private val li
                 if (position != RecyclerView.NO_POSITION) {
                     val id = comics[position].id!!
                     listener.onEditClick(id)
+                }
+            }
+            uploadButton.setOnClickListener {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    listener.onSendClick(comics[position].id!!)
                 }
             }
         }

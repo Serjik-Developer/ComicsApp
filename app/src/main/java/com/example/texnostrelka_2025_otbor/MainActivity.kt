@@ -17,16 +17,19 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.texnostrelka_2025_otbor.adapters.ComicsAdapter
 import com.example.texnostrelka_2025_otbor.database.ComicsDatabase
+import com.example.texnostrelka_2025_otbor.database.PreferencesManager
 import com.example.texnostrelka_2025_otbor.factories.MainViewModelFactory
 import com.example.texnostrelka_2025_otbor.interfaces.OnItemClickListener
 import com.example.texnostrelka_2025_otbor.repositories.ComicsRepository
+import com.example.texnostrelka_2025_otbor.repositories.NetworkRepository
 import com.example.texnostrelka_2025_otbor.viewmodelslist.MainViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class MainActivity : AppCompatActivity(), OnItemClickListener {
     private lateinit var comicsAdapter: ComicsAdapter
     private val viewModel: MainViewModel by viewModels {
-        MainViewModelFactory(ComicsRepository(ComicsDatabase(this)))
+        MainViewModelFactory(ComicsRepository(ComicsDatabase(this)), NetworkRepository(),
+            PreferencesManager(this))
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -108,6 +111,10 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
         val intent = Intent(this, EditActivity::class.java)
         intent.putExtra("COMICS_ID", id)
         startActivity(intent)
+    }
+
+    override fun onSendClick(id: String) {
+        viewModel.updateComics(id)
     }
 
     override fun onResume() {
