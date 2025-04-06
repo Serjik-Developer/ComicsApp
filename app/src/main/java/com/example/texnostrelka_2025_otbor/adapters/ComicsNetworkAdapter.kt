@@ -15,6 +15,7 @@ import com.example.texnostrelka_2025_otbor.interfaces.OnItemClickListener
 import com.example.texnostrelka_2025_otbor.models.NetworkModels.ComicsFromNetwork
 import com.example.texnostrelka_2025_otbor.models.ComicsModel
 import com.example.texnostrelka_2025_otbor.models.NetworkModels.ComicsNetworkModel
+import com.example.texnostrelka_2025_otbor.utils.base64ToBitmap
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
 
@@ -40,14 +41,6 @@ class ComicsNetworkAdapter(private var comics: MutableList<ComicsNetworkModel>, 
     fun updateData(newComics: MutableList<ComicsNetworkModel>) {
         comics = newComics
         notifyDataSetChanged() // Уведомляем адаптер об изменениях
-    }
-    fun String.base64ToBitmap(): Bitmap? {
-        return try {
-            val imageBytes = android.util.Base64.decode(this, android.util.Base64.DEFAULT)
-            BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-        } catch (e: Exception) {
-            null
-        }
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ComiksViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.comics_from_network, parent, false)
