@@ -17,6 +17,8 @@ class MainViewModel(private val repository: ComicsRepository, private val networ
     private val _comics = MutableLiveData<MutableList<ComicsModel>>()
     val comics: LiveData<MutableList<ComicsModel>> get() = _comics
 
+    private val _errorMessage = MutableLiveData<String?>()
+    val errorMessage : LiveData<String?> get() = _errorMessage
     init {
         fetchComics()
     }
@@ -40,13 +42,24 @@ class MainViewModel(private val repository: ComicsRepository, private val networ
         }
     }
     fun postComics(id: String) {
-        viewModelScope.launch { try {
-            val token = preferencesManager.getAuthToken()!!
-            networkRepository.postComics(token, repository.getComicsById(id))
-        } catch (e: Exception) {
-            Log.e("MainViewModel", "Error posting comics", e)
-        }
-
+        viewModelScope.launch {
+            _errorMessage.value = null
+            try {
+                val token = preferencesManager.getAuthToken() ?: throw NetworkRepository.NotAuthorizedException("Токен отсутсвует")
+                networkRepository.postComics(token, repository.getComicsById(id))
+            } catch (e: Exception)
+            {
+                _errorMessage.value = when(e) {
+                    is NetworkRepository.BadRequestException -> "Ошибка запроса: ${e.message}"
+                    is NetworkRepository.NetworkException -> "Проблемы с интернетом"
+                    else -> "Неизвестная ошибка"
+                }
+            }
+            catch (e: NetworkRepository.NotAuthorizedException) {
+                _errorMessage.value = e.message
+            }
+            preferencesManager.clearAuthToken()
+            preferencesManager.clearName()
         }
     }
 }

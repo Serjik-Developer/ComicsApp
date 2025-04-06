@@ -9,8 +9,10 @@ import com.example.texnostrelka_2025_otbor.models.NetworkModels.PageFromNetwork
 import com.example.texnostrelka_2025_otbor.models.authentication.AuthRequest
 import com.example.texnostrelka_2025_otbor.models.authentication.AuthResponse
 import com.example.texnostrelka_2025_otbor.models.authentication.RegisterationRequest
+import retrofit2.HttpException
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.io.IOException
 
 class NetworkRepository {
     private val apiService: RetrofitApiService by lazy {
@@ -37,6 +39,21 @@ class NetworkRepository {
         return apiService.getComicPages(id, "Bearer $token").pages
     }
     suspend fun postComics(token: String, comics: ComicsFromNetwork)  {
-        apiService.postComics("Bearer $token", comics)
+        try {
+            apiService.postComics("Bearer $token", comics)
+        } catch (e: HttpException) {
+            when(e.code()) {
+                400 -> throw BadRequestException("Некорректный запрос: ${e.message}")
+                401 -> throw NotAuthorizedException("Не авторизован.")
+                else -> throw ApiException("Ошибка сервера ${e.code()}")
+            }
+        } catch (e: IOException) {
+            throw NetworkException("Ошибка сети: ${e.message}")
+        }
     }
+
+    class NotAuthorizedException(message: String) : Exception(message)
+    class BadRequestException(message: String) : Exception(message)
+    class ApiException(message: String) : Exception(message)
+    class NetworkException(message: String) : Exception(message)
 }

@@ -48,8 +48,28 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
         add_btn.setOnClickListener {
             showAddComicsDialog()
         }
+
+        viewModel.errorMessage.observe(this, Observer { error ->
+            error?.let {
+                if (error == "Не авторизован.") {
+                    startActivity(Intent(this, AuthActivity::class.java))
+                }
+                else {
+                    showErrorDialog(error)
+                }
+            }
+        })
         findViewById<ImageButton>(R.id.imageBtnNetwork).setOnClickListener { startActivity(Intent(this,ViewNetworkActivity::class.java)) }
     }
+
+    private fun showErrorDialog(message: String) {
+        MaterialAlertDialogBuilder(this)
+            .setTitle("Ошибка")
+            .setMessage(message)
+            .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
+            .show()
+    }
+
     private fun showAddComicsDialog() {
         val inputName = EditText(this).apply {
             hint = "Введите название комикса"

@@ -19,4 +19,10 @@ class PreferencesManager(context: Context) {
     fun getName() : String? {
         return sharedPreferences.getString("user_name", null)
     }
+    fun clearAuthToken() {
+        sharedPreferences.edit().remove("auth_token").apply()
+    }
+    fun clearName() {
+        sharedPreferences.edit().remove("user_name").apply()
+    }
 }
