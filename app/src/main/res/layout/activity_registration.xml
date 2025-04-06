@@ -70,13 +70,13 @@
         android:textColor="#FFFFFF"
         android:paddingVertical="12dp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/need_login"
+        app:layout_constraintBottom_toTopOf="@+id/toAuth"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- Кнопка перехода на экран логина -->
     <Button
-        android:id="@+id/need_login"
+        android:id="@+id/toAuth"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"

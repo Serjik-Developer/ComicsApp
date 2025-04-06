@@ -54,13 +54,13 @@
             android:textColor="#FFFFFF"
             android:paddingVertical="12dp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@id/need_reg"
+            app:layout_constraintBottom_toTopOf="@id/toRegistration"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
         <!-- Кнопка перехода на экран регистрации -->
         <Button
-            android:id="@+id/need_reg"
+            android:id="@+id/toRegistration"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="32dp"

@@ -1,5 +1,6 @@
 package com.example.texnostrelka_2025_otbor
 
+import android.content.Intent
 import android.os.Bundle
 import android.preference.Preference
 import android.widget.Toast
@@ -26,6 +27,9 @@ class RegistrationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityRegistrationBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        binding.toAuth.setOnClickListener {
+            startActivity(Intent(this, AuthActivity::class.java))
+        }
         binding.RegMe.setOnClickListener {
             val login = binding.regLogin.text.toString()
             val password = binding.regPasword.text.toString()
@@ -40,6 +44,7 @@ class RegistrationActivity : AppCompatActivity() {
                  when {
                      result.isSuccess -> {
                          Toast.makeText(this, "Успешный вход как ${result.getOrNull()?.name}", Toast.LENGTH_LONG).show()
+                         startActivity(Intent(this, MainActivity::class.java))
                      }
                      result.isFailure -> {
                          Toast.makeText(
