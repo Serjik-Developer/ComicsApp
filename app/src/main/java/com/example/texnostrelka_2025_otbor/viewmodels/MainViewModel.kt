@@ -39,7 +39,7 @@ class MainViewModel(private val repository: ComicsRepository, private val networ
             fetchComics()
         }
     }
-    fun updateComics(id: String) {
+    fun postComics(id: String) {
         viewModelScope.launch { try {
             val token = preferencesManager.getAuthToken()!!
             networkRepository.postComics(token, repository.getComicsById(id))

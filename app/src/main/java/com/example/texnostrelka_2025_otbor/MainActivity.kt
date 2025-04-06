@@ -114,7 +114,7 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
     }
 
     override fun onSendClick(id: String) {
-        viewModel.updateComics(id)
+        viewModel.postComics(id)
     }
 
     override fun onResume() {
