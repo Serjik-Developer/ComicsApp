@@ -77,7 +77,7 @@ class NetworkRepository {
             when(e.code()) {
                 400 -> throw BadRequestException("Некорректный запрос: ${e.message}")
                 401 -> throw NotAuthorizedException("Не авторизован.")
-                404 -> throw NotFoundException("Комикс не найден.")
+                404 -> throw NotFoundException("Комиксы не найдены.")
                 else -> throw ApiException("Ошибка сервера ${e.code()}")
             }
         } catch (e: IOException) {
@@ -97,6 +97,21 @@ class NetworkRepository {
         } catch (e: IOException) {
             throw NetworkException("Ошибка сети: ${e.message}")
         }
+    }
+    suspend fun getMyComics(token: String): MutableList<ComicsNetworkModel> {
+        try {
+            return apiService.getMyComics("Bearer $token")
+        } catch (e: HttpException) {
+            when(e.code()) {
+                400 -> throw BadRequestException("Некорректный запрос: ${e.message}")
+                401 -> throw NotAuthorizedException("Не авторизован.")
+                404 -> throw NotFoundException("Комиксы не найдены.")
+                else -> throw ApiException("Ошибка сервера ${e.code()}")
+            }
+        } catch (e: IOException) {
+            throw NetworkException("Ошибка сети: ${e.message}")
+        }
+
     }
 
     class NotAuthorizedException(message: String) : Exception(message)

@@ -27,4 +27,7 @@ interface RetrofitApiService {
 
     @POST("/api/comics/")
     suspend fun postComics(@Header("Authorization") token: String, @Body request: ComicsFromNetwork)
+
+    @GET("/api/mycomics")
+    suspend fun getMyComics(@Header("Authorization") token: String) : MutableList<ComicsNetworkModel>
 }
