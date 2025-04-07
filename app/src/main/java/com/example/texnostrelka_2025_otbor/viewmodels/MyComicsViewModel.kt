@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.texnostrelka_2025_otbor.database.PreferencesManager
 import com.example.texnostrelka_2025_otbor.models.NetworkModels.ComicsNetworkModel
 import com.example.texnostrelka_2025_otbor.repositories.NetworkRepository
+import com.example.texnostrelka_2025_otbor.repositories.NetworkRepository.NotAuthorizedException
 import kotlinx.coroutines.launch
 
 class MyComicsViewModel(
@@ -20,8 +21,39 @@ class MyComicsViewModel(
     private val _error = MutableLiveData<String?>(null)
     val error: LiveData<String?> get() = _error
 
+    private val _deleteSuccess = MutableLiveData<Boolean>()
+    val deleteSuccess: LiveData<Boolean> get() = _deleteSuccess
+
     init {
         fetchComics()
+    }
+    fun deleteComics(id: String) {
+        viewModelScope.launch {
+            _error.value = null
+            try {
+                val token = preferencesManager.getAuthToken()
+                if(token.isNullOrEmpty()) {
+                    _error.value = "Не авторизован."
+                    return@launch
+                }
+                networkRepository.deleteComics(id, token)
+                val currentList = _comics.value?.toMutableList() ?: mutableListOf()
+                currentList.removeAll { it.id == id }
+                _comics.value = currentList
+                _deleteSuccess.postValue(true)
+            } catch (e: NotAuthorizedException) {
+                _error.value = e.message
+            } catch (e: NetworkRepository.ForbiddenException) {
+                _error.value = e.message
+            } catch (e: NetworkRepository.NotFoundException) {
+                _error.value = e.message
+            } catch (e: NetworkRepository.NetworkException) {
+                _error.value = "Проблемы с интернетом"
+            } catch (e: Exception) {
+                _error.value = "Неизвестная ошибка"
+                Log.e("MyComicsViewModel", "Unknown error", e)
+            }
+        }
     }
     fun fetchComics() {
         viewModelScope.launch {

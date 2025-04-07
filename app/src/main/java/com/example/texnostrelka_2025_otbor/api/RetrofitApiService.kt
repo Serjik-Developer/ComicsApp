@@ -7,6 +7,7 @@ import com.example.texnostrelka_2025_otbor.models.authentication.AuthRequest
 import com.example.texnostrelka_2025_otbor.models.authentication.AuthResponse
 import com.example.texnostrelka_2025_otbor.models.authentication.RegisterationRequest
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
@@ -30,4 +31,7 @@ interface RetrofitApiService {
 
     @GET("/api/mycomics")
     suspend fun getMyComics(@Header("Authorization") token: String) : MutableList<ComicsNetworkModel>
+
+    @DELETE("/api/comics/{id}")
+    suspend fun deleteComics(@Path("id") id: String, @Header("Authorization") token: String)
 }

@@ -29,7 +29,7 @@ class MyComicsActivity : AppCompatActivity(), OnItemClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMyComicsBinding.inflate(layoutInflater)
-        comicsNetworkAdapter = ComicsNetworkAdapter(mutableListOf(), this)
+        comicsNetworkAdapter = ComicsNetworkAdapter(mutableListOf(), this, true)
         setContentView(binding.root)
         binding.RecyclerViewMyComics.layoutManager = LinearLayoutManager(this)
         binding.RecyclerViewMyComics.adapter = comicsNetworkAdapter
@@ -46,6 +46,9 @@ class MyComicsActivity : AppCompatActivity(), OnItemClickListener {
                     showErrorDialog(error)
                 }
             }
+        })
+        viewModel.deleteSuccess.observe(this, Observer { success ->
+            if(success) Toast.makeText(this, "Успешно удалено!", Toast.LENGTH_LONG).show()
         })
         viewModel.fetchComics()
     }
@@ -70,7 +73,7 @@ class MyComicsActivity : AppCompatActivity(), OnItemClickListener {
     }
 
     override fun onDeleteClick(id: String) {
-        TODO("Not yet implemented")
+        viewModel.deleteComics(id)
     }
 
     override fun onEditClick(id: String) {

@@ -19,13 +19,33 @@ import com.example.texnostrelka_2025_otbor.utils.base64ToBitmap
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
 
-class ComicsNetworkAdapter(private var comics: MutableList<ComicsNetworkModel>, private val listener: OnItemClickListener) : RecyclerView.Adapter<ComicsNetworkAdapter.ComiksViewHolder>() {
+class ComicsNetworkAdapter(private var comics: MutableList<ComicsNetworkModel>, private val listener: OnItemClickListener, private val isMyComics: Boolean = false) : RecyclerView.Adapter<ComicsNetworkAdapter.ComiksViewHolder>() {
 
     inner class ComiksViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val textView: TextView = itemView.findViewById(R.id.comics_network_name)
         val textViewDesc: TextView = itemView.findViewById(R.id.comics_network_description)
         val imageView: ImageView = itemView.findViewById(R.id.imageViewComics)
+        val deleteBtn: ImageButton = itemView.findViewById(R.id.delete_network_comics_btn)
+        val editBtn: ImageButton = itemView.findViewById(R.id.edit_netwotk_comics_btn)
         init {
+            if (isMyComics) {
+                deleteBtn.setOnClickListener {
+                    val position = adapterPosition
+                    if (position != RecyclerView.NO_POSITION) {
+                        listener.onDeleteClick(comics[position].id!!)
+                    }
+                }
+                editBtn.setOnClickListener {
+                    val position = adapterPosition
+                    if (position != RecyclerView.NO_POSITION) {
+                        listener.onEditClick(comics[position].id!!)
+                    }
+                }
+            }
+            else {
+                deleteBtn.visibility = View.GONE
+                editBtn.visibility = View.GONE
+            }
             itemView.setOnClickListener {
                 val position = adapterPosition
                 if (position != RecyclerView.NO_POSITION) {
@@ -33,7 +53,6 @@ class ComicsNetworkAdapter(private var comics: MutableList<ComicsNetworkModel>, 
                     listener.onItemClick(id)
                 }
             }
-
         }
     }
 

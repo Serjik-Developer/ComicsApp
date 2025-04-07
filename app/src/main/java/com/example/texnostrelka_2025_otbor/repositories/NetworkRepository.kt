@@ -13,8 +13,10 @@ import retrofit2.HttpException
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
+import kotlin.jvm.Throws
 
 class NetworkRepository {
+
     private val apiService: RetrofitApiService by lazy {
         Retrofit.Builder()
             .baseUrl("https://comicsapp-backend.onrender.com/")
@@ -36,8 +38,8 @@ class NetworkRepository {
         } catch (e: IOException) {
             throw NetworkException("Ошибка сети: ${e.message}")
         }
-
     }
+
     suspend fun registration(login: String, password: String, name: String) : AuthResponse {
         try {
             return apiService.registration(RegisterationRequest(login, password, name))
@@ -52,6 +54,7 @@ class NetworkRepository {
         }
 
     }
+
     suspend fun getComics(token: String): MutableList<ComicsNetworkModel> {
         try {
             return apiService.getComics("Bearer $token")
@@ -67,9 +70,11 @@ class NetworkRepository {
         }
 
     }
+
     suspend fun getComicById(id: String, token: String) : ComicsFromNetwork {
         return apiService.getComicPages(id, "Bearer $token")
     }
+
     suspend fun getComicPages(id: String, token: String) : MutableList<PageFromNetwork>? {
         try {
             return apiService.getComicPages(id, "Bearer $token").pages
@@ -85,6 +90,7 @@ class NetworkRepository {
         }
 
     }
+
     suspend fun postComics(token: String, comics: ComicsFromNetwork)  {
         try {
             apiService.postComics("Bearer $token", comics)
@@ -98,6 +104,7 @@ class NetworkRepository {
             throw NetworkException("Ошибка сети: ${e.message}")
         }
     }
+
     suspend fun getMyComics(token: String): MutableList<ComicsNetworkModel> {
         try {
             return apiService.getMyComics("Bearer $token")
@@ -114,10 +121,26 @@ class NetworkRepository {
 
     }
 
+    suspend fun deleteComics(id: String, token: String) {
+        try {
+            apiService.deleteComics(id, "Bearer $token")
+        } catch (e: HttpException) {
+            when(e.code()) {
+                401 -> throw NotAuthorizedException("Не авторизован.")
+                403 -> throw ForbiddenException("Недостаточно прав.")
+                404 -> throw NotFoundException("Комикс не найден")
+                else -> throw ApiException("Ошибка сервера ${e.code()}")
+            }
+        } catch (e: IOException) {
+            throw NetworkException("Ошибка сети: ${e.message}")
+        }
+    }
+
     class NotAuthorizedException(message: String) : Exception(message)
     class BadRequestException(message: String) : Exception(message)
     class ApiException(message: String) : Exception(message)
     class NetworkException(message: String) : Exception(message)
     class NotFoundException(message: String) : Exception(message)
     class ConflictException(message: String) : Exception(message)
+    class ForbiddenException(message: String) : Exception(message)
 }
