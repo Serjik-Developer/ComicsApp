@@ -1,5 +1,6 @@
 package com.example.texnostrelka_2025_otbor
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -45,6 +46,8 @@ class PageNetworkActivity : AppCompatActivity() {
             error?.let {
                 if (it == "Не авторизован.") {
                     Toast.makeText(this, it, Toast.LENGTH_LONG).show()
+                    startActivity(Intent(this, AuthActivity::class.java))
+                    finish()
                 }
                 else {
                     showErrorDialog(it)
