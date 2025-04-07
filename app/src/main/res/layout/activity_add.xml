@@ -103,7 +103,7 @@
     </HorizontalScrollView>
 
     <!-- Основное поле для рисования -->
-    <com.example.texnostrelka_2025_otbor.PaintView
+    <com.example.texnostrelka_2025_otbor.presentation.view.PaintView
         android:id="@+id/paintView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

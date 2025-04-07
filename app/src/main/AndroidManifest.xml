@@ -17,34 +17,34 @@
         android:theme="@style/Theme.Texnostrelka2025otbor"
         tools:targetApi="31">
         <activity
-            android:name=".MyComicsActivity"
+            android:name=".presentation.ui.mycomics.MyComicsActivity"
             android:exported="false" />
         <activity
-            android:name=".PageNetworkActivity"
+            android:name=".presentation.ui.pagenetwork.PageNetworkActivity"
             android:exported="false" />
         <activity
-            android:name=".ViewNetworkActivity"
+            android:name=".presentation.ui.viewnetwork.ViewNetworkActivity"
             android:exported="false" />
         <activity
-            android:name=".AuthActivity"
+            android:name=".presentation.ui.auth.AuthActivity"
             android:exported="false" />
         <activity
-            android:name=".RegistrationActivity"
+            android:name=".presentation.ui.registration.RegistrationActivity"
             android:exported="false" />
         <activity
-            android:name=".EditPageActivity"
+            android:name=".presentation.ui.editpage.EditPageActivity"
             android:exported="false" />
         <activity
-            android:name=".AddActivity"
+            android:name=".presentation.ui.add.AddActivity"
             android:exported="false" />
         <activity
-            android:name=".ViewActivity"
+            android:name=".presentation.ui.view.ViewActivity"
             android:exported="false" />
         <activity
-            android:name=".EditActivity"
+            android:name=".presentation.ui.edit.EditActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".presentation.ui.main.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

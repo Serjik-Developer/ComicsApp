@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="8dp"
-    tools:context=".EditActivity">
+    tools:context=".presentation.ui.edit.EditActivity">
     <com.google.android.material.button.MaterialButton
         android:id="@+id/backButtonMain"
         android:layout_width="wrap_content"
