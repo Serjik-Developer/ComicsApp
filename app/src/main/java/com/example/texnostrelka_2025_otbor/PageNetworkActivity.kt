@@ -39,9 +39,13 @@ class PageNetworkActivity : AppCompatActivity() {
         Log.w("COMICS_ID", comicsId)
         binding.RecyclerViewNetwork.layoutManager = LinearLayoutManager(this)
         binding.RecyclerViewNetwork.adapter = pageNetworkAdapter
-        viewModel.pages.observe(this, Observer { pages ->
-            pageNetworkAdapter.updateData(pages)
-        })
+        viewModel.pages.observe(this) { pages ->
+            Log.d("PAGES_DEBUG", "Pages count: ${pages?.size}")
+            pages?.forEach { page ->
+                Log.d("PAGES_DEBUG", "Page ${page.number} has ${page.images?.size} images")
+            }
+            pageNetworkAdapter.updateData(pages ?: mutableListOf())
+        }
         viewModel.error.observe(this, Observer { error ->
             error?.let {
                 if (it == "Не авторизован.") {

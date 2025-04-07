@@ -237,34 +237,44 @@ class ComicsDatabase(context: Context) {
         var description = ""
         val db = databaseHelper.readableDatabase
         val cursor = db.rawQuery("SELECT * FROM comics WHERE id = ?", arrayOf(id))
-        var pages : MutableList<PageFromNetwork> ? = mutableListOf()
-        var images : MutableList<ImageNetworkModel> ? = mutableListOf()
+        val pages = mutableListOf<PageFromNetwork>()
+
         while (cursor.moveToNext()) {
-            val comicsId = cursor.getString(cursor.getColumnIndex("id"))
             text = cursor.getString(cursor.getColumnIndex("text"))
             description = cursor.getString(cursor.getColumnIndex("description"))
-            val cursorPages = db.rawQuery("SELECT * FROM pages WHERE comicsId = ?", arrayOf(comicsId))
+
+            val cursorPages = db.rawQuery("SELECT * FROM pages WHERE comicsId = ? ORDER BY number", arrayOf(id))
             while (cursorPages.moveToNext()) {
                 val pageId = cursorPages.getString(cursorPages.getColumnIndex("pageId"))
                 val number = cursorPages.getInt(cursorPages.getColumnIndex("number"))
                 val rows = cursorPages.getInt(cursorPages.getColumnIndex("rows"))
                 val columns = cursorPages.getInt(cursorPages.getColumnIndex("columns"))
-                val cursorImages = db.rawQuery("SELECT * FROM image WHERE pageId = ?", arrayOf(pageId))
+
+                // Для каждой страницы создаем новый список изображений
+                val images = mutableListOf<ImageNetworkModel>()
+                val cursorImages = db.rawQuery(
+                    "SELECT * FROM image WHERE pageId = ? ORDER BY cellIndex",
+                    arrayOf(pageId)
+                )
+
                 while (cursorImages.moveToNext()) {
                     val imageId = cursorImages.getString(cursorImages.getColumnIndex("id"))
                     val cellIndex = cursorImages.getInt(cursorImages.getColumnIndex("cellIndex"))
                     val imageByteArray = cursorImages.getBlob(cursorImages.getColumnIndex("image"))
                     val bitmapImage = BitmapFactory.decodeByteArray(imageByteArray, 0, imageByteArray.size)
                     val image = bitmapImage.toBase64()
-                    images?.add(ImageNetworkModel(imageId, cellIndex, image))
+                    images.add(ImageNetworkModel(imageId, cellIndex, image))
                 }
                 cursorImages.close()
-                pages?.add(PageFromNetwork(pageId, number, rows, columns, images))
+
+                pages.add(PageFromNetwork(pageId, number, rows, columns, images))
             }
             cursorPages.close()
-
         }
         cursor.close()
+        db.close()
+
         return ComicsFromNetwork(id, text, description, pages)
     }
+    //Удивительный факт, я идиот!
 }
