@@ -44,7 +44,6 @@ class NetworkRepository {
         } catch (e: HttpException) {
             when(e.code()) {
                 400 -> throw BadRequestException("Некорректный запрос: ${e.message}")
-                404 -> throw NotFoundException("Пользователь не найден.")
                 409 -> throw ConflictException("Пользователь уже существует.")
                 else -> throw ApiException("Ошибка сервера ${e.code()}")
             }

@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -52,6 +53,7 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
         viewModel.errorMessage.observe(this, Observer { error ->
             error?.let {
                 if (error == "Не авторизован.") {
+                    Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
                     startActivity(Intent(this, AuthActivity::class.java))
                 }
                 else {

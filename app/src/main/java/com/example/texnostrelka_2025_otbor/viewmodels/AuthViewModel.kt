@@ -14,18 +14,31 @@ class AuthViewModel(
     private val preferencesManager: PreferencesManager
 ) : ViewModel() {
     private val _error = MutableLiveData<String?>()
-    val error : LiveData<String?> get() = _error
-    fun authenticate(login: String, password: String, onResult: (Result<AuthResponse>) -> Unit) {
+    val error: LiveData<String?> get() = _error
+
+    private val _authSuccess = MutableLiveData<Boolean>()
+    val authSuccess: LiveData<Boolean> get() = _authSuccess
+
+    fun authenticate(login: String, password: String) {
         viewModelScope.launch {
+            _error.value = null
             try {
                 val response = networkRepository.authenticate(login, password)
                 preferencesManager.saveAuthToken(response.token)
                 preferencesManager.saveName(response.name)
-                onResult(Result.success(response))
+                _authSuccess.postValue(true)
+            } catch (e: NetworkRepository.BadRequestException) {
+                _error.postValue("Некорректные данные. Проверьте ввод.")
+            } catch (e: NetworkRepository.NetworkException) {
+                _error.postValue("Проблемы с интернетом. Проверьте соединение.")
+            } catch (e: NetworkRepository.NotAuthorizedException) {
+                _error.postValue("Неверный логин или пароль")
+            } catch (e: NetworkRepository.NotFoundException) {
+                _error.postValue("Пользователь не найден")
             } catch (e: Exception) {
-                onResult(Result.failure(e))
+                _error.postValue("Произошла неизвестная ошибка")
+                e.printStackTrace()
             }
         }
     }
-
 }

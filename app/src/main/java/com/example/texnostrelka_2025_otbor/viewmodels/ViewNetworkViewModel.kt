@@ -38,20 +38,21 @@ class ViewNetworkViewModel(
                 _comics.value = result
 
                 if (result.isEmpty()) {
-                    _error.value = "No comics found"
+                    _error.value = "Комиксы не найдены!"
                 }
-            } catch (e: Exception) {
-                _error.value = when(e) {
-                    is BadRequestException -> "Ошибка запроса: ${e.message}"
-                    is NetworkRepository.NetworkException -> "Проблемы с интернетом"
-                    is NotFoundException -> "Комиксы не найден"
-                    else -> "Неизвестная ошибка"
-                }
-            }
-            catch (e: NetworkRepository.NotAuthorizedException) {
-                _error.value = e.message
+            } catch (e: NetworkRepository.NotAuthorizedException) {
+                _error.value = "Не авторизован."
                 preferencesManager.clearName()
                 preferencesManager.clearAuthToken()
+            } catch (e: NetworkRepository.BadRequestException) {
+                _error.value = "Ошибка запроса: ${e.message}"
+            } catch (e: NetworkRepository.NetworkException) {
+                _error.value = "Проблемы с интернетом"
+            } catch (e: NetworkRepository.NotFoundException) {
+                _error.value = "Комиксы не найдены"
+            } catch (e: Exception) {
+                _error.value = "Неизвестная ошибка"
+                Log.e("ViewNetworkViewModel", "Unknown error", e)
             }
         }
     }

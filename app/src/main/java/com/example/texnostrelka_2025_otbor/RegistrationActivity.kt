@@ -2,13 +2,10 @@ package com.example.texnostrelka_2025_otbor
 
 import android.content.Intent
 import android.os.Bundle
-import android.preference.Preference
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.Observer
 import com.example.texnostrelka_2025_otbor.database.PreferencesManager
 import com.example.texnostrelka_2025_otbor.databinding.ActivityRegistrationBinding
 import com.example.texnostrelka_2025_otbor.factories.RegistrationViewModelFactory
@@ -16,6 +13,7 @@ import com.example.texnostrelka_2025_otbor.repositories.NetworkRepository
 import com.example.texnostrelka_2025_otbor.viewmodels.RegistrationViewModel
 
 class RegistrationActivity : AppCompatActivity() {
+    private lateinit var preferencesManager: PreferencesManager
     private lateinit var binding: ActivityRegistrationBinding
     private val viewModel: RegistrationViewModel by viewModels {
         RegistrationViewModelFactory(
@@ -27,6 +25,25 @@ class RegistrationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityRegistrationBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        preferencesManager = PreferencesManager(this)
+        setupObservers()
+        setupClickListeners()
+    }
+    private fun setupObservers() {
+        viewModel.error.observe(this, Observer{ error ->
+            error?.let {
+                Toast.makeText(this, it, Toast.LENGTH_LONG).show()
+            }
+        })
+        viewModel.authSuccess.observe(this, Observer{ success ->
+            if (success) {
+                Toast.makeText(this, "Успешный вход как ${preferencesManager.getName()}", Toast.LENGTH_LONG).show()
+                startActivity(Intent(this, MainActivity::class.java))
+                finish()
+            }
+        })
+    }
+    private fun setupClickListeners() {
         binding.toAuth.setOnClickListener {
             startActivity(Intent(this, AuthActivity::class.java))
         }
@@ -39,21 +56,7 @@ class RegistrationActivity : AppCompatActivity() {
                 Toast.makeText(this, "Заполните все формы", Toast.LENGTH_LONG).show()
                 return@setOnClickListener
             }
-            viewModel.registrate(login, password, name) { result ->
-             runOnUiThread {
-                 when {
-                     result.isSuccess -> {
-                         Toast.makeText(this, "Успешный вход как ${result.getOrNull()?.name}", Toast.LENGTH_LONG).show()
-                         startActivity(Intent(this, MainActivity::class.java))
-                     }
-                     result.isFailure -> {
-                         Toast.makeText(
-                             this, "Error ${result.exceptionOrNull()?.message}", Toast.LENGTH_LONG
-                         ).show()
-                     }
-                 }
-             }
-            }
+            viewModel.registrate(login, password, name)
         }
     }
 }

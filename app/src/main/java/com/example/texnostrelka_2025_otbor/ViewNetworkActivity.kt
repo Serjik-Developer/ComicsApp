@@ -43,6 +43,7 @@ class ViewNetworkActivity : AppCompatActivity(), OnItemClickListener {
         viewModel.error.observe(this) { error ->
             error?.let {
                 if (it == "Не авторизован.") {
+                    Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
                     startActivity(Intent(this, AuthActivity::class.java))
                 }
                 else {

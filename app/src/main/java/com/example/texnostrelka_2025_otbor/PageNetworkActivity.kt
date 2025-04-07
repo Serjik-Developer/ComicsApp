@@ -2,6 +2,7 @@ package com.example.texnostrelka_2025_otbor
 
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -18,6 +19,7 @@ import com.example.texnostrelka_2025_otbor.objects.AppData
 import com.example.texnostrelka_2025_otbor.repositories.ComicsRepository
 import com.example.texnostrelka_2025_otbor.repositories.NetworkRepository
 import com.example.texnostrelka_2025_otbor.viewmodels.PageNetworkViewModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class PageNetworkActivity : AppCompatActivity() {
     private lateinit var binding: ActivityViewNetworkBinding
@@ -39,6 +41,23 @@ class PageNetworkActivity : AppCompatActivity() {
         viewModel.pages.observe(this, Observer { pages ->
             pageNetworkAdapter.updateData(pages)
         })
+        viewModel.error.observe(this, Observer { error ->
+            error?.let {
+                if (it == "Не авторизован.") {
+                    Toast.makeText(this, it, Toast.LENGTH_LONG).show()
+                }
+                else {
+                    showErrorDialog(it)
+                }
+            }
+        })
         viewModel.fetchPages(comicsId)
+    }
+    private fun showErrorDialog(message: String) {
+        MaterialAlertDialogBuilder(this)
+            .setTitle("Ошибка")
+            .setMessage(message)
+            .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
+            .show()
     }
 }

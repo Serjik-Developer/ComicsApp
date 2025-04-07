@@ -12,7 +12,7 @@ import com.example.texnostrelka_2025_otbor.repositories.NetworkRepository
 import com.example.texnostrelka_2025_otbor.viewmodels.AuthViewModel
 
 class AuthActivity : AppCompatActivity() {
-
+    private lateinit var preferencesManager: PreferencesManager
     private lateinit var binding: ActivityAuthBinding
     private val viewModel: AuthViewModel by viewModels {
         AuthViewModelFactory(
@@ -20,36 +20,51 @@ class AuthActivity : AppCompatActivity() {
             PreferencesManager(this)
         )
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAuthBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        preferencesManager = PreferencesManager(this)
+        setupObservers()
+        setupClickListeners()
+    }
+
+    private fun setupObservers() {
+        viewModel.error.observe(this) { error ->
+            error?.let {
+                Toast.makeText(this, it, Toast.LENGTH_LONG).show()
+            }
+        }
+
+        viewModel.authSuccess.observe(this) { success ->
+            if (success) {
+                Toast.makeText(
+                    this,
+                    "Успешный вход как ${preferencesManager.getName()}",
+                    Toast.LENGTH_LONG
+                ).show()
+                startActivity(Intent(this, MainActivity::class.java))
+                finish()
+            }
+        }
+    }
+
+    private fun setupClickListeners() {
         binding.toRegistration.setOnClickListener {
             startActivity(Intent(this, RegistrationActivity::class.java))
         }
+
         binding.LogMe.setOnClickListener {
             val login = binding.logLogin.text.toString()
             val password = binding.logPass.text.toString()
-            if (login.isBlank() || password.isBlank()) {
-                Toast.makeText(this, "Заполните все формы", Toast.LENGTH_LONG).show()
 
+            if (login.isBlank() || password.isBlank()) {
+                Toast.makeText(this, "Заполните все поля", Toast.LENGTH_LONG).show()
                 return@setOnClickListener
             }
-            viewModel.authenticate(login, password) { result ->
-                runOnUiThread {
-                    when {
-                        result.isSuccess -> {
-                            Toast.makeText(this, "Успешный вход как ${result.getOrNull()?.name}", Toast.LENGTH_LONG).show()
-                            startActivity(Intent(this, MainActivity::class.java))
-                        }
-                        result.isFailure -> {
-                            Toast.makeText(
-                                this, "Error ${result.exceptionOrNull()?.message}", Toast.LENGTH_LONG
-                            ).show()
-                        }
-                    }
-                }
-            }
+
+            viewModel.authenticate(login, password)
         }
     }
 }

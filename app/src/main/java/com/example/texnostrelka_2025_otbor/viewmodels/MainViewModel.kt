@@ -45,20 +45,25 @@ class MainViewModel(private val repository: ComicsRepository, private val networ
         viewModelScope.launch {
             _errorMessage.value = null
             try {
-                val token = preferencesManager.getAuthToken() ?: throw NetworkRepository.NotAuthorizedException("Токен отсутсвует")
-                networkRepository.postComics(token, repository.getComicsById(id))
-            } catch (e: Exception)
-            {
-                _errorMessage.value = when(e) {
-                    is NetworkRepository.BadRequestException -> "Ошибка запроса: ${e.message}"
-                    is NetworkRepository.NetworkException -> "Проблемы с интернетом"
-                    else -> "Неизвестная ошибка"
+                val token = preferencesManager.getAuthToken()
+                if (token.isNullOrEmpty()) {
+                    _errorMessage.value = "Не авторизован."
+                    return@launch
                 }
+                networkRepository.postComics(token, repository.getComicsById(id))
+            }
+            catch (e: Exception)
+            {
+                _errorMessage.value = "Неизвестная ошибка"
             }
             catch (e: NetworkRepository.NotAuthorizedException) {
-                _errorMessage.value = e.message
-                preferencesManager.clearAuthToken()
+                _errorMessage.value = "Не авторизован."
                 preferencesManager.clearName()
+                preferencesManager.clearAuthToken()
+            } catch (e: NetworkRepository.BadRequestException) {
+                _errorMessage.value = "Ошибка запроса: ${e.message}"
+            } catch (e: NetworkRepository.NetworkException) {
+                _errorMessage.value = "Проблемы с интернетом"
             }
         }
     }
