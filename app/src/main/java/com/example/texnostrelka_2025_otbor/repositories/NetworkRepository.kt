@@ -9,6 +9,7 @@ import com.example.texnostrelka_2025_otbor.models.NetworkModels.PageFromNetwork
 import com.example.texnostrelka_2025_otbor.models.authentication.AuthRequest
 import com.example.texnostrelka_2025_otbor.models.authentication.AuthResponse
 import com.example.texnostrelka_2025_otbor.models.authentication.RegisterationRequest
+import com.example.texnostrelka_2025_otbor.models.pagesNetwork.PageAddRequestModel
 import retrofit2.HttpException
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -129,6 +130,36 @@ class NetworkRepository {
                 401 -> throw NotAuthorizedException("Не авторизован.")
                 403 -> throw ForbiddenException("Недостаточно прав.")
                 404 -> throw NotFoundException("Комикс не найден")
+                else -> throw ApiException("Ошибка сервера ${e.code()}")
+            }
+        } catch (e: IOException) {
+            throw NetworkException("Ошибка сети: ${e.message}")
+        }
+    }
+
+    suspend fun addPage(id: String, token: String, request: PageAddRequestModel) {
+        try {
+            apiService.postPage(id, "Bearer $token", request)
+        } catch (e: HttpException) {
+            when(e.code()) {
+                401 -> throw NotAuthorizedException("Не авторизован.")
+                403 -> throw ForbiddenException("Недостаточно прав.")
+                404 -> throw NotFoundException("Комикс не найден")
+                else -> throw ApiException("Ошибка сервера ${e.code()}")
+            }
+        } catch (e: IOException) {
+            throw NetworkException("Ошибка сети: ${e.message}")
+        }
+    }
+
+    suspend fun deletePage(pageId: String, token: String) {
+        try {
+            apiService.deletePage(pageId, "Bearer $token")
+        } catch (e: HttpException) {
+            when(e.code()) {
+                401 -> throw NotAuthorizedException("Не авторизован.")
+                403 -> throw ForbiddenException("Недостаточно прав.")
+                404 -> throw NotFoundException("Страница не найдена")
                 else -> throw ApiException("Ошибка сервера ${e.code()}")
             }
         } catch (e: IOException) {

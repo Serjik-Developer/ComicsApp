@@ -6,6 +6,7 @@ import com.example.texnostrelka_2025_otbor.models.NetworkModels.ComicsNetworkMod
 import com.example.texnostrelka_2025_otbor.models.authentication.AuthRequest
 import com.example.texnostrelka_2025_otbor.models.authentication.AuthResponse
 import com.example.texnostrelka_2025_otbor.models.authentication.RegisterationRequest
+import com.example.texnostrelka_2025_otbor.models.pagesNetwork.PageAddRequestModel
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -34,4 +35,10 @@ interface RetrofitApiService {
 
     @DELETE("/api/comics/{id}")
     suspend fun deleteComics(@Path("id") id: String, @Header("Authorization") token: String)
+
+    @POST("/api/comics/pages/{comicsId}")
+    suspend fun postPage(@Path("comicsId") comicsId: String, @Header("Authorization") token: String, @Body request: PageAddRequestModel)
+
+    @DELETE("/api/comics/pages/{pageId}")
+    suspend fun deletePage(@Path("pageId") pageId: String, @Header("Authorization") token: String)
 }
