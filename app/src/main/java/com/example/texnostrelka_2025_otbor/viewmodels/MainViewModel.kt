@@ -19,6 +19,9 @@ class MainViewModel(private val repository: ComicsRepository, private val networ
 
     private val _errorMessage = MutableLiveData<String?>()
     val errorMessage : LiveData<String?> get() = _errorMessage
+
+    private val _postSucces = MutableLiveData<Boolean>()
+    val postSucces : LiveData<Boolean> get() = _postSucces
     init {
         fetchComics()
     }
@@ -51,6 +54,7 @@ class MainViewModel(private val repository: ComicsRepository, private val networ
                     return@launch
                 }
                 networkRepository.postComics(token, repository.getComicsById(id))
+                _postSucces.postValue(true)
             }
             catch (e: Exception)
             {

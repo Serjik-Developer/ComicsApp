@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Observer
+import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.texnostrelka_2025_otbor.adapters.ComicsAdapter
@@ -45,11 +46,9 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
         viewModel.comics.observe(this, Observer { comics ->
             comicsAdapter.updateData(comics)
         })
-
-        add_btn.setOnClickListener {
-            showAddComicsDialog()
-        }
-
+        viewModel.postSucces.observe(this, Observer { success ->
+            if(success) Toast.makeText(this, "Успешно отправлено!", Toast.LENGTH_LONG).show()
+        })
         viewModel.errorMessage.observe(this, Observer { error ->
             error?.let {
                 if (error == "Не авторизован.") {
@@ -61,6 +60,9 @@ class MainActivity : AppCompatActivity(), OnItemClickListener {
                 }
             }
         })
+        add_btn.setOnClickListener {
+            showAddComicsDialog()
+        }
         findViewById<ImageButton>(R.id.imageBtnNetwork).setOnClickListener { startActivity(Intent(this,ViewNetworkActivity::class.java)) }
     }
 
