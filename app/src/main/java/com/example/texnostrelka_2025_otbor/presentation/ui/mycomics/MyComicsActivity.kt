@@ -15,6 +15,7 @@ import com.example.texnostrelka_2025_otbor.presentation.factory.MyComicsViewMode
 import com.example.texnostrelka_2025_otbor.presentation.listener.OnItemClickListener
 import com.example.texnostrelka_2025_otbor.data.remote.repository.NetworkRepository
 import com.example.texnostrelka_2025_otbor.presentation.ui.auth.AuthActivity
+import com.example.texnostrelka_2025_otbor.presentation.ui.editnetwork.EditNetworkActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class MyComicsActivity : AppCompatActivity(), OnItemClickListener {
@@ -75,7 +76,7 @@ class MyComicsActivity : AppCompatActivity(), OnItemClickListener {
     }
 
     override fun onEditClick(id: String) {
-        TODO("Not yet implemented")
+        startActivity(Intent(this, EditNetworkActivity::class.java).putExtra("COMICS-ID", id))
     }
 
     override fun onSendClick(id: String) {

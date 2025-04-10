@@ -17,7 +17,7 @@ import com.example.texnostrelka_2025_otbor.data.remote.repository.NetworkReposit
 import com.example.texnostrelka_2025_otbor.presentation.ui.auth.AuthActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
-class PageNetworkActivity : AppCompatActivity() {
+class   PageNetworkActivity : AppCompatActivity() {
     private lateinit var binding: ActivityViewNetworkBinding
     private lateinit var pageNetworkAdapter: PageNetworkAdapter
     private lateinit var comicsId: String
