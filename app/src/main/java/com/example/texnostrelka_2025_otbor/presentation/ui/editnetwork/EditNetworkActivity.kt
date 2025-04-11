@@ -20,11 +20,12 @@ import com.example.texnostrelka_2025_otbor.databinding.ActivityEditNetworkBindin
 import com.example.texnostrelka_2025_otbor.domain.repository.ComicsRepository
 import com.example.texnostrelka_2025_otbor.presentation.adapter.EditNetworkAdapter
 import com.example.texnostrelka_2025_otbor.presentation.factory.EditNetworkViewModelFactory
+import com.example.texnostrelka_2025_otbor.presentation.listener.OnItemClickListener
 import com.example.texnostrelka_2025_otbor.presentation.ui.auth.AuthActivity
 import com.example.texnostrelka_2025_otbor.presentation.ui.mycomics.MyComicsActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
-class EditNetworkActivity: AppCompatActivity() {
+class EditNetworkActivity: AppCompatActivity(), OnItemClickListener {
     private lateinit var adapter: EditNetworkAdapter
     private val viewModel: EditNetworkViewModel by viewModels {
         EditNetworkViewModelFactory(NetworkRepository(), PreferencesManager(this))
@@ -58,7 +59,9 @@ class EditNetworkActivity: AppCompatActivity() {
             }
         })
         viewModel.success.observe(this, Observer { success ->
-            if(success) Toast.makeText(this, "Успешно добавлено!", Toast.LENGTH_LONG).show()
+            success?.let {
+                Toast.makeText(this, it, Toast.LENGTH_LONG).show()
+            }
         })
     }
 
@@ -94,5 +97,21 @@ class EditNetworkActivity: AppCompatActivity() {
             .setMessage(message)
             .setPositiveButton("OK") {dialog,_, -> dialog.dismiss()}
             .show()
+    }
+
+    override fun onItemClick(id: String) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onDeleteClick(id: String) {
+        viewModel.deletePage(id)
+    }
+
+    override fun onEditClick(id: String) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onSendClick(id: String) {
+        TODO("Not yet implemented")
     }
 }

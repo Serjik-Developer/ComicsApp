@@ -23,8 +23,8 @@ class EditNetworkViewModel(private val networkRepository: NetworkRepository, pri
     private val _error = MutableLiveData<String?>()
     val error: LiveData<String?> get() = _error
 
-    private val _success = MutableLiveData<Boolean>()
-    val success : LiveData<Boolean> get() = _success
+    private val _success = MutableLiveData<String?>()
+    val success : LiveData<String?> get() = _success
 
     fun addPage(comicsId: String, rows: Int, columns: Int) {
         viewModelScope.launch {
@@ -36,8 +36,35 @@ class EditNetworkViewModel(private val networkRepository: NetworkRepository, pri
                     return@launch
                 }
                 networkRepository.addPage(comicsId, token, PageAddRequestModel(rows, columns))
-                _success.postValue(true)
+                _success.postValue("Успешно добавлено!")
             } catch (e: NotAuthorizedException) {
+                _error.value = e.message
+                preferencesManager.clearName()
+                preferencesManager.clearAuthToken()
+            } catch (e: ForbiddenException) {
+                _error.value = e.message
+            } catch (e: NotFoundException) {
+                _error.value = e.message
+            } catch (e: NetworkException) {
+                _error.value = "Проблемы с интернетом"
+            } catch (e: Exception) {
+                _error.value = "Неизвестная ошибка"
+                Log.e("EditNetworkViewModel", "Unknown error", e)
+            }
+        }
+    }
+    fun deletePage(pageId: String) {
+        viewModelScope.launch {
+            _error.value = null
+            try {
+                val token = preferencesManager.getAuthToken()
+                if (token.isNullOrEmpty()) {
+                    _error.value = "Не авторизован."
+                    return@launch
+                }
+                networkRepository.deletePage(pageId, token)
+                _success.postValue("Успешно удалено!")
+            }catch (e: NotAuthorizedException) {
                 _error.value = e.message
                 preferencesManager.clearName()
                 preferencesManager.clearAuthToken()
