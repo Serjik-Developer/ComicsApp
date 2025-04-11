@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.texnostrelka_2025_otbor.data.local.preferences.PreferencesManager
+import com.example.texnostrelka_2025_otbor.data.remote.exception.BadRequestException
 import com.example.texnostrelka_2025_otbor.data.remote.exception.ForbiddenException
 import com.example.texnostrelka_2025_otbor.data.remote.exception.NetworkException
 import com.example.texnostrelka_2025_otbor.data.remote.exception.NotAuthorizedException
@@ -77,6 +78,34 @@ class EditNetworkViewModel(private val networkRepository: NetworkRepository, pri
             } catch (e: Exception) {
                 _error.value = "Неизвестная ошибка"
                 Log.e("EditNetworkViewModel", "Unknown error", e)
+            }
+        }
+    }
+
+    fun fetchPages(id: String) {
+        viewModelScope.launch {
+            _error.value = null
+            try {
+                val token = preferencesManager.getAuthToken()
+                if (token.isNullOrEmpty()) {
+                    _error.value = "Не авторизован."
+                    return@launch
+                }
+                val result = networkRepository.getComicPages(id, token)
+                _pages.value = result!!
+            } catch (e: BadRequestException) {
+                _error.value = "Ошибка запроса: ${e.message}"
+            } catch (e: NotAuthorizedException) {
+                _error.value = "Не авторизован."
+                preferencesManager.clearName()
+                preferencesManager.clearAuthToken()
+            } catch (e: NotFoundException) {
+                _error.value = "Комикс не найден."
+            } catch (e: NetworkException) {
+                _error.value = "Проблемы с интернетом"
+            } catch (e: Exception) {
+                _error.value = "Неизвестная ошибка"
+                Log.e("ViewNetworkViewModel", "Unknown error", e)
             }
         }
     }

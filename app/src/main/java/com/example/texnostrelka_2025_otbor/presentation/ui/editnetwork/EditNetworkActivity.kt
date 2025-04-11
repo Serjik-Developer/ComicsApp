@@ -47,7 +47,10 @@ class EditNetworkActivity: AppCompatActivity(), OnItemClickListener {
         }
         binding.RecyclerViewNetworkPages.layoutManager = LinearLayoutManager(this)
         binding.RecyclerViewNetworkPages.adapter = adapter
-        viewModel.error.observe(this, Observer{ error->
+        viewModel.pages.observe(this, Observer { pages ->
+            //TODO UPDATE ADPATER LIST
+        })
+        viewModel.error.observe(this, Observer{ error ->
             error?.let{
                 if(it.toString() == "Не авторизован") {
                     Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
