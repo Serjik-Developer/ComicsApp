@@ -64,6 +64,9 @@ class EditNetworkViewModel(private val networkRepository: NetworkRepository, pri
                     return@launch
                 }
                 networkRepository.deletePage(pageId, token)
+                val currentList = _pages.value?.toMutableList() ?: mutableListOf()
+                currentList.removeAll { it.pageId == pageId }
+                _pages.value = currentList
                 _success.postValue("Успешно удалено!")
             }catch (e: NotAuthorizedException) {
                 _error.value = e.message
