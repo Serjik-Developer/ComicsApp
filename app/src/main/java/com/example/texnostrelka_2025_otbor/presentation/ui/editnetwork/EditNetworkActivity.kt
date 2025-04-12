@@ -38,7 +38,7 @@ class EditNetworkActivity: AppCompatActivity(), OnItemClickListener {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         comicsId = intent.getStringExtra("COMICS_ID") ?: throw IllegalArgumentException("comicsId is required")
-        adapter = EditNetworkAdapter()
+        adapter = EditNetworkAdapter(mutableListOf(), this, this)
         binding.buttonAddNetworkPage.setOnClickListener {
             showAddPageDialog()
         }
@@ -48,7 +48,7 @@ class EditNetworkActivity: AppCompatActivity(), OnItemClickListener {
         binding.RecyclerViewNetworkPages.layoutManager = LinearLayoutManager(this)
         binding.RecyclerViewNetworkPages.adapter = adapter
         viewModel.pages.observe(this, Observer { pages ->
-            //TODO UPDATE ADPATER LIST
+            adapter.updateData(pages)
         })
         viewModel.error.observe(this, Observer{ error ->
             error?.let{
@@ -66,6 +66,7 @@ class EditNetworkActivity: AppCompatActivity(), OnItemClickListener {
                 Toast.makeText(this, it, Toast.LENGTH_LONG).show()
             }
         })
+        viewModel.fetchPages(comicsId)
     }
 
     private fun showAddPageDialog() {
@@ -111,7 +112,7 @@ class EditNetworkActivity: AppCompatActivity(), OnItemClickListener {
     }
 
     override fun onEditClick(id: String) {
-        TODO("Not yet implemented")
+        startActivity(Intent(this, SomeActivity::class.java))
     }
 
     override fun onSendClick(id: String) {
