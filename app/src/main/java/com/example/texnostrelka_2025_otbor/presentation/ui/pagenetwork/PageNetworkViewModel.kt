@@ -10,7 +10,7 @@ import com.example.texnostrelka_2025_otbor.data.remote.exception.BadRequestExcep
 import com.example.texnostrelka_2025_otbor.data.remote.exception.NetworkException
 import com.example.texnostrelka_2025_otbor.data.remote.exception.NotAuthorizedException
 import com.example.texnostrelka_2025_otbor.data.remote.exception.NotFoundException
-import com.example.texnostrelka_2025_otbor.data.remote.model.PageFromNetwork
+import com.example.texnostrelka_2025_otbor.data.remote.model.page.PageFromNetwork
 import com.example.texnostrelka_2025_otbor.data.remote.repository.NetworkRepository
 import kotlinx.coroutines.launch
 

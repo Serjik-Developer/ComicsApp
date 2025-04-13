@@ -5,15 +5,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.texnostrelka_2025_otbor.data.local.preferences.PreferencesManager
 import com.example.texnostrelka_2025_otbor.data.remote.exception.BadRequestException
 import com.example.texnostrelka_2025_otbor.data.remote.exception.ForbiddenException
 import com.example.texnostrelka_2025_otbor.data.remote.exception.NetworkException
 import com.example.texnostrelka_2025_otbor.data.remote.exception.NotAuthorizedException
 import com.example.texnostrelka_2025_otbor.data.remote.exception.NotFoundException
-import com.example.texnostrelka_2025_otbor.data.remote.model.PageFromNetwork
-import com.example.texnostrelka_2025_otbor.data.remote.model.pagenetwork.PageAddRequestModel
+import com.example.texnostrelka_2025_otbor.data.remote.model.page.PageFromNetwork
+import com.example.texnostrelka_2025_otbor.data.remote.model.page.request.PageAddRequestModel
 import com.example.texnostrelka_2025_otbor.data.remote.repository.NetworkRepository
 import kotlinx.coroutines.launch
 

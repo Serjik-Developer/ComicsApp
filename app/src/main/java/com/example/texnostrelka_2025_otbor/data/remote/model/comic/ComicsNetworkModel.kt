@@ -1,4 +1,4 @@
-package com.example.texnostrelka_2025_otbor.data.remote.model
+package com.example.texnostrelka_2025_otbor.data.remote.model.comic
 
 data class ComicsNetworkModel(
     val id: String? = null,

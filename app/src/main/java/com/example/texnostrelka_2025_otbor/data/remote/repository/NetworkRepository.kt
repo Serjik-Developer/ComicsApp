@@ -1,5 +1,7 @@
 package com.example.texnostrelka_2025_otbor.data.remote.repository
 
+import android.media.Image
+import android.net.wifi.WifiManager
 import com.example.texnostrelka_2025_otbor.data.remote.api.RetrofitApiService
 import com.example.texnostrelka_2025_otbor.data.remote.exception.ApiException
 import com.example.texnostrelka_2025_otbor.data.remote.exception.BadRequestException
@@ -8,13 +10,14 @@ import com.example.texnostrelka_2025_otbor.data.remote.exception.ForbiddenExcept
 import com.example.texnostrelka_2025_otbor.data.remote.exception.NetworkException
 import com.example.texnostrelka_2025_otbor.data.remote.exception.NotAuthorizedException
 import com.example.texnostrelka_2025_otbor.data.remote.exception.NotFoundException
-import com.example.texnostrelka_2025_otbor.data.remote.model.ComicsFromNetwork
-import com.example.texnostrelka_2025_otbor.data.remote.model.ComicsNetworkModel
-import com.example.texnostrelka_2025_otbor.data.remote.model.PageFromNetwork
-import com.example.texnostrelka_2025_otbor.data.remote.model.authentication.AuthRequest
-import com.example.texnostrelka_2025_otbor.data.remote.model.authentication.AuthResponse
-import com.example.texnostrelka_2025_otbor.data.remote.model.authentication.RegisterationRequest
-import com.example.texnostrelka_2025_otbor.data.remote.model.pagenetwork.PageAddRequestModel
+import com.example.texnostrelka_2025_otbor.data.remote.model.comic.response.ComicsFromNetwork
+import com.example.texnostrelka_2025_otbor.data.remote.model.comic.ComicsNetworkModel
+import com.example.texnostrelka_2025_otbor.data.remote.model.page.PageFromNetwork
+import com.example.texnostrelka_2025_otbor.data.remote.model.authentication.request.AuthRequest
+import com.example.texnostrelka_2025_otbor.data.remote.model.authentication.response.AuthResponse
+import com.example.texnostrelka_2025_otbor.data.remote.model.authentication.request.RegisterationRequest
+import com.example.texnostrelka_2025_otbor.data.remote.model.image.request.ImageRequestModel
+import com.example.texnostrelka_2025_otbor.data.remote.model.page.request.PageAddRequestModel
 import retrofit2.HttpException
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -164,6 +167,54 @@ class NetworkRepository {
                 401 -> throw NotAuthorizedException("Не авторизован.")
                 403 -> throw ForbiddenException("Недостаточно прав.")
                 404 -> throw NotFoundException("Страница не найдена")
+                else -> throw ApiException("Ошибка сервера ${e.code()}")
+            }
+        } catch (e: IOException) {
+            throw NetworkException("Ошибка сети: ${e.message}")
+        }
+    }
+
+    suspend fun postImage(pageId: String, token: String, request: ImageRequestModel) {
+        try {
+            apiService.postImage(pageId, "Bearer $token", request)
+        } catch (e: HttpException) {
+            when(e.code()) {
+                400 -> throw BadRequestException("Некорректный запрос: ${e.message}")
+                401 -> throw NotAuthorizedException("Не авторизован.")
+                403 -> throw ForbiddenException("Недостаточно прав.")
+                404 -> throw NotFoundException("Страница не найдена.")
+                else -> throw ApiException("Ошибка сервера ${e.code()}")
+            }
+        } catch (e: IOException) {
+            throw NetworkException("Ошибка сети: ${e.message}")
+        }
+    }
+
+    suspend fun deleteImage(imageId: String, token: String) {
+        try {
+            apiService.deleteImage(imageId, "Bearer $token")
+        } catch (e: HttpException) {
+            when(e.code()) {
+                400 -> throw BadRequestException("Некорректный запрос: ${e.message}")
+                401 -> throw NotAuthorizedException("Не авторизован.")
+                403 -> throw ForbiddenException("Недостаточно прав.")
+                404 -> throw NotFoundException("Страница не найдена.")
+                else -> throw ApiException("Ошибка сервера ${e.code()}")
+            }
+        } catch (e: IOException) {
+            throw NetworkException("Ошибка сети: ${e.message}")
+        }
+    }
+
+    suspend fun updateImage(imageId: String, token: String, request: String) {
+        try {
+            apiService.updateImage(imageId, "Bearer $token", request)
+        } catch (e: HttpException) {
+            when(e.code()) {
+                400 -> throw BadRequestException("Некорректный запрос: ${e.message}")
+                401 -> throw NotAuthorizedException("Не авторизован.")
+                403 -> throw ForbiddenException("Недостаточно прав.")
+                404 -> throw NotFoundException("Страница не найдена.")
                 else -> throw ApiException("Ошибка сервера ${e.code()}")
             }
         } catch (e: IOException) {

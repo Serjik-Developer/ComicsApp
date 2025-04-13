@@ -10,7 +10,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.texnostrelka_2025_otbor.R
 import com.example.texnostrelka_2025_otbor.presentation.listener.OnItemClickListener
-import com.example.texnostrelka_2025_otbor.data.remote.model.ComicsNetworkModel
+import com.example.texnostrelka_2025_otbor.data.remote.model.comic.ComicsNetworkModel
 import com.example.texnostrelka_2025_otbor.presentation.utils.base64ToBitmap
 
 class ComicsNetworkAdapter(private var comics: MutableList<ComicsNetworkModel>, private val listener: OnItemClickListener, private val isMyComics: Boolean = false) : RecyclerView.Adapter<ComicsNetworkAdapter.ComiksViewHolder>() {

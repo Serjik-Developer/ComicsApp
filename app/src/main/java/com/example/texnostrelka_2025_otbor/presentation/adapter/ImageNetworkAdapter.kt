@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.texnostrelka_2025_otbor.R
-import com.example.texnostrelka_2025_otbor.data.remote.model.ImageNetworkModel
+import com.example.texnostrelka_2025_otbor.data.remote.model.image.response.ImageNetworkModel
 import com.example.texnostrelka_2025_otbor.presentation.utils.base64ToBitmap
 
 class ImageNetworkAdapter(

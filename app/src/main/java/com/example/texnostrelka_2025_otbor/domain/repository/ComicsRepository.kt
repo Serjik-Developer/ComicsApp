@@ -5,7 +5,7 @@ import com.example.texnostrelka_2025_otbor.data.local.database.ComicsDatabase
 import com.example.texnostrelka_2025_otbor.data.model.ComicsModel
 import com.example.texnostrelka_2025_otbor.data.model.ImageModel
 import com.example.texnostrelka_2025_otbor.data.model.Page
-import com.example.texnostrelka_2025_otbor.data.remote.model.ComicsFromNetwork
+import com.example.texnostrelka_2025_otbor.data.remote.model.comic.response.ComicsFromNetwork
 
 class ComicsRepository(private val database: ComicsDatabase) {
     suspend fun getAllPages(comicsId: String): MutableList<Page> {

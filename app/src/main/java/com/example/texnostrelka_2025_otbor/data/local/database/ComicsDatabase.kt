@@ -8,9 +8,9 @@ import android.graphics.BitmapFactory
 import android.util.Log
 import com.example.texnostrelka_2025_otbor.data.model.ComicsModel
 import com.example.texnostrelka_2025_otbor.data.model.ImageModel
-import com.example.texnostrelka_2025_otbor.data.remote.model.ComicsFromNetwork
-import com.example.texnostrelka_2025_otbor.data.remote.model.ImageNetworkModel
-import com.example.texnostrelka_2025_otbor.data.remote.model.PageFromNetwork
+import com.example.texnostrelka_2025_otbor.data.remote.model.comic.response.ComicsFromNetwork
+import com.example.texnostrelka_2025_otbor.data.remote.model.image.response.ImageNetworkModel
+import com.example.texnostrelka_2025_otbor.data.remote.model.page.PageFromNetwork
 import com.example.texnostrelka_2025_otbor.data.model.Page
 import com.example.texnostrelka_2025_otbor.presentation.utils.toBase64
 import java.io.ByteArrayOutputStream

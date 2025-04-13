@@ -1,4 +1,6 @@
-package com.example.texnostrelka_2025_otbor.data.remote.model
+package com.example.texnostrelka_2025_otbor.data.remote.model.page
+
+import com.example.texnostrelka_2025_otbor.data.remote.model.image.response.ImageNetworkModel
 
 data class PageFromNetwork(
     val pageId:String,

@@ -10,8 +10,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.texnostrelka_2025_otbor.R
 import com.example.texnostrelka_2025_otbor.data.model.ImageModel
-import com.example.texnostrelka_2025_otbor.data.remote.model.ImageNetworkModel
-import com.example.texnostrelka_2025_otbor.data.remote.model.PageFromNetwork
+import com.example.texnostrelka_2025_otbor.data.remote.model.image.response.ImageNetworkModel
+import com.example.texnostrelka_2025_otbor.data.remote.model.page.PageFromNetwork
 import com.example.texnostrelka_2025_otbor.presentation.adapter.EditNetworkAdapter.EditNetworkViewHolder
 import com.example.texnostrelka_2025_otbor.presentation.listener.OnItemClickListener
 import com.example.texnostrelka_2025_otbor.presentation.utils.base64ToBitmap

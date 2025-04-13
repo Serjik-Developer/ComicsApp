@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.texnostrelka_2025_otbor.R
 import com.example.texnostrelka_2025_otbor.presentation.adapter.PageNetworkAdapter.PageNetworkViewHolder
-import com.example.texnostrelka_2025_otbor.data.remote.model.PageFromNetwork
+import com.example.texnostrelka_2025_otbor.data.remote.model.page.PageFromNetwork
 
 class PageNetworkAdapter(
     private var pages: MutableList<PageFromNetwork>,

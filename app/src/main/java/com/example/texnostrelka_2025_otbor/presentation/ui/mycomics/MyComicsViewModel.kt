@@ -11,7 +11,7 @@ import com.example.texnostrelka_2025_otbor.data.remote.exception.ForbiddenExcept
 import com.example.texnostrelka_2025_otbor.data.remote.exception.NetworkException
 import com.example.texnostrelka_2025_otbor.data.remote.exception.NotAuthorizedException
 import com.example.texnostrelka_2025_otbor.data.remote.exception.NotFoundException
-import com.example.texnostrelka_2025_otbor.data.remote.model.ComicsNetworkModel
+import com.example.texnostrelka_2025_otbor.data.remote.model.comic.ComicsNetworkModel
 import com.example.texnostrelka_2025_otbor.data.remote.repository.NetworkRepository
 import kotlinx.coroutines.launch
 

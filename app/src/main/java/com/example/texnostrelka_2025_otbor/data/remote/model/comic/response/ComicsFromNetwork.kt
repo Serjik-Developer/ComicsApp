@@ -1,6 +1,6 @@
-package com.example.texnostrelka_2025_otbor.data.remote.model
+package com.example.texnostrelka_2025_otbor.data.remote.model.comic.response
 
-import com.example.texnostrelka_2025_otbor.data.remote.model.PageFromNetwork
+import com.example.texnostrelka_2025_otbor.data.remote.model.page.PageFromNetwork
 
 data class ComicsFromNetwork(
     val id: String,
