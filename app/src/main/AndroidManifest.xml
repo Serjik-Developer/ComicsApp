@@ -47,6 +47,9 @@
             android:name=".presentation.ui.editnetwork.EditNetworkActivity"
             android:exported="false" />
         <activity
+            android:name=".presentation.ui.editpagenetwork.EditPageNetworkActivity"
+            android:exported="false" />
+        <activity
             android:name=".presentation.ui.main.MainActivity"
             android:exported="true">
             <intent-filter>
