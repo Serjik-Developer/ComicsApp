@@ -9,6 +9,7 @@ import android.widget.ImageButton
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.texnostrelka_2025_otbor.R
+import com.example.texnostrelka_2025_otbor.data.mapper.convertNetworkToModel
 import com.example.texnostrelka_2025_otbor.data.model.ImageModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.image.response.ImageNetworkModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.page.PageFromNetwork
@@ -54,16 +55,6 @@ class EditNetworkAdapter(private var pages: MutableList<PageFromNetwork>, privat
             editBtn.setOnClickListener {
                 listener.onEditClick(page.pageId)
             }
-        }
-        private fun convertNetworkToModel(imageList: MutableList<ImageNetworkModel>?, pageId: String) : List<ImageModel>{
-            return imageList?.map { networkItem ->
-                ImageModel(
-                    id = networkItem.id,
-                    pageId = pageId,
-                    image = networkItem.image?.base64ToBitmap(),
-                    cellIndex = networkItem.cellIndex
-                )
-            } ?: TODO("CREATE ERROR ABOT PAGE WITHOUT IMAGES")
         }
     }
 }
