@@ -199,7 +199,7 @@ class NetworkRepository {
                 400 -> throw BadRequestException("Некорректный запрос: ${e.message}")
                 401 -> throw NotAuthorizedException("Не авторизован.")
                 403 -> throw ForbiddenException("Недостаточно прав.")
-                404 -> throw NotFoundException("Страница не найдена.")
+                404 -> throw NotFoundException("Изображение не найдено.")
                 else -> throw ApiException("Ошибка сервера ${e.code()}")
             }
         } catch (e: IOException) {
@@ -215,7 +215,7 @@ class NetworkRepository {
                 400 -> throw BadRequestException("Некорректный запрос: ${e.message}")
                 401 -> throw NotAuthorizedException("Не авторизован.")
                 403 -> throw ForbiddenException("Недостаточно прав.")
-                404 -> throw NotFoundException("Страница не найдена.")
+                404 -> throw NotFoundException("Изображение не найдено.")
                 else -> throw ApiException("Ошибка сервера ${e.code()}")
             }
         } catch (e: IOException) {

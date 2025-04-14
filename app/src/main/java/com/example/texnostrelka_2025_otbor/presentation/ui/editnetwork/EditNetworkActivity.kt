@@ -114,7 +114,7 @@ class EditNetworkActivity: AppCompatActivity(), OnItemClickListener {
     }
 
     override fun onEditClick(id: String) {
-        startActivity(Intent(this, EditPageNetworkActivity::class.java).putExtra("PAGE_ID", id))
+        startActivity(Intent(this, EditPageNetworkActivity::class.java).putExtra("PAGE-ID", id))
     }
 
     override fun onSendClick(id: String) {
