@@ -22,6 +22,8 @@ import com.example.texnostrelka_2025_otbor.presentation.adapter.EditNetworkAdapt
 import com.example.texnostrelka_2025_otbor.presentation.factory.EditNetworkViewModelFactory
 import com.example.texnostrelka_2025_otbor.presentation.listener.OnItemClickListener
 import com.example.texnostrelka_2025_otbor.presentation.ui.auth.AuthActivity
+import com.example.texnostrelka_2025_otbor.presentation.ui.edit.EditActivity
+import com.example.texnostrelka_2025_otbor.presentation.ui.editpagenetwork.EditPageNetworkActivity
 import com.example.texnostrelka_2025_otbor.presentation.ui.mycomics.MyComicsActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
@@ -112,7 +114,7 @@ class EditNetworkActivity: AppCompatActivity(), OnItemClickListener {
     }
 
     override fun onEditClick(id: String) {
-        startActivity(Intent(this, SomeActivity::class.java))
+        startActivity(Intent(this, EditPageNetworkActivity::class.java).putExtra("PAGE_ID", id))
     }
 
     override fun onSendClick(id: String) {
