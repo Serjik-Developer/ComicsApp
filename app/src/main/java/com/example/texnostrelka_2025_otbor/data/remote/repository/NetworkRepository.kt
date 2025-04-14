@@ -2,6 +2,7 @@ package com.example.texnostrelka_2025_otbor.data.remote.repository
 
 import android.media.Image
 import android.net.wifi.WifiManager
+import com.example.texnostrelka_2025_otbor.data.model.Page
 import com.example.texnostrelka_2025_otbor.data.remote.api.RetrofitApiService
 import com.example.texnostrelka_2025_otbor.data.remote.exception.ApiException
 import com.example.texnostrelka_2025_otbor.data.remote.exception.BadRequestException
@@ -215,6 +216,19 @@ class NetworkRepository {
                 401 -> throw NotAuthorizedException("Не авторизован.")
                 403 -> throw ForbiddenException("Недостаточно прав.")
                 404 -> throw NotFoundException("Страница не найдена.")
+                else -> throw ApiException("Ошибка сервера ${e.code()}")
+            }
+        } catch (e: IOException) {
+            throw NetworkException("Ошибка сети: ${e.message}")
+        }
+    }
+
+    suspend fun getPage(pageId: String, token: String) : PageFromNetwork {
+        try {
+            return apiService.getPage(pageId, "Bearer $token")
+        } catch (e: HttpException) {
+            when(e.code()) {
+                401 -> throw NotAuthorizedException("Не авторизован.")
                 else -> throw ApiException("Ошибка сервера ${e.code()}")
             }
         } catch (e: IOException) {
