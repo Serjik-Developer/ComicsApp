@@ -9,6 +9,7 @@ import com.example.texnostrelka_2025_otbor.data.model.ComicsModel
 import com.example.texnostrelka_2025_otbor.data.remote.exception.NetworkException
 import com.example.texnostrelka_2025_otbor.data.remote.exception.NotAuthorizedException
 import com.example.texnostrelka_2025_otbor.data.remote.exception.BadRequestException
+import com.example.texnostrelka_2025_otbor.data.remote.exception.ConflictException
 import com.example.texnostrelka_2025_otbor.domain.repository.ComicsRepository
 import com.example.texnostrelka_2025_otbor.data.remote.repository.NetworkRepository
 import kotlinx.coroutines.launch
@@ -69,6 +70,8 @@ class MainViewModel(private val repository: ComicsRepository, private val networ
                 _errorMessage.value = "Ошибка запроса: ${e.message}"
             } catch (e: NetworkException) {
                 _errorMessage.value = "Проблемы с интернетом"
+            } catch (e: ConflictException) {
+                _errorMessage.value = e.message
             }
         }
     }

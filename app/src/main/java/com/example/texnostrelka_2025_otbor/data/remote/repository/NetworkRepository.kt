@@ -107,6 +107,7 @@ class NetworkRepository {
             when(e.code()) {
                 400 -> throw BadRequestException("Некорректный запрос: ${e.message}")
                 401 -> throw NotAuthorizedException("Не авторизован.")
+                409 -> throw ConflictException("Этот комикс уже существует!")
                 else -> throw ApiException("Ошибка сервера ${e.code()}")
             }
         } catch (e: IOException) {
