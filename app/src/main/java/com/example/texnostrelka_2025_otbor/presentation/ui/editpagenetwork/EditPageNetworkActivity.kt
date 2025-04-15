@@ -27,11 +27,11 @@ class EditPageNetworkActivity : AppCompatActivity(), OnItemClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityEditNetworkBinding.inflate(layoutInflater)
-        adapter = EditPageAdapter(listOf(), this)
+        adapter = EditPageAdapter(0, listOf(), this)
         pageId = intent.getStringExtra("PAGE-ID") ?: throw IllegalArgumentException("pageId is required")
         viewModel.page.observe(this, Observer { page ->
             val imageList = convertNetworkToModel(page.images, pageId)
-            adapter.updateData(imageList)
+            adapter.updateData(imageList, page.rows, page.columns)
         })
         viewModel.success.observe(this, Observer { success ->
             success?.let {
