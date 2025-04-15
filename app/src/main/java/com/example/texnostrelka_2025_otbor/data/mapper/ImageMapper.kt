@@ -12,5 +12,5 @@ fun convertNetworkToModel(imageList: MutableList<ImageNetworkModel>?, pageId: St
             image = networkItem.image?.base64ToBitmap(),
             cellIndex = networkItem.cellIndex
         )
-    } ?: TODO("CREATE ERROR ABOT PAGE WITHOUT IMAGES")
+    } ?: emptyList()
 }
