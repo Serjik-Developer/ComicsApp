@@ -39,7 +39,7 @@ class EditNetworkActivity: AppCompatActivity(), OnItemClickListener {
         binding = ActivityEditNetworkBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        comicsId = intent.getStringExtra("COMICS_ID") ?: throw IllegalArgumentException("comicsId is required")
+        comicsId = intent.getStringExtra("COMICS-ID") ?: throw IllegalArgumentException("comicsId is required")
         adapter = EditNetworkAdapter(mutableListOf(), this, this)
         binding.buttonAddNetworkPage.setOnClickListener {
             showAddPageDialog()

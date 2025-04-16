@@ -1,15 +1,23 @@
 package com.example.texnostrelka_2025_otbor.presentation.ui.editpagenetwork
 
 import android.content.Intent
+import android.graphics.pdf.PdfDocument.Page
 import android.os.Bundle
+import android.util.Log
+import android.widget.GridLayout
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.texnostrelka_2025_otbor.data.local.preferences.PreferencesManager
 import com.example.texnostrelka_2025_otbor.data.mapper.convertNetworkToModel
+import com.example.texnostrelka_2025_otbor.data.remote.model.page.PageFromNetwork
 import com.example.texnostrelka_2025_otbor.data.remote.repository.NetworkRepository
 import com.example.texnostrelka_2025_otbor.databinding.ActivityEditNetworkBinding
+import com.example.texnostrelka_2025_otbor.databinding.ActivityEditPageBinding
+import com.example.texnostrelka_2025_otbor.databinding.ActivityEditPageNetworkBinding
 import com.example.texnostrelka_2025_otbor.presentation.adapter.EditPageAdapter
 import com.example.texnostrelka_2025_otbor.presentation.factory.EditPageNetworkViewModelFactory
 import com.example.texnostrelka_2025_otbor.presentation.listener.OnItemClickListener
@@ -17,7 +25,7 @@ import com.example.texnostrelka_2025_otbor.presentation.ui.auth.AuthActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class EditPageNetworkActivity : AppCompatActivity(), OnItemClickListener {
-    private lateinit var binding: ActivityEditNetworkBinding
+    private lateinit var binding: ActivityEditPageNetworkBinding
     private val viewModel : EditPageNetworkViewModel by viewModels() {
         EditPageNetworkViewModelFactory(NetworkRepository(), PreferencesManager(this))
     }
@@ -26,12 +34,24 @@ class EditPageNetworkActivity : AppCompatActivity(), OnItemClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityEditNetworkBinding.inflate(layoutInflater)
-        adapter = EditPageAdapter(0, listOf(), this)
+        binding = ActivityEditPageNetworkBinding.inflate(layoutInflater)
+
+        adapter = EditPageAdapter(
+            PageFromNetwork(pageId = "", number = 0, rows = 0, columns = 0, images = mutableListOf()),
+            this
+        )
+
+        binding.RecyclerViewEditPageNetwork.apply {
+            layoutManager = LinearLayoutManager(this@EditPageNetworkActivity)
+            adapter = this@EditPageNetworkActivity.adapter
+            setHasFixedSize(true)
+        }
+
         pageId = intent.getStringExtra("PAGE-ID") ?: throw IllegalArgumentException("pageId is required")
+
         viewModel.page.observe(this, Observer { page ->
-            val imageList = convertNetworkToModel(page.images, pageId)
-            adapter.updateData(imageList, page.rows, page.columns)
+            Log.w("DATA", "Received page: ${page.pageId}, images: ${page.images?.size}")
+            adapter.updateData(page)
         })
         viewModel.success.observe(this, Observer { success ->
             success?.let {
