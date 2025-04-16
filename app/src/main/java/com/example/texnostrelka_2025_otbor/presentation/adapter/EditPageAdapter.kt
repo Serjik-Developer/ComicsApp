@@ -19,42 +19,63 @@ import com.example.texnostrelka_2025_otbor.presentation.adapter.EditPageAdapter.
 import com.example.texnostrelka_2025_otbor.presentation.listener.OnItemClickListener
 
 class EditPageAdapter(
-    private var page: PageFromNetwork,
+    private var pages: MutableList<PageFromNetwork>,
     private val listener: OnItemClickListener
 ) : RecyclerView.Adapter<EditPageViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EditPageViewHolder {
-        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_edit_image, parent, false)
+        Log.d("ADAPTER", "Creating ViewHolder")
+        val itemView = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_edit_image, parent, false)
         return EditPageViewHolder(itemView, listener, parent.context)
     }
 
     override fun onBindViewHolder(holder: EditPageViewHolder, position: Int) {
-        holder.bind(page)
+        Log.d("ADAPTER", "Binding ViewHolder at position $position")
+        holder.bind(pages[position])
     }
 
-    override fun getItemCount(): Int = 10 // Оставляем 1, так как у вас одна страница с сеткой изображений
+    override fun getItemCount(): Int {
+        Log.d("ADAPTER", "Item count: ${pages.size}")
+        return pages.size
+    }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun updateData(newPage: PageFromNetwork) {
-        Log.w("DATA", "DATA-UPDATED")
-        page = newPage
+    fun updateData(newPages: MutableList<PageFromNetwork>) {
+        Log.w("ADAPTER", "Updating data with ${newPages.size} pages")
+        pages = newPages
         notifyDataSetChanged()
     }
 
-    inner class EditPageViewHolder(itemView: View, private val listener: OnItemClickListener, private val context: Context) : RecyclerView.ViewHolder(itemView) {
+    inner class EditPageViewHolder(
+        itemView: View,
+        private val listener: OnItemClickListener,
+        private val context: Context
+    ) : RecyclerView.ViewHolder(itemView) {
         private val recyclerView = itemView.findViewById<RecyclerView>(R.id.editImageRecyclerView)
 
         fun bind(page: PageFromNetwork) {
-            val pageId = page.pageId
-            val imageList = convertNetworkToModel(page.images, pageId)
+            Log.w("DATA-ADAPTER", "Binding page: ${page.pageId}")
+            val imageList = convertNetworkToModel(page.images, page.pageId)
             Log.w("DATA-ADAPTER", "Images count: ${imageList.size}, Columns: ${page.columns}")
 
             recyclerView.apply {
-                layoutManager = GridLayoutManager(context, page.columns).apply {
-                    orientation = GridLayoutManager.VERTICAL
+                // Убедитесь, что columns > 0
+                val columns = if (page.columns > 0) page.columns else 1
+                layoutManager = GridLayoutManager(context, columns)
+
+                adapter = ImageEditAdapter(imageList, listener).apply {
+                    // Добавляем логирование при создании адаптера
+                    registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
+                        override fun onChanged() {
+                            super.onChanged()
+                            Log.d("INNER_ADAPTER", "Data changed, item count: ${imageList.size}")
+                        }
+                    })
                 }
-                adapter = ImageEditAdapter(imageList, listener)
-                setHasFixedSize(true)
+
+                // Добавляем отладочную рамку
+                setBackgroundResource(R.drawable.debug_border)
             }
         }
     }

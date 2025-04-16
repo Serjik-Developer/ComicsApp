@@ -33,13 +33,10 @@ class EditPageNetworkActivity : AppCompatActivity(), OnItemClickListener {
     private var pageId : String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
         binding = ActivityEditPageNetworkBinding.inflate(layoutInflater)
+        super.onCreate(savedInstanceState)
 
-        adapter = EditPageAdapter(
-            PageFromNetwork(pageId = "", number = 0, rows = 0, columns = 0, images = mutableListOf()),
-            this
-        )
+        adapter = EditPageAdapter(mutableListOf(), this)
 
         binding.RecyclerViewEditPageNetwork.apply {
             layoutManager = LinearLayoutManager(this@EditPageNetworkActivity)
@@ -51,7 +48,7 @@ class EditPageNetworkActivity : AppCompatActivity(), OnItemClickListener {
 
         viewModel.page.observe(this, Observer { page ->
             Log.w("DATA", "Received page: ${page.pageId}, images: ${page.images?.size}")
-            adapter.updateData(page)
+            adapter.updateData(mutableListOf(page))
         })
         viewModel.success.observe(this, Observer { success ->
             success?.let {
