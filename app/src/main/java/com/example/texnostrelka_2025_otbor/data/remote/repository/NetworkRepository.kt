@@ -11,6 +11,7 @@ import com.example.texnostrelka_2025_otbor.data.remote.exception.ForbiddenExcept
 import com.example.texnostrelka_2025_otbor.data.remote.exception.NetworkException
 import com.example.texnostrelka_2025_otbor.data.remote.exception.NotAuthorizedException
 import com.example.texnostrelka_2025_otbor.data.remote.exception.NotFoundException
+import com.example.texnostrelka_2025_otbor.data.remote.exception.TooManyRequests
 import com.example.texnostrelka_2025_otbor.data.remote.model.comic.response.ComicsFromNetwork
 import com.example.texnostrelka_2025_otbor.data.remote.model.comic.ComicsNetworkModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.page.PageFromNetwork
@@ -42,6 +43,7 @@ class NetworkRepository {
                 400 -> throw BadRequestException("Некорректный запрос: ${e.message}")
                 401 -> throw NotAuthorizedException("Не верный пароль")
                 404 -> throw NotFoundException("Пользователь не найден.")
+                429 -> throw TooManyRequests("Исчерпано количество попыток. Попробуйте позже")
                 else -> throw ApiException("Ошибка сервера ${e.code()}")
             }
         } catch (e: IOException) {

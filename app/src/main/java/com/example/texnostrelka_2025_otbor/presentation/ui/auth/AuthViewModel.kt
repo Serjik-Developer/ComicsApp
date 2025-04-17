@@ -9,6 +9,7 @@ import com.example.texnostrelka_2025_otbor.data.remote.exception.BadRequestExcep
 import com.example.texnostrelka_2025_otbor.data.remote.exception.NetworkException
 import com.example.texnostrelka_2025_otbor.data.remote.exception.NotAuthorizedException
 import com.example.texnostrelka_2025_otbor.data.remote.exception.NotFoundException
+import com.example.texnostrelka_2025_otbor.data.remote.exception.TooManyRequests
 import com.example.texnostrelka_2025_otbor.data.remote.repository.NetworkRepository
 import kotlinx.coroutines.launch
 
@@ -38,6 +39,8 @@ class AuthViewModel(
                 _error.postValue("Неверный логин или пароль")
             } catch (e: NotFoundException) {
                 _error.postValue("Пользователь не найден")
+            } catch (e: TooManyRequests) {
+                _error.postValue(e.message)
             } catch (e: Exception) {
                 _error.postValue("Произошла неизвестная ошибка")
                 e.printStackTrace()
