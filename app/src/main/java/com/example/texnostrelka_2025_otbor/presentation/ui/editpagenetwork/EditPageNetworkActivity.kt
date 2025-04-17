@@ -35,7 +35,7 @@ class EditPageNetworkActivity : AppCompatActivity(), OnItemClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityEditPageNetworkBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
-
+setContentView(binding.root) 
         adapter = EditPageAdapter(mutableListOf(), this)
 
         binding.RecyclerViewEditPageNetwork.apply {
