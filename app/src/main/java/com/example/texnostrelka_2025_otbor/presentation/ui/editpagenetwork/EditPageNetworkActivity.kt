@@ -22,6 +22,7 @@ import com.example.texnostrelka_2025_otbor.presentation.adapter.EditPageAdapter
 import com.example.texnostrelka_2025_otbor.presentation.factory.EditPageNetworkViewModelFactory
 import com.example.texnostrelka_2025_otbor.presentation.listener.OnItemClickListener
 import com.example.texnostrelka_2025_otbor.presentation.ui.auth.AuthActivity
+import com.example.texnostrelka_2025_otbor.presentation.ui.editimagenetwork.EditImageNetworkActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class EditPageNetworkActivity : AppCompatActivity(), OnItemClickListener {
@@ -86,7 +87,7 @@ setContentView(binding.root)
     }
 
     override fun onEditClick(id: String) {
-        TODO("Not yet implemented")
+        startActivity(Intent(this, EditImageNetworkActivity::class.java).putExtra("IMAGE-ID", id))
     }
 
     override fun onSendClick(id: String) {

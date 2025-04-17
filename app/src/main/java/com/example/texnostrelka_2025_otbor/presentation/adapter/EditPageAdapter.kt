@@ -64,8 +64,7 @@ class EditPageAdapter(
                 val columns = if (page.columns > 0) page.columns else 1
                 layoutManager = GridLayoutManager(context, columns)
 
-                adapter = ImageEditAdapter(imageList, listener).apply {
-                    // Добавляем логирование при создании адаптера
+                adapter = ImageEditAdapter(imageList.toMutableList(), listener).apply {
                     registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
                         override fun onChanged() {
                             super.onChanged()
@@ -74,8 +73,6 @@ class EditPageAdapter(
                     })
                 }
 
-                // Добавляем отладочную рамку
-                setBackgroundResource(R.drawable.debug_border)
             }
         }
     }

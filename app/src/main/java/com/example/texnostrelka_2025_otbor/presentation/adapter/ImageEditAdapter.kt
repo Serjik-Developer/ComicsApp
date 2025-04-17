@@ -11,7 +11,7 @@ import com.example.texnostrelka_2025_otbor.data.model.ImageModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.page.PageFromNetwork
 import com.example.texnostrelka_2025_otbor.presentation.listener.OnItemClickListener
 
-class ImageEditAdapter(private val images: List<ImageModel>, private val listener: OnItemClickListener) :
+class ImageEditAdapter(private val images: MutableList<ImageModel>, private val listener: OnItemClickListener) :
     RecyclerView.Adapter<ImageEditAdapter.ImageEditViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageEditViewHolder {
@@ -39,6 +39,7 @@ class ImageEditAdapter(private val images: List<ImageModel>, private val listene
                 imageView.requestLayout()
 
                 deleteBtn.setOnClickListener {
+                    images.removeIf { it.id == imageModel.id.toString() }
                     listener.onDeleteClick(imageModel.id.toString())
                 }
                 editBtn.setOnClickListener {
