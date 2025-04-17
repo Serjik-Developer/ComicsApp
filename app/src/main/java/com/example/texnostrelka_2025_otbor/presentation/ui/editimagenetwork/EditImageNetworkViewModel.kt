@@ -50,4 +50,31 @@ class EditImageNetworkViewModel(private val repository: NetworkRepository, priva
             }
         }
     }
+
+    fun updateImage(imageId: String, request: String) {
+        viewModelScope.launch {
+            try {
+                val token = preferencesManager.getAuthToken()
+                if (token.isNullOrEmpty()) {
+                    _error.postValue("Не авторизован.")
+                    return@launch
+                }
+                repository.updateImage(imageId, "Bearer $token", request)
+                _success.postValue("Изображение успешно обновлено!")
+            } catch (e: NotAuthorizedException) {
+                preferencesManager.clearAuthToken()
+                preferencesManager.clearName()
+                _error.value = e.message
+            } catch (e: ForbiddenException) {
+                _error.value = e.message
+            } catch (e: NotFoundException) {
+                _error.value = e.message
+            } catch (e: NetworkException) {
+                _error.value = "Проблемы с интернетом"
+            } catch (e: Exception) {
+                _error.value = "Незивестная ошибка"
+                Log.w("EditImageNetworkViewModel", "Unknown error", e)
+            }
+        }
+    }
 }
