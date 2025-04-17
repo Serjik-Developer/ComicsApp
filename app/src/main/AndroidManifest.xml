@@ -20,6 +20,9 @@
             android:name=".presentation.ui.mycomics.MyComicsActivity"
             android:exported="false" />
         <activity
+            android:name=".presentation.ui.editimagenetwork.EditImageNetworkActivity"
+            android:exported="false" />
+        <activity
             android:name=".presentation.ui.pagenetwork.PageNetworkActivity"
             android:exported="false" />
         <activity
