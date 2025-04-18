@@ -17,10 +17,11 @@ import com.example.texnostrelka_2025_otbor.data.model.ImageModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.page.PageFromNetwork
 import com.example.texnostrelka_2025_otbor.presentation.adapter.EditPageAdapter.EditPageViewHolder
 import com.example.texnostrelka_2025_otbor.presentation.listener.OnItemClickListener
+import com.example.texnostrelka_2025_otbor.presentation.listener.OnItemEditPageNetworkClickListener
 
 class EditPageAdapter(
     private var pages: MutableList<PageFromNetwork>,
-    private val listener: OnItemClickListener
+    private val listener: OnItemEditPageNetworkClickListener
 ) : RecyclerView.Adapter<EditPageViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EditPageViewHolder {
@@ -49,7 +50,7 @@ class EditPageAdapter(
 
     inner class EditPageViewHolder(
         itemView: View,
-        private val listener: OnItemClickListener,
+        private val listener: OnItemEditPageNetworkClickListener,
         private val context: Context
     ) : RecyclerView.ViewHolder(itemView) {
         private val recyclerView = itemView.findViewById<RecyclerView>(R.id.editImageRecyclerView)
@@ -60,11 +61,12 @@ class EditPageAdapter(
             Log.w("DATA-ADAPTER", "Images count: ${imageList.size}, Columns: ${page.columns}")
 
             recyclerView.apply {
-                // Убедитесь, что columns > 0
+                // Ensure columns > 0
                 val columns = if (page.columns > 0) page.columns else 1
+                val rows = if (page.rows > 0) page.rows else 1
                 layoutManager = GridLayoutManager(context, columns)
 
-                adapter = ImageEditAdapter(imageList.toMutableList(), listener).apply {
+                adapter = ImageEditAdapter(page.pageId, imageList.toMutableList(), listener, rows, columns).apply {
                     registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
                         override fun onChanged() {
                             super.onChanged()
@@ -72,7 +74,6 @@ class EditPageAdapter(
                         }
                     })
                 }
-
             }
         }
     }

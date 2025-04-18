@@ -4,14 +4,21 @@
     android:layout_height="wrap_content"
     android:padding="8dp">
 
+    <!-- Изменения:
+        1. layout_width="match_parent" (занимает всю ширину ячейки)
+        2. layout_height="wrap_content" (подстраивается под пропорции)
+        3. Добавлен minHeight (опционально, чтобы placeholder не был слишком маленьким)
+    -->
     <ImageView
         android:id="@+id/editImageView"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
         android:adjustViewBounds="true"
-        android:scaleType="centerCrop" />
+        android:scaleType="centerCrop"
+        android:minHeight="100dp"
+        android:src="@drawable/gray_placeholder" />
 
     <LinearLayout
         android:layout_width="wrap_content"

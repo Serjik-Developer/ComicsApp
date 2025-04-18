@@ -21,11 +21,12 @@ import com.example.texnostrelka_2025_otbor.databinding.ActivityEditPageNetworkBi
 import com.example.texnostrelka_2025_otbor.presentation.adapter.EditPageAdapter
 import com.example.texnostrelka_2025_otbor.presentation.factory.EditPageNetworkViewModelFactory
 import com.example.texnostrelka_2025_otbor.presentation.listener.OnItemClickListener
+import com.example.texnostrelka_2025_otbor.presentation.listener.OnItemEditPageNetworkClickListener
 import com.example.texnostrelka_2025_otbor.presentation.ui.auth.AuthActivity
 import com.example.texnostrelka_2025_otbor.presentation.ui.editimagenetwork.EditImageNetworkActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
-class EditPageNetworkActivity : AppCompatActivity(), OnItemClickListener {
+class EditPageNetworkActivity : AppCompatActivity(), OnItemEditPageNetworkClickListener {
     private lateinit var binding: ActivityEditPageNetworkBinding
     private val viewModel : EditPageNetworkViewModel by viewModels() {
         EditPageNetworkViewModelFactory(NetworkRepository(), PreferencesManager(this))
@@ -36,17 +37,20 @@ class EditPageNetworkActivity : AppCompatActivity(), OnItemClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityEditPageNetworkBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
-setContentView(binding.root) 
+        setContentView(binding.root)
         adapter = EditPageAdapter(mutableListOf(), this)
-
         binding.RecyclerViewEditPageNetwork.apply {
             layoutManager = LinearLayoutManager(this@EditPageNetworkActivity)
             adapter = this@EditPageNetworkActivity.adapter
             setHasFixedSize(true)
         }
-
         pageId = intent.getStringExtra("PAGE-ID") ?: throw IllegalArgumentException("pageId is required")
-
+        binding.buttonAddNetworkImage.setOnClickListener {
+            startActivity(Intent(this, EditImageNetworkActivity::class.java).apply {
+                putExtra("MODE", 1)
+                putExtra("PAGE-ID", pageId)
+            })
+        }
         viewModel.page.observe(this, Observer { page ->
             Log.w("DATA", "Received page: ${page.pageId}, images: ${page.images?.size}")
             adapter.updateData(mutableListOf(page))
@@ -78,19 +82,22 @@ setContentView(binding.root)
             .show()
     }
 
-    override fun onItemClick(id: String) {
-        TODO("Not yet implemented")
-    }
-
     override fun onDeleteClick(id: String) {
         viewModel.deleteImage(id)
     }
 
     override fun onEditClick(id: String) {
-        startActivity(Intent(this, EditImageNetworkActivity::class.java).putExtra("IMAGE-ID", id))
+        startActivity(Intent(this, EditImageNetworkActivity::class.java).apply {
+            putExtra("MODE", 2)
+            putExtra("IMAGE-ID", id)
+        })
     }
 
-    override fun onSendClick(id: String) {
-        TODO("Not yet implemented")
+    override fun onAddClick(pageId: String, cellIndex: Int) {
+        startActivity(Intent(this, EditImageNetworkActivity::class.java).apply {
+            putExtra("MODE", 1)
+            putExtra("PAGE-ID", pageId)
+            putExtra("CELL-INDEX", cellIndex)
+        })
     }
 }

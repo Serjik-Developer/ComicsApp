@@ -16,10 +16,8 @@ class AddViewModel(private val repository: ComicsRepository) : ViewModel() {
     fun savePainting(imageId: String?, bitmap: Bitmap, pageId: String, cellIndex: Int) {
         viewModelScope.launch {
             if (imageId != null) {
-                // Если изображение существует, обновляем его
                 repository.updatePainting(imageId, bitmap)
             } else {
-                // Если изображение новое, добавляем его
                 repository.insertPainting(bitmap, pageId, cellIndex)
             }
         }

@@ -10,11 +10,24 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/RecyclerViewEditPageNetwork"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:layout_marginStart="1dp"
         android:layout_marginTop="1dp"
         android:layout_marginEnd="1dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/buttonAddNetworkImage"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+    <ImageButton
+        android:id="@+id/buttonAddNetworkImage"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:background="@null"
+        android:contentDescription="Add Page"
+        android:src="@android:drawable/ic_input_add"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:tint="@android:color/black"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
