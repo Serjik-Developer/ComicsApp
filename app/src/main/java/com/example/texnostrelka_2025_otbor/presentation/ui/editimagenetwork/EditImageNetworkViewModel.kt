@@ -21,6 +21,8 @@ class EditImageNetworkViewModel(private val repository: NetworkRepository, priva
     val error : LiveData<String?> get() = _error
     private val _success = MutableLiveData<String?>()
     val success : LiveData<String?> get() = _success
+    private val _shouldFinish = MutableLiveData<Boolean>()
+    val shouldFinish: LiveData<Boolean> = _shouldFinish
 
     fun addImage(pageId: String, request: ImageRequestModel) {
         viewModelScope.launch {
@@ -32,6 +34,7 @@ class EditImageNetworkViewModel(private val repository: NetworkRepository, priva
                 }
                 repository.postImage(pageId, token, request)
                 _success.postValue("Изображение успешно загружено!")
+                _shouldFinish.postValue(true)
             } catch (e: BadRequestException) {
                 _error.value = e.message
             } catch (e: NotAuthorizedException) {
@@ -61,6 +64,7 @@ class EditImageNetworkViewModel(private val repository: NetworkRepository, priva
                 }
                 repository.updateImage(imageId, token, request)
                 _success.postValue("Изображение успешно обновлено!")
+                _shouldFinish.postValue(true)
             } catch (e: NotAuthorizedException) {
                 preferencesManager.clearAuthToken()
                 preferencesManager.clearName()

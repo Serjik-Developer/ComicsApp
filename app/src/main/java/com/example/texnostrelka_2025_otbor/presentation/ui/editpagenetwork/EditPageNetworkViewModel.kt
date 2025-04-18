@@ -23,6 +23,8 @@ class EditPageNetworkViewModel(private val repository: NetworkRepository, privat
     val error: LiveData<String?> get() = _error
     private val _success = MutableLiveData<String?>()
     val success: LiveData<String?> get() = _success
+    private val _refreshTrigger = MutableLiveData<Boolean>()
+    val refreshTrigger: LiveData<Boolean> = _refreshTrigger
 
     fun fetchPage(pageId: String) {
         viewModelScope.launch {
@@ -75,5 +77,8 @@ class EditPageNetworkViewModel(private val repository: NetworkRepository, privat
                 Log.e("EditPageNetworkViewModel", "Unknown error", e)
             }
         }
+    }
+    fun resetRefreshTrigger() {
+        _refreshTrigger.postValue(false)
     }
 }

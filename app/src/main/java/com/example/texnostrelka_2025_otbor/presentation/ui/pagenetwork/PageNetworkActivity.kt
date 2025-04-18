@@ -62,4 +62,9 @@ class   PageNetworkActivity : AppCompatActivity() {
             .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
             .show()
     }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.fetchPages(comicsId)
+    }
 }

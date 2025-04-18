@@ -45,12 +45,12 @@ class EditPageNetworkActivity : AppCompatActivity(), OnItemEditPageNetworkClickL
             setHasFixedSize(true)
         }
         pageId = intent.getStringExtra("PAGE-ID") ?: throw IllegalArgumentException("pageId is required")
-        binding.buttonAddNetworkImage.setOnClickListener {
-            startActivity(Intent(this, EditImageNetworkActivity::class.java).apply {
-                putExtra("MODE", 1)
-                putExtra("PAGE-ID", pageId)
-            })
-        }
+        viewModel.refreshTrigger.observe(this, Observer { shouldRefresh ->
+            if (shouldRefresh) {
+                viewModel.fetchPage(pageId)
+                viewModel.resetRefreshTrigger()
+            }
+        })
         viewModel.page.observe(this, Observer { page ->
             Log.w("DATA", "Received page: ${page.pageId}, images: ${page.images?.size}")
             adapter.updateData(mutableListOf(page))
@@ -99,5 +99,10 @@ class EditPageNetworkActivity : AppCompatActivity(), OnItemEditPageNetworkClickL
             putExtra("PAGE-ID", pageId)
             putExtra("CELL-INDEX", cellIndex)
         })
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.fetchPage(pageId)
     }
 }

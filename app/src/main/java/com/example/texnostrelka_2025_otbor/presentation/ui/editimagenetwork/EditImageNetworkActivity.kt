@@ -54,6 +54,11 @@ class EditImageNetworkActivity : AppCompatActivity() {
             }
             2 -> imageId = intent.getStringExtra("IMAGE-ID") ?: throw IllegalArgumentException("ImageId is required")
         }
+        viewModel.shouldFinish.observe(this, Observer { shouldFinish ->
+            if (shouldFinish) {
+                finish()
+            }
+        })
         viewModel.success.observe(this, Observer { success ->
             success?.let {
                 Toast.makeText(this, it, Toast.LENGTH_LONG).show()
@@ -116,12 +121,6 @@ class EditImageNetworkActivity : AppCompatActivity() {
         else {
             throw IllegalArgumentException("Unknowm mode")
         }
-        val intent = Intent(this, EditPageNetworkActivity::class.java).apply {
-            putExtra("PAGE-ID", pageId)
-            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-        }
-        startActivity(intent)
-        finish()
     }
 
     private fun showErrorDialog(message: String) {
