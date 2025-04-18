@@ -100,13 +100,9 @@ class AddActivity : AppCompatActivity() {
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
             override fun onStopTrackingTouch(seekBar: SeekBar?) {}
         })
-
-        // Обработчик для кнопки добавления изображения (новый способ)
         findViewById<Button>(R.id.addImageButton).setOnClickListener {
             pickImageLauncher.launch("image/*")
         }
-
-        // Остальные обработчики...
         findViewById<Button>(R.id.moveImageButton).setOnClickListener {
             paintView.setMoveImageMode(true)
         }
