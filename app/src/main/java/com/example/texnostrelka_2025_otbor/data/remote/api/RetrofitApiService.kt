@@ -7,6 +7,7 @@ import com.example.texnostrelka_2025_otbor.data.remote.model.authentication.requ
 import com.example.texnostrelka_2025_otbor.data.remote.model.authentication.response.AuthResponse
 import com.example.texnostrelka_2025_otbor.data.remote.model.authentication.request.RegisterationRequest
 import com.example.texnostrelka_2025_otbor.data.remote.model.image.request.ImageRequestModel
+import com.example.texnostrelka_2025_otbor.data.remote.model.image.request.UpdateImageRequestModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.page.PageFromNetwork
 import com.example.texnostrelka_2025_otbor.data.remote.model.page.request.PageAddRequestModel
 import retrofit2.http.Body
@@ -52,7 +53,7 @@ interface RetrofitApiService {
     suspend fun deleteImage(@Path("imageId") imageId: String, @Header("Authorization") token: String)
 
     @PUT("/api/comics/pages/images/{imageId}")
-    suspend fun updateImage(@Path("imageId") imageId: String, @Header("Authorization") token: String, @Body request: String)
+    suspend fun updateImage(@Path("imageId") imageId: String, @Header("Authorization") token: String, @Body image: UpdateImageRequestModel)
 
     @GET("/api/comics/pages/{pageId}")
     suspend fun getPage(@Path("pageId") pageId: String, @Header("Authorization") token: String) : PageFromNetwork

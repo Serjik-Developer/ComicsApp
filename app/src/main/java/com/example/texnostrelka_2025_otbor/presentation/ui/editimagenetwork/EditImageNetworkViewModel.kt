@@ -30,7 +30,7 @@ class EditImageNetworkViewModel(private val repository: NetworkRepository, priva
                     _error.postValue("Не авторизован.")
                     return@launch
                 }
-                repository.postImage(pageId, "Bearer $token", request)
+                repository.postImage(pageId, token, request)
                 _success.postValue("Изображение успешно загружено!")
             } catch (e: BadRequestException) {
                 _error.value = e.message
@@ -59,7 +59,7 @@ class EditImageNetworkViewModel(private val repository: NetworkRepository, priva
                     _error.postValue("Не авторизован.")
                     return@launch
                 }
-                repository.updateImage(imageId, "Bearer $token", request)
+                repository.updateImage(imageId, token, request)
                 _success.postValue("Изображение успешно обновлено!")
             } catch (e: NotAuthorizedException) {
                 preferencesManager.clearAuthToken()

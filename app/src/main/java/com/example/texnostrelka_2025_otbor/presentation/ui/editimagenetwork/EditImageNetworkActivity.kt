@@ -5,19 +5,23 @@ import android.graphics.Color
 import android.os.Bundle
 import android.widget.Button
 import android.widget.SeekBar
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import com.example.texnostrelka_2025_otbor.data.local.preferences.PreferencesManager
 import com.example.texnostrelka_2025_otbor.data.remote.model.image.request.ImageRequestModel
 import com.example.texnostrelka_2025_otbor.data.remote.repository.NetworkRepository
 import com.example.texnostrelka_2025_otbor.databinding.ActivityEditImageNetworkBinding
 import com.example.texnostrelka_2025_otbor.databinding.ActivityEditNetworkBinding
 import com.example.texnostrelka_2025_otbor.presentation.factory.EditImageNetworkViewModelFactory
+import com.example.texnostrelka_2025_otbor.presentation.ui.auth.AuthActivity
 import com.example.texnostrelka_2025_otbor.presentation.ui.editpage.EditPageActivity
 import com.example.texnostrelka_2025_otbor.presentation.ui.editpagenetwork.EditPageNetworkActivity
 import com.example.texnostrelka_2025_otbor.presentation.utils.toBase64
 import com.example.texnostrelka_2025_otbor.presentation.view.PaintView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class EditImageNetworkActivity : AppCompatActivity() {
     private lateinit var paintView: PaintView
@@ -50,6 +54,22 @@ class EditImageNetworkActivity : AppCompatActivity() {
             }
             2 -> imageId = intent.getStringExtra("IMAGE-ID") ?: throw IllegalArgumentException("ImageId is required")
         }
+        viewModel.success.observe(this, Observer { success ->
+            success?.let {
+                Toast.makeText(this, it, Toast.LENGTH_LONG).show()
+            }
+        })
+        viewModel.error.observe(this, Observer{ error ->
+            error?.let{
+                if(it.toString() == "Не авторизован.") {
+                    Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+                    startActivity(Intent(this, AuthActivity::class.java))
+                }
+                else {
+                    showErrorDialog(error)
+                }
+            }
+        })
         paintView = binding.paintView
         binding.colorBlack.setOnClickListener{paintView.setColor(Color.BLACK)}
         binding.colorRed.setOnClickListener{paintView.setColor(Color.RED)}
@@ -102,5 +122,13 @@ class EditImageNetworkActivity : AppCompatActivity() {
         }
         startActivity(intent)
         finish()
+    }
+
+    private fun showErrorDialog(message: String) {
+        MaterialAlertDialogBuilder(this)
+            .setTitle("Ошибка")
+            .setMessage(message)
+            .setPositiveButton("OK") {dialog,_, -> dialog.dismiss()}
+            .show()
     }
 }

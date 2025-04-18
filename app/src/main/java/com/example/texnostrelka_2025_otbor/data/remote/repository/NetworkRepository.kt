@@ -19,6 +19,7 @@ import com.example.texnostrelka_2025_otbor.data.remote.model.authentication.requ
 import com.example.texnostrelka_2025_otbor.data.remote.model.authentication.response.AuthResponse
 import com.example.texnostrelka_2025_otbor.data.remote.model.authentication.request.RegisterationRequest
 import com.example.texnostrelka_2025_otbor.data.remote.model.image.request.ImageRequestModel
+import com.example.texnostrelka_2025_otbor.data.remote.model.image.request.UpdateImageRequestModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.page.request.PageAddRequestModel
 import retrofit2.HttpException
 import retrofit2.Retrofit
@@ -212,7 +213,7 @@ class NetworkRepository {
 
     suspend fun updateImage(imageId: String, token: String, request: String) {
         try {
-            apiService.updateImage(imageId, "Bearer $token", request)
+            apiService.updateImage(imageId, "Bearer $token", UpdateImageRequestModel(request))
         } catch (e: HttpException) {
             when(e.code()) {
                 400 -> throw BadRequestException("Некорректный запрос: ${e.message}")

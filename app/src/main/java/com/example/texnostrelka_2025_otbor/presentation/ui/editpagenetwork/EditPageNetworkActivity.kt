@@ -62,7 +62,7 @@ class EditPageNetworkActivity : AppCompatActivity(), OnItemEditPageNetworkClickL
         })
         viewModel.error.observe(this, Observer{ error ->
             error?.let{
-                if(it.toString() == "Не авторизован") {
+                if(it.toString() == "Не авторизован.") {
                     Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
                     startActivity(Intent(this, AuthActivity::class.java))
                 }
