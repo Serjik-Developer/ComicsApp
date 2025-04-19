@@ -112,14 +112,16 @@ class EditImageNetworkActivity : AppCompatActivity() {
 
     private fun savePainting() {
         val base64Bitmap = paintView.getBitmap().toBase64() ?: throw IllegalArgumentException("Bitmap is required")
-        if (mode == 1) {
-            viewModel.addImage(pageId, ImageRequestModel(cellIndex, base64Bitmap))
-        }
-        else if (mode == 2) {
-            viewModel.updateImage(imageId, base64Bitmap)
-        }
-        else {
-            throw IllegalArgumentException("Unknowm mode")
+        when (mode) {
+            1 -> {
+                viewModel.addImage(pageId, ImageRequestModel(cellIndex, base64Bitmap))
+            }
+            2 -> {
+                viewModel.updateImage(imageId, base64Bitmap)
+            }
+            else -> {
+                throw IllegalArgumentException("Unknowm mode")
+            }
         }
     }
 
