@@ -14,7 +14,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.texnostrelka_2025_otbor.presentation.ui.main.MainActivity
+import com.example.texnostrelka_2025_otbor.presentation.ui.main.MainContainerActivity
 import com.example.texnostrelka_2025_otbor.R
 import com.example.texnostrelka_2025_otbor.presentation.adapter.PagesAdapter
 import com.example.texnostrelka_2025_otbor.data.local.database.ComicsDatabase
@@ -54,7 +54,7 @@ class EditActivity : AppCompatActivity(), OnItemPageClickListener {
         addPageButton.setOnClickListener {
             showAddPageDialog()
         }
-        findViewById<Button>(R.id.backButtonMain).setOnClickListener { startActivity(Intent(this, MainActivity::class.java)) }
+        findViewById<Button>(R.id.backButtonMain).setOnClickListener { startActivity(Intent(this, MainContainerActivity::class.java)) }
 
     }
 

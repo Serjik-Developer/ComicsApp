@@ -11,7 +11,7 @@ import com.example.texnostrelka_2025_otbor.databinding.ActivityRegistrationBindi
 import com.example.texnostrelka_2025_otbor.presentation.factory.RegistrationViewModelFactory
 import com.example.texnostrelka_2025_otbor.data.remote.repository.NetworkRepository
 import com.example.texnostrelka_2025_otbor.presentation.ui.auth.AuthActivity
-import com.example.texnostrelka_2025_otbor.presentation.ui.main.MainActivity
+import com.example.texnostrelka_2025_otbor.presentation.ui.main.MainContainerActivity
 
 class RegistrationActivity : AppCompatActivity() {
     private lateinit var preferencesManager: PreferencesManager
@@ -39,7 +39,7 @@ class RegistrationActivity : AppCompatActivity() {
         viewModel.authSuccess.observe(this, Observer{ success ->
             if (success) {
                 Toast.makeText(this, "Успешный вход как ${preferencesManager.getName()}", Toast.LENGTH_LONG).show()
-                startActivity(Intent(this, MainActivity::class.java))
+                startActivity(Intent(this, MainContainerActivity::class.java))
                 finish()
             }
         })

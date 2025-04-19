@@ -53,7 +53,7 @@
             android:name=".presentation.ui.editpagenetwork.EditPageNetworkActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.ui.main.MainActivity"
+            android:name=".presentation.ui.main.MainContainerActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

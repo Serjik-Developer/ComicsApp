@@ -28,7 +28,7 @@ import com.example.texnostrelka_2025_otbor.presentation.ui.edit.EditActivity
 import com.example.texnostrelka_2025_otbor.viewmodelslist.MainViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
-class MainActivity : AppCompatActivity(), OnItemClickListener {
+class MainContainerActivity : AppCompatActivity(), OnItemClickListener {
     private lateinit var comicsAdapter: ComicsAdapter
     private val viewModel: MainViewModel by viewModels {
         MainViewModelFactory(ComicsRepository(ComicsDatabase(this)), NetworkRepository(),

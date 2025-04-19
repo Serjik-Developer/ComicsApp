@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import com.example.texnostrelka_2025_otbor.presentation.ui.main.MainActivity
+import com.example.texnostrelka_2025_otbor.presentation.ui.main.MainContainerActivity
 import com.example.texnostrelka_2025_otbor.presentation.ui.registration.RegistrationActivity
 import com.example.texnostrelka_2025_otbor.data.local.preferences.PreferencesManager
 import com.example.texnostrelka_2025_otbor.databinding.ActivityAuthBinding
@@ -45,7 +45,7 @@ class AuthActivity : AppCompatActivity() {
                     "Успешный вход как ${preferencesManager.getName()}",
                     Toast.LENGTH_LONG
                 ).show()
-                startActivity(Intent(this, MainActivity::class.java))
+                startActivity(Intent(this, MainContainerActivity::class.java))
                 finish()
             }
         }
