@@ -44,6 +44,9 @@ class EditPageNetworkActivity : AppCompatActivity(), OnItemEditPageNetworkClickL
             adapter = this@EditPageNetworkActivity.adapter
             setHasFixedSize(true)
         }
+        binding.backBtn.setOnClickListener {
+           finish()
+        }
         pageId = intent.getStringExtra("PAGE-ID") ?: throw IllegalArgumentException("pageId is required")
         viewModel.refreshTrigger.observe(this, Observer { shouldRefresh ->
             if (shouldRefresh) {

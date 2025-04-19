@@ -61,6 +61,7 @@ class EditPageNetworkViewModel(private val repository: NetworkRepository, privat
                 val currentList = _page.value?.images?.toMutableList() ?: mutableListOf()
                 currentList.removeAll { it.id == imageId }
                 _success.value = "Успешно удалено!"
+                _refreshTrigger.postValue(true)
             } catch (e: NotAuthorizedException) {
                 preferencesManager.clearAuthToken()
                 preferencesManager.clearName()

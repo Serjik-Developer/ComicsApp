@@ -26,6 +26,9 @@ class EditNetworkViewModel(private val networkRepository: NetworkRepository, pri
     private val _success = MutableLiveData<String?>()
     val success : LiveData<String?> get() = _success
 
+    private val _refreshTrigger = MutableLiveData<Boolean>()
+    val refreshTrigger: LiveData<Boolean> = _refreshTrigger
+
     fun addPage(comicsId: String, rows: Int, columns: Int) {
         viewModelScope.launch {
             _error.value = null
@@ -37,6 +40,7 @@ class EditNetworkViewModel(private val networkRepository: NetworkRepository, pri
                 }
                 networkRepository.addPage(comicsId, token, PageAddRequestModel(rows, columns))
                 _success.postValue("Успешно добавлено!")
+                _refreshTrigger.postValue(true)
             } catch (e: NotAuthorizedException) {
                 _error.value = e.message
                 preferencesManager.clearName()
@@ -67,6 +71,7 @@ class EditNetworkViewModel(private val networkRepository: NetworkRepository, pri
                 currentList.removeAll { it.pageId == pageId }
                 _pages.value = currentList
                 _success.postValue("Успешно удалено!")
+                _refreshTrigger.postValue(true)
             }catch (e: NotAuthorizedException) {
                 _error.value = e.message
                 preferencesManager.clearName()
@@ -111,4 +116,8 @@ class EditNetworkViewModel(private val networkRepository: NetworkRepository, pri
             }
         }
     }
+    fun resetRefreshTrigger() {
+        _refreshTrigger.postValue(false)
+    }
+
 }

@@ -47,6 +47,12 @@ class EditNetworkActivity: AppCompatActivity(), OnItemClickListener {
         binding.backButtonMainNetwork.setOnClickListener {
             startActivity(Intent(this, MyComicsActivity::class.java))
         }
+        viewModel.refreshTrigger.observe(this, Observer { shouldRefresh ->
+            if (shouldRefresh) {
+                viewModel.fetchPages(comicsId)
+                viewModel.resetRefreshTrigger()
+            }
+        })
         binding.RecyclerViewNetworkPages.layoutManager = LinearLayoutManager(this)
         binding.RecyclerViewNetworkPages.adapter = adapter
         viewModel.pages.observe(this, Observer { pages ->
@@ -119,5 +125,9 @@ class EditNetworkActivity: AppCompatActivity(), OnItemClickListener {
 
     override fun onSendClick(id: String) {
         TODO("Not yet implemented")
+    }
+    override fun onResume() {
+        super.onResume()
+        viewModel.fetchPages(comicsId)
     }
 }
