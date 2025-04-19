@@ -119,5 +119,4 @@ class EditNetworkViewModel(private val networkRepository: NetworkRepository, pri
     fun resetRefreshTrigger() {
         _refreshTrigger.postValue(false)
     }
-
 }
