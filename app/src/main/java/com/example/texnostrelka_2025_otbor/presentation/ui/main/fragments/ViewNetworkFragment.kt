@@ -11,6 +11,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.texnostrelka_2025_otbor.data.local.preferences.PreferencesManager
 import com.example.texnostrelka_2025_otbor.data.remote.repository.NetworkRepository
+import com.example.texnostrelka_2025_otbor.databinding.FragmentViewNetworkBinding
 import com.example.texnostrelka_2025_otbor.presentation.adapter.ComicsNetworkAdapter
 import com.example.texnostrelka_2025_otbor.presentation.factory.ViewNetworkViewModelFactory
 import com.example.texnostrelka_2025_otbor.presentation.listener.OnItemClickListener
@@ -21,7 +22,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class ViewNetworkFragment : Fragment(), OnItemClickListener {
     private var _binding : FragmentViewNetworkBinding? = null
-    private val binding get() = _binding
+    private val binding get() = _binding!!
     private val viewModel : ViewNetworkViewModel by activityViewModels {
         ViewNetworkViewModelFactory(
             NetworkRepository(),

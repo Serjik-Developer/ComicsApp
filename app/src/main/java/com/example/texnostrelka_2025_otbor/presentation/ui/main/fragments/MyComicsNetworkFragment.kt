@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.texnostrelka_2025_otbor.R
 import com.example.texnostrelka_2025_otbor.data.local.preferences.PreferencesManager
 import com.example.texnostrelka_2025_otbor.data.remote.repository.NetworkRepository
+import com.example.texnostrelka_2025_otbor.databinding.FragmentMyComicsBinding
 import com.example.texnostrelka_2025_otbor.presentation.adapter.ComicsNetworkAdapter
 import com.example.texnostrelka_2025_otbor.presentation.factory.MyComicsViewModelFactory
 import com.example.texnostrelka_2025_otbor.presentation.listener.OnItemClickListener
@@ -26,7 +27,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class MyComicsNetworkFragment : Fragment(), OnItemClickListener {
     private var _binding : FragmentMyComicsBinding? = null
-    private val binding get() = _binding
+    private val binding get() = _binding!!
     private val viewModel: MyComicsViewModel by activityViewModels {
         MyComicsViewModelFactory(NetworkRepository(), PreferencesManager(requireContext()))
     }
