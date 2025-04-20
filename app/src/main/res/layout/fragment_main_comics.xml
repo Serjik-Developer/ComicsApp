@@ -40,17 +40,4 @@
         app:layout_constraintStart_toStartOf="parent"
         app:tint="@android:color/black"/>
 
-    <ImageButton
-        android:id="@+id/imageBtnNetwork"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:layout_marginEnd="16dp"
-        android:background="@null"
-        android:scaleType="centerInside"
-        android:src="@drawable/ic_add_image"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:tint="@android:color/black" />
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

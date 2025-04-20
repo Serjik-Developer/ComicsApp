@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_main"
+        android:icon="@drawable/ic_local"
+        android:title="Локальные комиксы" />
+
+    <item
+        android:id="@+id/nav_my_comics"
+        android:icon="@drawable/ic_my_network"
+        android:title="Мои загруженные комиксы" />
+
+    <item
+        android:id="@+id/nav_view_network"
+        android:icon="@drawable/ic_global"
+        android:title="Просмотр всех комиксов" />
+</menu>
