@@ -75,9 +75,6 @@ class MainComicsFragment : Fragment(), OnItemClickListener {
                 }
             }
         }
-        binding.imageBtnNetwork.setOnClickListener {
-            (activity as? MainContainerActivity)?.switchToNetworkFragment()
-        }
     }
     private fun showErrorDialog(message: String) {
         MaterialAlertDialogBuilder(requireContext())
