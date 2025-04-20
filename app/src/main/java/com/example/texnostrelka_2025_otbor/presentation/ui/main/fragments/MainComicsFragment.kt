@@ -13,7 +13,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.texnostrelka_2025_otbor.R
+import com.example.texnostrelka_2025_otbor.data.local.database.ComicsDatabase
+import com.example.texnostrelka_2025_otbor.data.local.preferences.PreferencesManager
+import com.example.texnostrelka_2025_otbor.data.remote.repository.NetworkRepository
+import com.example.texnostrelka_2025_otbor.databinding.FragmentMainComicsBinding
+import com.example.texnostrelka_2025_otbor.domain.repository.ComicsRepository
 import com.example.texnostrelka_2025_otbor.presentation.adapter.ComicsAdapter
+import com.example.texnostrelka_2025_otbor.presentation.factory.MainViewModelFactory
 import com.example.texnostrelka_2025_otbor.presentation.listener.OnItemClickListener
 import com.example.texnostrelka_2025_otbor.presentation.ui.auth.AuthActivity
 import com.example.texnostrelka_2025_otbor.presentation.ui.edit.EditActivity
@@ -25,9 +31,13 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 class MainComicsFragment : Fragment(), OnItemClickListener {
     private var _binding : FragmentMainComicsBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: MainViewModel by activityViewModels()
+    private val viewModel: MainViewModel by activityViewModels {
+        MainViewModelFactory(
+            ComicsRepository(ComicsDatabase(requireContext())), NetworkRepository(),
+            PreferencesManager(requireContext())
+        )
+    }
     private lateinit var adapter: ComicsAdapter
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -52,13 +62,13 @@ class MainComicsFragment : Fragment(), OnItemClickListener {
             showAddComicsDialog()
         }
         viewModel.postSucces.observe(viewLifecycleOwner) { success ->
-            if(success) Toast.makeText(this, "Успешно отправлено!", Toast.LENGTH_LONG).show()
+            if(success) Toast.makeText(requireContext(), "Успешно отправлено!", Toast.LENGTH_LONG).show()
         }
         viewModel.errorMessage.observe(viewLifecycleOwner) { error ->
             error?.let {
                 if (error == "Не авторизован.") {
-                    Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
-                    startActivity(Intent(this, AuthActivity::class.java))
+                    Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+                    startActivity(Intent(requireContext(), AuthActivity::class.java))
                 }
                 else {
                     showErrorDialog(error)
@@ -66,12 +76,11 @@ class MainComicsFragment : Fragment(), OnItemClickListener {
             }
         }
         binding.imageBtnNetwork.setOnClickListener {
-            // Переключение на сетевой фрагмент
             (activity as? MainContainerActivity)?.switchToNetworkFragment()
         }
     }
     private fun showErrorDialog(message: String) {
-        MaterialAlertDialogBuilder(this)
+        MaterialAlertDialogBuilder(requireContext())
             .setTitle("Ошибка")
             .setMessage(message)
             .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
@@ -79,18 +88,18 @@ class MainComicsFragment : Fragment(), OnItemClickListener {
     }
 
     private fun showAddComicsDialog() {
-        val inputName = EditText(this).apply {
+        val inputName = EditText(requireContext()).apply {
             hint = "Введите название комикса"
             setTextAppearance(R.style.TextAppearance_MaterialComponents_Body1) // Стиль текста
         }
 
-        val inputDesc = EditText(this).apply {
+        val inputDesc = EditText(requireContext()).apply {
             hint = "Введите описание комикса"
             setTextAppearance(R.style.TextAppearance_MaterialComponents_Body1) // Стиль текста
         }
 
 // Создаем контейнер для EditText
-        val container = LinearLayout(this).apply {
+        val container = LinearLayout(requireContext()).apply {
             orientation = LinearLayout.VERTICAL
             setPadding(50, 20, 50, 20)
             addView(inputName)
@@ -98,7 +107,7 @@ class MainComicsFragment : Fragment(), OnItemClickListener {
         }
 
 // Создаем Material диалог
-        val dialog = MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialog_Rounded)
+        val dialog = MaterialAlertDialogBuilder(requireContext(), R.style.MaterialAlertDialog_Rounded)
             .setTitle("Добавить комикс")
             .setView(container) // Передаем контейнер с EditText
             .setPositiveButton("Сохранить") { _, _ ->
@@ -125,7 +134,7 @@ class MainComicsFragment : Fragment(), OnItemClickListener {
     }
 
     override fun onItemClick(id: String) {
-        val intent = Intent(this, ViewActivity::class.java)
+        val intent = Intent(requireContext(), ViewActivity::class.java)
         intent.putExtra("COMICS_ID", id)
         startActivity(intent)
 
@@ -136,7 +145,7 @@ class MainComicsFragment : Fragment(), OnItemClickListener {
     }
 
     override fun onEditClick(id: String) {
-        val intent = Intent(this, EditActivity::class.java)
+        val intent = Intent(requireContext(), EditActivity::class.java)
         intent.putExtra("COMICS_ID", id)
         startActivity(intent)
     }
@@ -148,5 +157,9 @@ class MainComicsFragment : Fragment(), OnItemClickListener {
     override fun onResume() {
         super.onResume()
         viewModel.fetchComics()
+    }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
