@@ -23,9 +23,8 @@ import com.example.texnostrelka_2025_otbor.presentation.factory.MainViewModelFac
 import com.example.texnostrelka_2025_otbor.presentation.listener.OnItemClickListener
 import com.example.texnostrelka_2025_otbor.presentation.ui.auth.AuthActivity
 import com.example.texnostrelka_2025_otbor.presentation.ui.edit.EditActivity
-import com.example.texnostrelka_2025_otbor.presentation.ui.main.MainContainerActivity
 import com.example.texnostrelka_2025_otbor.presentation.ui.view.ViewActivity
-import com.example.texnostrelka_2025_otbor.viewmodelslist.MainViewModel
+import com.example.texnostrelka_2025_otbor.presentation.ui.main.fragments.viewmodels.MainViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class MainComicsFragment : Fragment(), OnItemClickListener {

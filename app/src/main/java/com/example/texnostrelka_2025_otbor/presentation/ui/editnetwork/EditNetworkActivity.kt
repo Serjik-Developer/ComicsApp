@@ -24,7 +24,7 @@ import com.example.texnostrelka_2025_otbor.presentation.listener.OnItemClickList
 import com.example.texnostrelka_2025_otbor.presentation.ui.auth.AuthActivity
 import com.example.texnostrelka_2025_otbor.presentation.ui.edit.EditActivity
 import com.example.texnostrelka_2025_otbor.presentation.ui.editpagenetwork.EditPageNetworkActivity
-import com.example.texnostrelka_2025_otbor.presentation.ui.mycomics.MyComicsActivity
+import com.example.texnostrelka_2025_otbor.presentation.ui.main.MainContainerActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class EditNetworkActivity: AppCompatActivity(), OnItemClickListener {
@@ -45,7 +45,7 @@ class EditNetworkActivity: AppCompatActivity(), OnItemClickListener {
             showAddPageDialog()
         }
         binding.backButtonMainNetwork.setOnClickListener {
-            startActivity(Intent(this, MyComicsActivity::class.java))
+            startActivity(Intent(this, MainContainerActivity::class.java))
         }
         viewModel.refreshTrigger.observe(this, Observer { shouldRefresh ->
             if (shouldRefresh) {

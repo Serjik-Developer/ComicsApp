@@ -1,4 +1,4 @@
-package com.example.texnostrelka_2025_otbor.viewmodelslist
+package com.example.texnostrelka_2025_otbor.presentation.ui.main.fragments.viewmodels
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

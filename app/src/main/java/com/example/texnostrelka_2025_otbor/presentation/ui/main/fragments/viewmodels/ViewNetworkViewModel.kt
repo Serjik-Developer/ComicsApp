@@ -1,4 +1,4 @@
-package com.example.texnostrelka_2025_otbor.presentation.ui.pagenetwork
+package com.example.texnostrelka_2025_otbor.presentation.ui.main.fragments.viewmodels
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -10,18 +10,24 @@ import com.example.texnostrelka_2025_otbor.data.remote.exception.BadRequestExcep
 import com.example.texnostrelka_2025_otbor.data.remote.exception.NetworkException
 import com.example.texnostrelka_2025_otbor.data.remote.exception.NotAuthorizedException
 import com.example.texnostrelka_2025_otbor.data.remote.exception.NotFoundException
-import com.example.texnostrelka_2025_otbor.data.remote.model.page.PageFromNetwork
+import com.example.texnostrelka_2025_otbor.data.remote.model.comic.ComicsNetworkModel
 import com.example.texnostrelka_2025_otbor.data.remote.repository.NetworkRepository
 import kotlinx.coroutines.launch
 
-class PageNetworkViewModel(private val networkRepository: NetworkRepository, private val preferencesManager: PreferencesManager) : ViewModel() {
-    private val _pages = MutableLiveData<MutableList<PageFromNetwork>>()
-    val pages : LiveData<MutableList<PageFromNetwork>> get() = _pages
+class ViewNetworkViewModel(
+    private val networkRepository: NetworkRepository,
+    private val preferencesManager: PreferencesManager
+) : ViewModel() {
+    private val _comics = MutableLiveData<MutableList<ComicsNetworkModel>>(mutableListOf())
+    val comics: LiveData<MutableList<ComicsNetworkModel>> get() = _comics
     private val _error = MutableLiveData<String?>(null)
     val error: LiveData<String?> get() = _error
 
+    init {
+        fetchComics()
+    }
 
-    fun fetchPages(id: String) {
+    fun fetchComics() {
         viewModelScope.launch {
             _error.value = null
             try {
@@ -30,18 +36,22 @@ class PageNetworkViewModel(private val networkRepository: NetworkRepository, pri
                     _error.value = "Не авторизован."
                     return@launch
                 }
-                val result = networkRepository.getComicPages(id, token)
-                _pages.value = result!!
-            } catch (e: BadRequestException) {
-                _error.value = "Ошибка запроса: ${e.message}"
+                val result = networkRepository.getComics(token)
+                _comics.value = result
+
+                if (result.isEmpty()) {
+                    _error.value = "Комиксы не найдены!"
+                }
             } catch (e: NotAuthorizedException) {
                 _error.value = "Не авторизован."
                 preferencesManager.clearName()
                 preferencesManager.clearAuthToken()
-            } catch (e: NotFoundException) {
-                _error.value = "Комикс не найден."
+            } catch (e: BadRequestException) {
+                _error.value = "Ошибка запроса: ${e.message}"
             } catch (e: NetworkException) {
                 _error.value = "Проблемы с интернетом"
+            } catch (e: NotFoundException) {
+                _error.value = "Комиксы не найдены"
             } catch (e: Exception) {
                 _error.value = "Неизвестная ошибка"
                 Log.e("ViewNetworkViewModel", "Unknown error", e)

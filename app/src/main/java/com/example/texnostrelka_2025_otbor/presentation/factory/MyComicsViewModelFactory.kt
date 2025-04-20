@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.example.texnostrelka_2025_otbor.data.local.preferences.PreferencesManager
 import com.example.texnostrelka_2025_otbor.data.remote.repository.NetworkRepository
-import com.example.texnostrelka_2025_otbor.presentation.ui.mycomics.MyComicsViewModel
+import com.example.texnostrelka_2025_otbor.presentation.ui.main.fragments.viewmodels.MyComicsViewModel
 
 class MyComicsViewModelFactory(private val networkRepository: NetworkRepository, private val preferencesManager: PreferencesManager) : ViewModelProvider.Factory{
     override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {

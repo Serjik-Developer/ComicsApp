@@ -16,8 +16,8 @@ import com.example.texnostrelka_2025_otbor.presentation.adapter.ComicsNetworkAda
 import com.example.texnostrelka_2025_otbor.presentation.factory.ViewNetworkViewModelFactory
 import com.example.texnostrelka_2025_otbor.presentation.listener.OnItemClickListener
 import com.example.texnostrelka_2025_otbor.presentation.ui.auth.AuthActivity
-import com.example.texnostrelka_2025_otbor.presentation.ui.pagenetwork.PageNetworkActivity
-import com.example.texnostrelka_2025_otbor.presentation.ui.viewnetwork.ViewNetworkViewModel
+import com.example.texnostrelka_2025_otbor.presentation.ui.comicnetwork.ComicNetworkActivity
+import com.example.texnostrelka_2025_otbor.presentation.ui.main.fragments.viewmodels.ViewNetworkViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class ViewNetworkFragment : Fragment(), OnItemClickListener {
@@ -75,7 +75,7 @@ class ViewNetworkFragment : Fragment(), OnItemClickListener {
     }
 
     override fun onItemClick(id: String) {
-        val intent = Intent(requireContext(), PageNetworkActivity::class.java)
+        val intent = Intent(requireContext(), ComicNetworkActivity::class.java)
         intent.putExtra("COMICS_ID", id)
         startActivity(intent)
     }

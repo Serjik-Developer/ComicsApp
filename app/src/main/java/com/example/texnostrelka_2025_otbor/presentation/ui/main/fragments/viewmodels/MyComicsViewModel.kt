@@ -1,6 +1,5 @@
-package com.example.texnostrelka_2025_otbor.presentation.ui.mycomics
+package com.example.texnostrelka_2025_otbor.presentation.ui.main.fragments.viewmodels
 
-import android.content.ClipDescription
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

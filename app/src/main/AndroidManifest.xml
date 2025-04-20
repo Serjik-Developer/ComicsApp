@@ -17,16 +17,10 @@
         android:theme="@style/Theme.Texnostrelka2025otbor"
         tools:targetApi="31">
         <activity
-            android:name=".presentation.ui.mycomics.MyComicsActivity"
-            android:exported="false" />
-        <activity
             android:name=".presentation.ui.editimagenetwork.EditImageNetworkActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.ui.pagenetwork.PageNetworkActivity"
-            android:exported="false" />
-        <activity
-            android:name=".presentation.ui.viewnetwork.ViewNetworkActivity"
+            android:name=".presentation.ui.comicnetwork.ComicNetworkActivity"
             android:exported="false" />
         <activity
             android:name=".presentation.ui.auth.AuthActivity"
