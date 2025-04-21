@@ -176,4 +176,15 @@ class MyComicsViewModel(
             }
         }
     }
+    fun resetDeleteSuccess() {
+        _deleteSuccess.postValue(false)
+    }
+
+    fun resetPostSuccess() {
+        _postSuccess.postValue(false)
+    }
+
+    fun resetDownloadSuccess() {
+        _downloadSuccess.postValue(false)
+    }
 }

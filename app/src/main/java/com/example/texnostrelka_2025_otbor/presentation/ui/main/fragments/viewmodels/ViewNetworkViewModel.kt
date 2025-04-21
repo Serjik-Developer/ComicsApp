@@ -98,4 +98,7 @@ class ViewNetworkViewModel(
             }
         }
     }
+    fun resetDownloadSuccess() {
+        _downloadSuccess.postValue(false)
+    }
 }

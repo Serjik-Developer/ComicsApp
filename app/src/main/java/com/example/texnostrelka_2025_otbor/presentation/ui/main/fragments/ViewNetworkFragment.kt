@@ -54,6 +54,7 @@ class ViewNetworkFragment : Fragment(), OnItemComicsListener {
         }
         viewModel.downloadSuccess.observe(viewLifecycleOwner) { success ->
             if(success) Toast.makeText(requireContext(), "Успешно загруженно!", Toast.LENGTH_LONG).show()
+            viewModel.resetDownloadSuccess()
         }
         viewModel.error.observe(viewLifecycleOwner) { error ->
             error?.let {

@@ -71,13 +71,13 @@ class MyComicsNetworkFragment : Fragment(), OnItemComicsListener {
             }
         }
         viewModel.deleteSuccess.observe(viewLifecycleOwner) { success ->
-            if(success) Toast.makeText(requireContext(), "Успешно удалено!", Toast.LENGTH_LONG).show()
+            if(success) Toast.makeText(requireContext(), "Успешно удалено!", Toast.LENGTH_LONG).show(); viewModel.resetDeleteSuccess()
         }
         viewModel.postSuccess.observe(viewLifecycleOwner) { success ->
-            if(success) Toast.makeText(requireContext(), "Успешно добавлено!", Toast.LENGTH_LONG).show()
+            if(success) Toast.makeText(requireContext(), "Успешно добавлено!", Toast.LENGTH_LONG).show(); viewModel.resetPostSuccess()
         }
         viewModel.downloadSuccess.observe(viewLifecycleOwner) { success ->
-            if(success) Toast.makeText(requireContext(), "Успешно загруженно!", Toast.LENGTH_LONG).show()
+            if(success) Toast.makeText(requireContext(), "Успешно загруженно!", Toast.LENGTH_LONG).show(); viewModel.resetDownloadSuccess()
         }
         viewModel.refreshTrigger.observe(viewLifecycleOwner) { shouldRefresh ->
             if (shouldRefresh) {
