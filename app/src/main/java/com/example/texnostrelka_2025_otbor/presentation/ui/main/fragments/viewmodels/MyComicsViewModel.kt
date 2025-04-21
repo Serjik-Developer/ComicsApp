@@ -123,6 +123,7 @@ class MyComicsViewModel(
             catch (e: Exception)
             {
                 _error.value = "Неизвестная ошибка"
+                Log.e("MyComicsViewModel", "Unknown error", e)
             }
             catch (e: NotAuthorizedException) {
                 _error.value = "Не авторизован."
@@ -168,7 +169,7 @@ class MyComicsViewModel(
                 _error.value = "Комикс не найден"
             } catch (e: Exception) {
                 _error.value = "Неизвестная ошибка"
-                Log.e("ViewNetworkViewModel", "Unknown error", e)
+                Log.e("MyComicsViewModel", "Unknown error", e)
             }
         }
     }
