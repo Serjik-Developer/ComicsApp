@@ -12,8 +12,8 @@ import com.example.texnostrelka_2025_otbor.data.remote.exception.ForbiddenExcept
 import com.example.texnostrelka_2025_otbor.data.remote.exception.NetworkException
 import com.example.texnostrelka_2025_otbor.data.remote.exception.NotAuthorizedException
 import com.example.texnostrelka_2025_otbor.data.remote.exception.NotFoundException
+import com.example.texnostrelka_2025_otbor.data.remote.model.comic.ComicsCoverNetworkModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.comic.ComicsNetworkModel
-import com.example.texnostrelka_2025_otbor.data.remote.model.comic.response.ComicsCoverNetworkModel
 import com.example.texnostrelka_2025_otbor.data.remote.repository.NetworkRepository
 import kotlinx.coroutines.launch
 
@@ -21,8 +21,8 @@ class MyComicsViewModel(
     private val networkRepository: NetworkRepository,
     private val preferencesManager: PreferencesManager
 ) : ViewModel() {
-    private val _comics = MutableLiveData<MutableList<ComicsNetworkModel>>()
-    val comics : LiveData<MutableList<ComicsNetworkModel>> get() = _comics
+    private val _comics = MutableLiveData<MutableList<ComicsCoverNetworkModel>>()
+    val comics : LiveData<MutableList<ComicsCoverNetworkModel>> get() = _comics
 
     private val _error = MutableLiveData<String?>(null)
     val error: LiveData<String?> get() = _error
@@ -103,7 +103,7 @@ class MyComicsViewModel(
                     _error.value = "Не авторизован."
                     return@launch
                 }
-                val comics = ComicsCoverNetworkModel(
+                val comics = ComicsNetworkModel(
                     id = null,
                     text = text,
                     description = description,

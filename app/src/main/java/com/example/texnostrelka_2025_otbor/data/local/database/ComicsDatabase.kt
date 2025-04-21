@@ -8,7 +8,7 @@ import android.graphics.BitmapFactory
 import android.util.Log
 import com.example.texnostrelka_2025_otbor.data.model.ComicsModel
 import com.example.texnostrelka_2025_otbor.data.model.ImageModel
-import com.example.texnostrelka_2025_otbor.data.remote.model.comic.response.ComicsCoverNetworkModel
+import com.example.texnostrelka_2025_otbor.data.remote.model.comic.ComicsNetworkModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.image.response.ImageNetworkModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.page.PageFromNetworkModel
 import com.example.texnostrelka_2025_otbor.data.model.PageModel
@@ -230,7 +230,7 @@ class ComicsDatabase(context: Context) {
         return image
     }
     @SuppressLint("Range")
-    fun getComicsById(id: String) : ComicsCoverNetworkModel {
+    fun getComicsById(id: String) : ComicsNetworkModel {
         var text = ""
         var description = ""
         val db = databaseHelper.readableDatabase
@@ -271,6 +271,6 @@ class ComicsDatabase(context: Context) {
         }
         cursor.close()
         db.close()
-        return ComicsCoverNetworkModel(id, text, description, pages)
+        return ComicsNetworkModel(id, text, description, pages)
     }
 }

@@ -1,7 +1,7 @@
 package com.example.texnostrelka_2025_otbor.data.remote.api
 
-import com.example.texnostrelka_2025_otbor.data.remote.model.comic.response.ComicsCoverNetworkModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.comic.ComicsNetworkModel
+import com.example.texnostrelka_2025_otbor.data.remote.model.comic.ComicsCoverNetworkModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.authentication.request.AuthRequestModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.authentication.response.AuthResponseModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.authentication.request.RegisterationRequestModel
@@ -25,16 +25,16 @@ interface RetrofitApiService {
     suspend fun registration(@Body request: RegisterationRequestModel) : AuthResponseModel
 
     @GET("/api/comics")
-    suspend fun getComics(@Header("Authorization") token: String) : MutableList<ComicsNetworkModel>
+    suspend fun getComics(@Header("Authorization") token: String) : MutableList<ComicsCoverNetworkModel>
 
     @GET("/api/comics/{id}")
-    suspend fun getComicPages(@Path("id") id: String, @Header("Authorization") token: String) : ComicsCoverNetworkModel
+    suspend fun getComicPages(@Path("id") id: String, @Header("Authorization") token: String) : ComicsNetworkModel
 
     @POST("/api/comics/")
-    suspend fun postComics(@Header("Authorization") token: String, @Body request: ComicsCoverNetworkModel)
+    suspend fun postComics(@Header("Authorization") token: String, @Body request: ComicsNetworkModel)
 
     @GET("/api/mycomics")
-    suspend fun getMyComics(@Header("Authorization") token: String) : MutableList<ComicsNetworkModel>
+    suspend fun getMyComics(@Header("Authorization") token: String) : MutableList<ComicsCoverNetworkModel>
 
     @DELETE("/api/comics/{id}")
     suspend fun deleteComics(@Path("id") id: String, @Header("Authorization") token: String)

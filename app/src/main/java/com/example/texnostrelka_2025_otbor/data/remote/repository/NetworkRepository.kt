@@ -9,8 +9,8 @@ import com.example.texnostrelka_2025_otbor.data.remote.exception.NetworkExceptio
 import com.example.texnostrelka_2025_otbor.data.remote.exception.NotAuthorizedException
 import com.example.texnostrelka_2025_otbor.data.remote.exception.NotFoundException
 import com.example.texnostrelka_2025_otbor.data.remote.exception.TooManyRequests
-import com.example.texnostrelka_2025_otbor.data.remote.model.comic.response.ComicsCoverNetworkModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.comic.ComicsNetworkModel
+import com.example.texnostrelka_2025_otbor.data.remote.model.comic.ComicsCoverNetworkModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.page.PageFromNetworkModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.authentication.request.AuthRequestModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.authentication.response.AuthResponseModel
@@ -64,7 +64,7 @@ class NetworkRepository {
 
     }
 
-    suspend fun getComics(token: String): MutableList<ComicsNetworkModel> {
+    suspend fun getComics(token: String): MutableList<ComicsCoverNetworkModel> {
         try {
             return apiService.getComics("Bearer $token")
         } catch (e: HttpException) {
@@ -80,7 +80,7 @@ class NetworkRepository {
 
     }
 
-    suspend fun getComicById(id: String, token: String) : ComicsCoverNetworkModel {
+    suspend fun getComicById(id: String, token: String) : ComicsNetworkModel {
         return apiService.getComicPages(id, "Bearer $token")
     }
 
@@ -100,7 +100,7 @@ class NetworkRepository {
 
     }
 
-    suspend fun postComics(token: String, comics: ComicsCoverNetworkModel)  {
+    suspend fun postComics(token: String, comics: ComicsNetworkModel)  {
         try {
             apiService.postComics("Bearer $token", comics)
         } catch (e: HttpException) {
@@ -115,7 +115,7 @@ class NetworkRepository {
         }
     }
 
-    suspend fun getMyComics(token: String): MutableList<ComicsNetworkModel> {
+    suspend fun getMyComics(token: String): MutableList<ComicsCoverNetworkModel> {
         try {
             return apiService.getMyComics("Bearer $token")
         } catch (e: HttpException) {

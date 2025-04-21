@@ -10,10 +10,10 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.texnostrelka_2025_otbor.R
 import com.example.texnostrelka_2025_otbor.presentation.listener.OnItemClickListener
-import com.example.texnostrelka_2025_otbor.data.remote.model.comic.ComicsNetworkModel
+import com.example.texnostrelka_2025_otbor.data.remote.model.comic.ComicsCoverNetworkModel
 import com.example.texnostrelka_2025_otbor.presentation.utils.base64ToBitmap
 
-class ComicsNetworkAdapter(private var comics: MutableList<ComicsNetworkModel>, private val listener: OnItemClickListener, private val isMyComics: Boolean = false) : RecyclerView.Adapter<ComicsNetworkAdapter.ComiksViewHolder>() {
+class ComicsNetworkAdapter(private var comics: MutableList<ComicsCoverNetworkModel>, private val listener: OnItemClickListener, private val isMyComics: Boolean = false) : RecyclerView.Adapter<ComicsNetworkAdapter.ComiksViewHolder>() {
 
     inner class ComiksViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val textView: TextView = itemView.findViewById(R.id.comics_network_name)
@@ -51,7 +51,7 @@ class ComicsNetworkAdapter(private var comics: MutableList<ComicsNetworkModel>, 
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun updateData(newComics: MutableList<ComicsNetworkModel>) {
+    fun updateData(newComics: MutableList<ComicsCoverNetworkModel>) {
         comics = newComics
         notifyDataSetChanged() // Уведомляем адаптер об изменениях
     }

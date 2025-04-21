@@ -10,7 +10,7 @@ import com.example.texnostrelka_2025_otbor.data.remote.exception.BadRequestExcep
 import com.example.texnostrelka_2025_otbor.data.remote.exception.NetworkException
 import com.example.texnostrelka_2025_otbor.data.remote.exception.NotAuthorizedException
 import com.example.texnostrelka_2025_otbor.data.remote.exception.NotFoundException
-import com.example.texnostrelka_2025_otbor.data.remote.model.comic.ComicsNetworkModel
+import com.example.texnostrelka_2025_otbor.data.remote.model.comic.ComicsCoverNetworkModel
 import com.example.texnostrelka_2025_otbor.data.remote.repository.NetworkRepository
 import kotlinx.coroutines.launch
 
@@ -18,8 +18,8 @@ class ViewNetworkViewModel(
     private val networkRepository: NetworkRepository,
     private val preferencesManager: PreferencesManager
 ) : ViewModel() {
-    private val _comics = MutableLiveData<MutableList<ComicsNetworkModel>>(mutableListOf())
-    val comics: LiveData<MutableList<ComicsNetworkModel>> get() = _comics
+    private val _comics = MutableLiveData<MutableList<ComicsCoverNetworkModel>>(mutableListOf())
+    val comics: LiveData<MutableList<ComicsCoverNetworkModel>> get() = _comics
     private val _error = MutableLiveData<String?>(null)
     val error: LiveData<String?> get() = _error
 
