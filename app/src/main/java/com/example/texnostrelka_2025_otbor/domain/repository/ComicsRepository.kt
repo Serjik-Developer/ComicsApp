@@ -44,4 +44,7 @@ class ComicsRepository(private val database: ComicsDatabase) {
     suspend fun getComicsById(id: String) : ComicsNetworkModel {
         return database.getComicsById(id)
     }
+    suspend fun downloadComicFromNetwork(comic: ComicsNetworkModel) {
+        database.downloadComicFromNetwork(comic)
+    }
 }

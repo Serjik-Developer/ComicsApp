@@ -273,4 +273,34 @@ class ComicsDatabase(context: Context) {
         db.close()
         return ComicsNetworkModel(id, text, description, pages)
     }
+
+    fun downloadComicFromNetwork(comic: ComicsNetworkModel) {
+        val db = databaseHelper.writableDatabase
+        val valuesComic = ContentValues().apply {
+            put("id", comic.id)
+            put("text", comic.text)
+            put("description", comic.description)
+        }
+        db.insert("comics", null, valuesComic)
+        for (page in comic.pages!!) {
+            val valuesPage = ContentValues().apply {
+                put("pageId", page.pageId)
+                put("comicsId", comic.id)
+                put("number", page.number)
+                put("rows", page.rows)
+                put("columns", page.columns)
+            }
+            db.insert("pages", null, valuesPage)
+            for (image in page.images!!) {
+                val valuesImage = ContentValues().apply {
+                    put("id", image.id)
+                    put("pageId", page.pageId)
+                    put("cellIndex", image.cellIndex)
+                    put("image", image.image)
+                }
+                db.insert("image", null, valuesImage)
+            }
+        }
+        db.close()
+    }
 }
