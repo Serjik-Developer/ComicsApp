@@ -1,5 +1,6 @@
 package com.example.texnostrelka_2025_otbor.domain.repository
 
+import android.database.sqlite.SQLiteConstraintException
 import android.graphics.Bitmap
 import com.example.texnostrelka_2025_otbor.data.local.database.ComicsDatabase
 import com.example.texnostrelka_2025_otbor.data.model.ComicsModel

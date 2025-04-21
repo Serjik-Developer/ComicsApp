@@ -1,5 +1,6 @@
 package com.example.texnostrelka_2025_otbor.presentation.ui.main.fragments.viewmodels
 
+import android.database.sqlite.SQLiteConstraintException
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -144,7 +145,7 @@ class MyComicsViewModel(
     fun downloadComic(id: String) {
         viewModelScope.launch {
             _error.value = null
-            _downloadSuccess.value = false
+            _downloadSuccess.postValue(false)
             try {
                 val token = preferencesManager.getAuthToken()
                 if (token.isNullOrEmpty()) {
@@ -167,6 +168,8 @@ class MyComicsViewModel(
                 _error.value = "Проблемы с интернетом"
             } catch (e: NotFoundException) {
                 _error.value = "Комикс не найден"
+            } catch (e: SQLiteConstraintException) {
+                _error.value = "Комикс уже скачан!"
             } catch (e: Exception) {
                 _error.value = "Неизвестная ошибка"
                 Log.e("MyComicsViewModel", "Unknown error", e)

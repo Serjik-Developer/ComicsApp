@@ -3,6 +3,8 @@ package com.example.texnostrelka_2025_otbor.data.local.database
 import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Context
+import android.database.sqlite.SQLiteConstraintException
+import android.database.sqlite.SQLiteDatabase
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Log
@@ -283,7 +285,7 @@ class ComicsDatabase(context: Context) {
                 put("text", comic.text)
                 put("description", comic.description)
             }
-            db.insert("comics", null, valuesComic)
+            db.insertWithOnConflict("comics", null, valuesComic, SQLiteDatabase.CONFLICT_FAIL)
             comic.pages?.forEach { page ->
                 val valuesPage = ContentValues().apply {
                     put("pageId", page.pageId)
@@ -292,7 +294,7 @@ class ComicsDatabase(context: Context) {
                     put("rows", page.rows)
                     put("columns", page.columns)
                 }
-                db.insert("pages", null, valuesPage)
+                db.insertWithOnConflict("pages", null, valuesPage, SQLiteDatabase.CONFLICT_FAIL)
 
                 page.images?.forEach { image ->
                     val imageBytes = android.util.Base64.decode(image.image, android.util.Base64.DEFAULT)
@@ -303,12 +305,12 @@ class ComicsDatabase(context: Context) {
                         put("cellIndex", image.cellIndex)
                         put("image", imageBytes)
                     }
-                    db.insert("image", null, valuesImage)
+                    db.insertWithOnConflict("image", null, valuesImage, SQLiteDatabase.CONFLICT_FAIL)
                 }
             }
             db.setTransactionSuccessful()
         } catch (e: Exception) {
-            Log.e("DB", "Error downloading comic: ${e.message}")
+            throw e
         } finally {
             db.endTransaction()
             db.close()

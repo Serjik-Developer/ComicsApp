@@ -24,6 +24,12 @@ class ComicsNetworkAdapter(private var comics: MutableList<ComicsCoverNetworkMod
         private val editBtn: ImageButton = itemView.findViewById(R.id.edit_netwotk_comics_btn)
         private val downloadBtn: ImageButton = itemView.findViewById(R.id.download_comics_btn)
         init {
+            downloadBtn.setOnClickListener {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    listener.onDownloadClick(comics[position].id!!)
+                }
+            }
             if (isMyComics) {
                 deleteBtn.setOnClickListener {
                     val position = adapterPosition
@@ -35,12 +41,6 @@ class ComicsNetworkAdapter(private var comics: MutableList<ComicsCoverNetworkMod
                     val position = adapterPosition
                     if (position != RecyclerView.NO_POSITION) {
                         listener.onEditClick(comics[position].id!!)
-                    }
-                }
-                downloadBtn.setOnClickListener {
-                    val position = adapterPosition
-                    if (position != RecyclerView.NO_POSITION) {
-                        listener.onDownloadClick(comics[position].id!!)
                     }
                 }
             }

@@ -1,5 +1,6 @@
 package com.example.texnostrelka_2025_otbor.presentation.ui.main.fragments.viewmodels
 
+import android.database.sqlite.SQLiteConstraintException
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -89,6 +90,8 @@ class ViewNetworkViewModel(
                 _error.value = "Проблемы с интернетом"
             } catch (e: NotFoundException) {
                 _error.value = "Комикс не найден"
+            } catch (e: SQLiteConstraintException) {
+                _error.value = "Комикс уже скачан!"
             } catch (e: Exception) {
                 _error.value = "Неизвестная ошибка"
                 Log.e("ViewNetworkViewModel", "Unknown error", e)
