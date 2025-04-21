@@ -45,6 +45,7 @@ class MyComicsViewModel(
         fetchComics()
     }
     fun deleteComics(id: String) {
+        _deleteSuccess.postValue(false)
         viewModelScope.launch {
             _error.value = null
             try {
@@ -101,6 +102,7 @@ class MyComicsViewModel(
     }
     fun postComics(text: String, description: String) {
         _error.value = null
+        _postSuccess.value = false
         viewModelScope.launch {
             try {
                 val token = preferencesManager.getAuthToken()
@@ -141,6 +143,7 @@ class MyComicsViewModel(
     fun downloadComic(id: String) {
         viewModelScope.launch {
             _error.value = null
+            _downloadSuccess.value = false
             try {
                 val token = preferencesManager.getAuthToken()
                 if (token.isNullOrEmpty()) {

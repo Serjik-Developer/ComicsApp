@@ -276,31 +276,42 @@ class ComicsDatabase(context: Context) {
 
     fun downloadComicFromNetwork(comic: ComicsNetworkModel) {
         val db = databaseHelper.writableDatabase
-        val valuesComic = ContentValues().apply {
-            put("id", comic.id)
-            put("text", comic.text)
-            put("description", comic.description)
-        }
-        db.insert("comics", null, valuesComic)
-        for (page in comic.pages!!) {
-            val valuesPage = ContentValues().apply {
-                put("pageId", page.pageId)
-                put("comicsId", comic.id)
-                put("number", page.number)
-                put("rows", page.rows)
-                put("columns", page.columns)
+        try {
+            db.beginTransaction()
+            val valuesComic = ContentValues().apply {
+                put("id", comic.id)
+                put("text", comic.text)
+                put("description", comic.description)
             }
-            db.insert("pages", null, valuesPage)
-            for (image in page.images!!) {
-                val valuesImage = ContentValues().apply {
-                    put("id", image.id)
+            db.insert("comics", null, valuesComic)
+            comic.pages?.forEach { page ->
+                val valuesPage = ContentValues().apply {
                     put("pageId", page.pageId)
-                    put("cellIndex", image.cellIndex)
-                    put("image", image.image)
+                    put("comicsId", comic.id)
+                    put("number", page.number)
+                    put("rows", page.rows)
+                    put("columns", page.columns)
                 }
-                db.insert("image", null, valuesImage)
+                db.insert("pages", null, valuesPage)
+
+                page.images?.forEach { image ->
+                    val imageBytes = android.util.Base64.decode(image.image, android.util.Base64.DEFAULT)
+
+                    val valuesImage = ContentValues().apply {
+                        put("id", image.id)
+                        put("pageId", page.pageId)
+                        put("cellIndex", image.cellIndex)
+                        put("image", imageBytes)
+                    }
+                    db.insert("image", null, valuesImage)
+                }
             }
+            db.setTransactionSuccessful()
+        } catch (e: Exception) {
+            Log.e("DB", "Error downloading comic: ${e.message}")
+        } finally {
+            db.endTransaction()
+            db.close()
         }
-        db.close()
     }
 }

@@ -65,6 +65,7 @@ class ViewNetworkViewModel(
 
     fun downloadComic(id: String) {
         viewModelScope.launch {
+            _downloadSuccess.postValue(false)
             _error.value = null
             try {
                 val token = preferencesManager.getAuthToken()
