@@ -12,16 +12,20 @@ import com.example.texnostrelka_2025_otbor.data.remote.exception.NotAuthorizedEx
 import com.example.texnostrelka_2025_otbor.data.remote.exception.NotFoundException
 import com.example.texnostrelka_2025_otbor.data.remote.model.comic.ComicsCoverNetworkModel
 import com.example.texnostrelka_2025_otbor.data.remote.repository.NetworkRepository
+import com.example.texnostrelka_2025_otbor.domain.repository.ComicsRepository
 import kotlinx.coroutines.launch
 
 class ViewNetworkViewModel(
     private val networkRepository: NetworkRepository,
-    private val preferencesManager: PreferencesManager
+    private val preferencesManager: PreferencesManager,
+    private val repository: ComicsRepository
 ) : ViewModel() {
     private val _comics = MutableLiveData<MutableList<ComicsCoverNetworkModel>>(mutableListOf())
     val comics: LiveData<MutableList<ComicsCoverNetworkModel>> get() = _comics
     private val _error = MutableLiveData<String?>(null)
     val error: LiveData<String?> get() = _error
+    private val _downloadSuccess = MutableLiveData<Boolean>()
+    val downloadSuccess : LiveData<Boolean> get() = _downloadSuccess
 
     init {
         fetchComics()
@@ -52,6 +56,38 @@ class ViewNetworkViewModel(
                 _error.value = "Проблемы с интернетом"
             } catch (e: NotFoundException) {
                 _error.value = "Комиксы не найдены"
+            } catch (e: Exception) {
+                _error.value = "Неизвестная ошибка"
+                Log.e("ViewNetworkViewModel", "Unknown error", e)
+            }
+        }
+    }
+
+    fun downloadComic(id: String) {
+        viewModelScope.launch {
+            _error.value = null
+            try {
+                val token = preferencesManager.getAuthToken()
+                if (token.isNullOrEmpty()) {
+                    _error.value = "Не авторизован."
+                    return@launch
+                }
+                val comic = networkRepository.getComicById(id, token)
+                if (comic == null) {
+                    _error.value = "Комикс не найден"
+                }
+                repository.downloadComicFromNetwork(comic)
+                _downloadSuccess.postValue(true)
+            } catch (e: NotAuthorizedException) {
+                _error.value = "Не авторизован."
+                preferencesManager.clearName()
+                preferencesManager.clearAuthToken()
+            } catch (e: BadRequestException) {
+                _error.value = "Некорректный запрос"
+            } catch (e: NetworkException) {
+                _error.value = "Проблемы с интернетом"
+            } catch (e: NotFoundException) {
+                _error.value = "Комикс не найден"
             } catch (e: Exception) {
                 _error.value = "Неизвестная ошибка"
                 Log.e("ViewNetworkViewModel", "Unknown error", e)

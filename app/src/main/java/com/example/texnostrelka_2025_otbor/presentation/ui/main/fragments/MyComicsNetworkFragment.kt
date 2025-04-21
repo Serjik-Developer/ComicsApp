@@ -13,23 +13,28 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.texnostrelka_2025_otbor.R
+import com.example.texnostrelka_2025_otbor.data.local.database.ComicsDatabase
 import com.example.texnostrelka_2025_otbor.data.local.preferences.PreferencesManager
 import com.example.texnostrelka_2025_otbor.data.remote.repository.NetworkRepository
 import com.example.texnostrelka_2025_otbor.databinding.FragmentMyComicsBinding
+import com.example.texnostrelka_2025_otbor.domain.repository.ComicsRepository
 import com.example.texnostrelka_2025_otbor.presentation.adapter.ComicsNetworkAdapter
 import com.example.texnostrelka_2025_otbor.presentation.factory.MyComicsViewModelFactory
 import com.example.texnostrelka_2025_otbor.presentation.listener.OnItemClickListener
+import com.example.texnostrelka_2025_otbor.presentation.listener.OnItemComicsListener
 import com.example.texnostrelka_2025_otbor.presentation.ui.auth.AuthActivity
 import com.example.texnostrelka_2025_otbor.presentation.ui.editnetwork.EditNetworkActivity
 import com.example.texnostrelka_2025_otbor.presentation.ui.main.fragments.viewmodels.MyComicsViewModel
 import com.example.texnostrelka_2025_otbor.presentation.ui.comicnetwork.ComicNetworkActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
-class MyComicsNetworkFragment : Fragment(), OnItemClickListener {
+class MyComicsNetworkFragment : Fragment(), OnItemComicsListener {
     private var _binding : FragmentMyComicsBinding? = null
     private val binding get() = _binding!!
     private val viewModel: MyComicsViewModel by activityViewModels {
-        MyComicsViewModelFactory(NetworkRepository(), PreferencesManager(requireContext()))
+        MyComicsViewModelFactory(NetworkRepository(), PreferencesManager(requireContext()), ComicsRepository(
+            ComicsDatabase(requireContext())
+        ))
     }
     private lateinit var comicsNetworkAdapter: ComicsNetworkAdapter
 
@@ -71,6 +76,9 @@ class MyComicsNetworkFragment : Fragment(), OnItemClickListener {
         viewModel.postSuccess.observe(viewLifecycleOwner) { success ->
             if(success) Toast.makeText(requireContext(), "Успешно добавлено!", Toast.LENGTH_LONG).show()
         }
+        viewModel.downloadSuccess.observe(viewLifecycleOwner) { success ->
+            if(success) Toast.makeText(requireContext(), "Успешно загруженно!", Toast.LENGTH_LONG).show()
+        }
         viewModel.refreshTrigger.observe(viewLifecycleOwner) { shouldRefresh ->
             if (shouldRefresh) {
                 viewModel.fetchComics()
@@ -110,6 +118,11 @@ class MyComicsNetworkFragment : Fragment(), OnItemClickListener {
     override fun onSendClick(id: String) {
         TODO("Not yet implemented")
     }
+
+    override fun onDownloadClick(id: String) {
+        viewModel.downloadComic(id)
+    }
+
     private fun showAddComicsDialog() {
         val inputName = EditText(requireContext()).apply {
             hint = "Введите название комикса"

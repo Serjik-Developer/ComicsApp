@@ -9,24 +9,29 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.texnostrelka_2025_otbor.data.local.database.ComicsDatabase
 import com.example.texnostrelka_2025_otbor.data.local.preferences.PreferencesManager
 import com.example.texnostrelka_2025_otbor.data.remote.repository.NetworkRepository
 import com.example.texnostrelka_2025_otbor.databinding.FragmentViewNetworkBinding
+import com.example.texnostrelka_2025_otbor.domain.repository.ComicsRepository
 import com.example.texnostrelka_2025_otbor.presentation.adapter.ComicsNetworkAdapter
 import com.example.texnostrelka_2025_otbor.presentation.factory.ViewNetworkViewModelFactory
 import com.example.texnostrelka_2025_otbor.presentation.listener.OnItemClickListener
+import com.example.texnostrelka_2025_otbor.presentation.listener.OnItemComicsListener
 import com.example.texnostrelka_2025_otbor.presentation.ui.auth.AuthActivity
 import com.example.texnostrelka_2025_otbor.presentation.ui.comicnetwork.ComicNetworkActivity
 import com.example.texnostrelka_2025_otbor.presentation.ui.main.fragments.viewmodels.ViewNetworkViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
-class ViewNetworkFragment : Fragment(), OnItemClickListener {
+class ViewNetworkFragment : Fragment(), OnItemComicsListener {
     private var _binding : FragmentViewNetworkBinding? = null
     private val binding get() = _binding!!
     private val viewModel : ViewNetworkViewModel by activityViewModels {
         ViewNetworkViewModelFactory(
             NetworkRepository(),
-            PreferencesManager(requireContext()))
+            PreferencesManager(requireContext()),
+            ComicsRepository(ComicsDatabase(requireContext()))
+        )
     }
     private lateinit var comicsNetworkAdapter: ComicsNetworkAdapter
 
@@ -46,6 +51,9 @@ class ViewNetworkFragment : Fragment(), OnItemClickListener {
         binding.RecyclerViewNetwork.adapter = comicsNetworkAdapter
         viewModel.comics.observe( viewLifecycleOwner) { comics ->
             comicsNetworkAdapter.updateData(comics)
+        }
+        viewModel.downloadSuccess.observe(viewLifecycleOwner) { success ->
+            if(success) Toast.makeText(requireContext(), "Успешно загруженно!", Toast.LENGTH_LONG).show()
         }
         viewModel.error.observe(viewLifecycleOwner) { error ->
             error?.let {
@@ -90,5 +98,9 @@ class ViewNetworkFragment : Fragment(), OnItemClickListener {
 
     override fun onSendClick(id: String) {
         TODO("Not yet implemented")
+    }
+
+    override fun onDownloadClick(id: String) {
+        viewModel.downloadComic(id)
     }
 }
