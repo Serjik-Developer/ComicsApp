@@ -6,19 +6,18 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.texnostrelka_2025_otbor.data.local.preferences.PreferencesManager
-import com.example.texnostrelka_2025_otbor.data.remote.exception.ApiException
 import com.example.texnostrelka_2025_otbor.data.remote.exception.BadRequestException
 import com.example.texnostrelka_2025_otbor.data.remote.exception.ForbiddenException
 import com.example.texnostrelka_2025_otbor.data.remote.exception.NetworkException
 import com.example.texnostrelka_2025_otbor.data.remote.exception.NotAuthorizedException
 import com.example.texnostrelka_2025_otbor.data.remote.exception.NotFoundException
-import com.example.texnostrelka_2025_otbor.data.remote.model.page.PageFromNetwork
+import com.example.texnostrelka_2025_otbor.data.remote.model.page.PageFromNetworkModel
 import com.example.texnostrelka_2025_otbor.data.remote.repository.NetworkRepository
 import kotlinx.coroutines.launch
 
 class EditPageNetworkViewModel(private val repository: NetworkRepository, private val preferencesManager: PreferencesManager) : ViewModel() {
-    private val _page = MutableLiveData<PageFromNetwork>()
-    val page: LiveData<PageFromNetwork> get() = _page
+    private val _page = MutableLiveData<PageFromNetworkModel>()
+    val page: LiveData<PageFromNetworkModel> get() = _page
     private val _error = MutableLiveData<String?>()
     val error: LiveData<String?> get() = _error
     private val _success = MutableLiveData<String?>()

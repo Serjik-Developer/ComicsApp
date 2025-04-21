@@ -4,7 +4,7 @@ import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class PageWithImagesIds(
-    val page: Page,
+data class PageWithImagesIdsModel(
+    val pageModel: PageModel,
     val imageIds: List<String> // Передаем только идентификаторы изображений
 ) : Parcelable

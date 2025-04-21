@@ -8,10 +8,10 @@ import android.graphics.BitmapFactory
 import android.util.Log
 import com.example.texnostrelka_2025_otbor.data.model.ComicsModel
 import com.example.texnostrelka_2025_otbor.data.model.ImageModel
-import com.example.texnostrelka_2025_otbor.data.remote.model.comic.response.ComicsFromNetwork
+import com.example.texnostrelka_2025_otbor.data.remote.model.comic.response.ComicsCoverNetworkModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.image.response.ImageNetworkModel
-import com.example.texnostrelka_2025_otbor.data.remote.model.page.PageFromNetwork
-import com.example.texnostrelka_2025_otbor.data.model.Page
+import com.example.texnostrelka_2025_otbor.data.remote.model.page.PageFromNetworkModel
+import com.example.texnostrelka_2025_otbor.data.model.PageModel
 import com.example.texnostrelka_2025_otbor.presentation.utils.toBase64
 import java.io.ByteArrayOutputStream
 import java.util.UUID
@@ -127,8 +127,8 @@ class ComicsDatabase(context: Context) {
         db.close()
     }
     @SuppressLint("Range")
-    fun getAllPages(comicsId: String) : MutableList<Page> {
-        val list = mutableListOf<Page>()
+    fun getAllPages(comicsId: String) : MutableList<PageModel> {
+        val list = mutableListOf<PageModel>()
 
         val db = databaseHelper.readableDatabase
 
@@ -140,7 +140,7 @@ class ComicsDatabase(context: Context) {
             val number = cursor.getInt(cursor.getColumnIndex("number"))
             val rows = cursor.getInt(cursor.getColumnIndex("rows"))
             val columns = cursor.getInt(cursor.getColumnIndex("columns"))
-            list.add(Page(pageId, comicsId, number, rows, columns))
+            list.add(PageModel(pageId, comicsId, number, rows, columns))
         }
 
         // close the cursor and database connection
@@ -150,8 +150,8 @@ class ComicsDatabase(context: Context) {
         return list
     }
     @SuppressLint("Range")
-    fun getMyPage(pageId: String) : MutableList<Page> {
-        val list = mutableListOf<Page>()
+    fun getMyPage(pageId: String) : MutableList<PageModel> {
+        val list = mutableListOf<PageModel>()
 
         val db = databaseHelper.readableDatabase
 
@@ -163,7 +163,7 @@ class ComicsDatabase(context: Context) {
             val number = cursor.getInt(cursor.getColumnIndex("number"))
             val rows = cursor.getInt(cursor.getColumnIndex("rows"))
             val columns = cursor.getInt(cursor.getColumnIndex("columns"))
-            list.add(Page(pageId, comicsId, number, rows, columns))
+            list.add(PageModel(pageId, comicsId, number, rows, columns))
         }
 
         // close the cursor and database connection
@@ -230,12 +230,12 @@ class ComicsDatabase(context: Context) {
         return image
     }
     @SuppressLint("Range")
-    fun getComicsById(id: String) : ComicsFromNetwork {
+    fun getComicsById(id: String) : ComicsCoverNetworkModel {
         var text = ""
         var description = ""
         val db = databaseHelper.readableDatabase
         val cursor = db.rawQuery("SELECT * FROM comics WHERE id = ?", arrayOf(id))
-        val pages = mutableListOf<PageFromNetwork>()
+        val pages = mutableListOf<PageFromNetworkModel>()
 
         while (cursor.moveToNext()) {
             text = cursor.getString(cursor.getColumnIndex("text"))
@@ -265,14 +265,12 @@ class ComicsDatabase(context: Context) {
                 }
                 cursorImages.close()
 
-                pages.add(PageFromNetwork(pageId, number, rows, columns, images))
+                pages.add(PageFromNetworkModel(pageId, number, rows, columns, images))
             }
             cursorPages.close()
         }
         cursor.close()
         db.close()
-
-        return ComicsFromNetwork(id, text, description, pages)
+        return ComicsCoverNetworkModel(id, text, description, pages)
     }
-    //Удивительный факт, я идиот!
 }

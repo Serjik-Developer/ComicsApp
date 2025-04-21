@@ -13,7 +13,7 @@ import com.example.texnostrelka_2025_otbor.data.remote.exception.NetworkExceptio
 import com.example.texnostrelka_2025_otbor.data.remote.exception.NotAuthorizedException
 import com.example.texnostrelka_2025_otbor.data.remote.exception.NotFoundException
 import com.example.texnostrelka_2025_otbor.data.remote.model.comic.ComicsNetworkModel
-import com.example.texnostrelka_2025_otbor.data.remote.model.comic.response.ComicsFromNetwork
+import com.example.texnostrelka_2025_otbor.data.remote.model.comic.response.ComicsCoverNetworkModel
 import com.example.texnostrelka_2025_otbor.data.remote.repository.NetworkRepository
 import kotlinx.coroutines.launch
 
@@ -103,7 +103,7 @@ class MyComicsViewModel(
                     _error.value = "Не авторизован."
                     return@launch
                 }
-                val comics = ComicsFromNetwork(
+                val comics = ComicsCoverNetworkModel(
                     id = null,
                     text = text,
                     description = description,

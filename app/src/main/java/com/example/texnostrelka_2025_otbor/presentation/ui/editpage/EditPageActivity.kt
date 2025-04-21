@@ -16,7 +16,7 @@ import com.example.texnostrelka_2025_otbor.R
 import com.example.texnostrelka_2025_otbor.data.local.database.ComicsDatabase
 import com.example.texnostrelka_2025_otbor.presentation.factory.EditPageViewModelFactory
 import com.example.texnostrelka_2025_otbor.data.model.ImageModel
-import com.example.texnostrelka_2025_otbor.data.model.PageWithImagesIds
+import com.example.texnostrelka_2025_otbor.data.model.PageWithImagesIdsModel
 import com.example.texnostrelka_2025_otbor.domain.repository.ComicsRepository
 import com.example.texnostrelka_2025_otbor.presentation.ui.add.AddActivity
 
@@ -43,11 +43,11 @@ class EditPageActivity : AppCompatActivity() {
         btn.setOnClickListener {
             startActivity(Intent(this, EditActivity::class.java))
         }
-        val pageWithImagesIds = intent.getParcelableExtra<PageWithImagesIds>("PAGE_WITH_IMAGES")
+        val pageWithImagesIdsModel = intent.getParcelableExtra<PageWithImagesIdsModel>("PAGE_WITH_IMAGES")
         val pageIdIntent = intent.getStringExtra("PAGE_ID")
-        pageId = pageIdIntent ?: pageWithImagesIds?.page?.pageId ?: throw IllegalArgumentException("Page ID is required")
-        if (pageWithImagesIds != null) {
-            renderImages(pageWithImagesIds)
+        pageId = pageIdIntent ?: pageWithImagesIdsModel?.pageModel?.pageId ?: throw IllegalArgumentException("Page ID is required")
+        if (pageWithImagesIdsModel != null) {
+            renderImages(pageWithImagesIdsModel)
         } else {
             val rows = intent.getIntExtra("ROWS_COUNT", 1)
             val columns = intent.getIntExtra("COLUMNS_COUNT", 1)
@@ -66,8 +66,8 @@ class EditPageActivity : AppCompatActivity() {
         viewModel.fetchImages()
     }
 
-    private fun renderImages(pageWithImages: PageWithImagesIds) {
-        val page = pageWithImages.page
+    private fun renderImages(pageWithImages: PageWithImagesIdsModel) {
+        val page = pageWithImages.pageModel
         gridLayout.rowCount = page.rows
         gridLayout.columnCount = page.columns
 

@@ -11,14 +11,14 @@ import com.example.texnostrelka_2025_otbor.data.remote.exception.ForbiddenExcept
 import com.example.texnostrelka_2025_otbor.data.remote.exception.NetworkException
 import com.example.texnostrelka_2025_otbor.data.remote.exception.NotAuthorizedException
 import com.example.texnostrelka_2025_otbor.data.remote.exception.NotFoundException
-import com.example.texnostrelka_2025_otbor.data.remote.model.page.PageFromNetwork
+import com.example.texnostrelka_2025_otbor.data.remote.model.page.PageFromNetworkModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.page.request.PageAddRequestModel
 import com.example.texnostrelka_2025_otbor.data.remote.repository.NetworkRepository
 import kotlinx.coroutines.launch
 
 class EditNetworkViewModel(private val networkRepository: NetworkRepository, private val preferencesManager: PreferencesManager) : ViewModel() {
-    private val _pages = MutableLiveData<MutableList<PageFromNetwork>>()
-    val pages : LiveData<MutableList<PageFromNetwork>> get() = _pages
+    private val _pages = MutableLiveData<MutableList<PageFromNetworkModel>>()
+    val pages : LiveData<MutableList<PageFromNetworkModel>> get() = _pages
 
     private val _error = MutableLiveData<String?>()
     val error: LiveData<String?> get() = _error

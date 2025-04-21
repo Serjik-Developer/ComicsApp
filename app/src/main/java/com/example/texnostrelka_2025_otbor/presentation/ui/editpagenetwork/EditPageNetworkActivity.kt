@@ -1,26 +1,18 @@
 package com.example.texnostrelka_2025_otbor.presentation.ui.editpagenetwork
 
 import android.content.Intent
-import android.graphics.pdf.PdfDocument.Page
 import android.os.Bundle
 import android.util.Log
-import android.widget.GridLayout
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.texnostrelka_2025_otbor.data.local.preferences.PreferencesManager
-import com.example.texnostrelka_2025_otbor.data.mapper.convertNetworkToModel
-import com.example.texnostrelka_2025_otbor.data.remote.model.page.PageFromNetwork
 import com.example.texnostrelka_2025_otbor.data.remote.repository.NetworkRepository
-import com.example.texnostrelka_2025_otbor.databinding.ActivityEditNetworkBinding
-import com.example.texnostrelka_2025_otbor.databinding.ActivityEditPageBinding
 import com.example.texnostrelka_2025_otbor.databinding.ActivityEditPageNetworkBinding
 import com.example.texnostrelka_2025_otbor.presentation.adapter.EditPageAdapter
 import com.example.texnostrelka_2025_otbor.presentation.factory.EditPageNetworkViewModelFactory
-import com.example.texnostrelka_2025_otbor.presentation.listener.OnItemClickListener
 import com.example.texnostrelka_2025_otbor.presentation.listener.OnItemEditPageNetworkClickListener
 import com.example.texnostrelka_2025_otbor.presentation.ui.auth.AuthActivity
 import com.example.texnostrelka_2025_otbor.presentation.ui.editimagenetwork.EditImageNetworkActivity

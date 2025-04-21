@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.texnostrelka_2025_otbor.R
-import com.example.texnostrelka_2025_otbor.data.model.Page
+import com.example.texnostrelka_2025_otbor.data.model.PageModel
 import com.example.texnostrelka_2025_otbor.domain.repository.ComicsRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -16,7 +16,7 @@ import kotlinx.coroutines.withContext
 
 class ViewAdapter(
     private val context: Context,
-    private var items: MutableList<Page>,
+    private var items: MutableList<PageModel>,
     private val comicsRepository: ComicsRepository,
     private val coroutineScope: CoroutineScope
 ) : RecyclerView.Adapter<ViewAdapter.ViewViewHolder>() {
@@ -29,7 +29,7 @@ class ViewAdapter(
     override fun onBindViewHolder(holder: ViewViewHolder, position: Int) {
         holder.bind(items[position])
     }
-    fun updateData(newItems: MutableList<Page>) {
+    fun updateData(newItems: MutableList<PageModel>) {
         items = newItems
         notifyDataSetChanged() // Уведомляем адаптер об изменениях
     }
@@ -43,7 +43,7 @@ class ViewAdapter(
         private val coroutineScope: CoroutineScope
     ) : RecyclerView.ViewHolder(itemView) {
         private val imageRecyclerView: RecyclerView = itemView.findViewById(R.id.imageRecyclerViewView)
-        fun bind(item: Page) {
+        fun bind(item: PageModel) {
             coroutineScope.launch {
                 val imageList = comicsRepository.getAllImagesOnPage(item.pageId)
 

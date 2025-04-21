@@ -20,8 +20,8 @@ import com.example.texnostrelka_2025_otbor.presentation.adapter.PagesAdapter
 import com.example.texnostrelka_2025_otbor.data.local.database.ComicsDatabase
 import com.example.texnostrelka_2025_otbor.presentation.factory.EditViewModelFactory
 import com.example.texnostrelka_2025_otbor.presentation.listener.OnItemPageClickListener
-import com.example.texnostrelka_2025_otbor.data.model.PageWithImages
-import com.example.texnostrelka_2025_otbor.data.model.PageWithImagesIds
+import com.example.texnostrelka_2025_otbor.data.model.PageWithImagesModel
+import com.example.texnostrelka_2025_otbor.data.model.PageWithImagesIdsModel
 import com.example.texnostrelka_2025_otbor.AppData
 import com.example.texnostrelka_2025_otbor.domain.repository.ComicsRepository
 import com.example.texnostrelka_2025_otbor.presentation.ui.editpage.EditPageActivity
@@ -84,9 +84,9 @@ class EditActivity : AppCompatActivity(), OnItemPageClickListener {
             .show()
     }
 
-    override fun onEditClick(page: PageWithImages) {
+    override fun onEditClick(page: PageWithImagesModel) {
         val imageIds = page.images.map { it.id!! }
-        val pageWithImageIds = PageWithImagesIds(page.page, imageIds)
+        val pageWithImageIds = PageWithImagesIdsModel(page.pageModel, imageIds)
         AppData.comicsId = comicsId
         startActivity(
             Intent(this, EditPageActivity::class.java)

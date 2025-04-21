@@ -1,8 +1,5 @@
 package com.example.texnostrelka_2025_otbor.data.remote.repository
 
-import android.media.Image
-import android.net.wifi.WifiManager
-import com.example.texnostrelka_2025_otbor.data.model.Page
 import com.example.texnostrelka_2025_otbor.data.remote.api.RetrofitApiService
 import com.example.texnostrelka_2025_otbor.data.remote.exception.ApiException
 import com.example.texnostrelka_2025_otbor.data.remote.exception.BadRequestException
@@ -12,12 +9,12 @@ import com.example.texnostrelka_2025_otbor.data.remote.exception.NetworkExceptio
 import com.example.texnostrelka_2025_otbor.data.remote.exception.NotAuthorizedException
 import com.example.texnostrelka_2025_otbor.data.remote.exception.NotFoundException
 import com.example.texnostrelka_2025_otbor.data.remote.exception.TooManyRequests
-import com.example.texnostrelka_2025_otbor.data.remote.model.comic.response.ComicsFromNetwork
+import com.example.texnostrelka_2025_otbor.data.remote.model.comic.response.ComicsCoverNetworkModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.comic.ComicsNetworkModel
-import com.example.texnostrelka_2025_otbor.data.remote.model.page.PageFromNetwork
-import com.example.texnostrelka_2025_otbor.data.remote.model.authentication.request.AuthRequest
-import com.example.texnostrelka_2025_otbor.data.remote.model.authentication.response.AuthResponse
-import com.example.texnostrelka_2025_otbor.data.remote.model.authentication.request.RegisterationRequest
+import com.example.texnostrelka_2025_otbor.data.remote.model.page.PageFromNetworkModel
+import com.example.texnostrelka_2025_otbor.data.remote.model.authentication.request.AuthRequestModel
+import com.example.texnostrelka_2025_otbor.data.remote.model.authentication.response.AuthResponseModel
+import com.example.texnostrelka_2025_otbor.data.remote.model.authentication.request.RegisterationRequestModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.image.request.ImageRequestModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.image.request.UpdateImageRequestModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.page.request.PageAddRequestModel
@@ -36,9 +33,9 @@ class NetworkRepository {
             .create(RetrofitApiService::class.java)
     }
 
-    suspend fun authenticate(login: String, password: String) : AuthResponse {
+    suspend fun authenticate(login: String, password: String) : AuthResponseModel {
         try {
-            return apiService.authenticate(AuthRequest(login, password))
+            return apiService.authenticate(AuthRequestModel(login, password))
         } catch (e: HttpException) {
             when(e.code()) {
                 400 -> throw BadRequestException("Некорректный запрос: ${e.message}")
@@ -52,9 +49,9 @@ class NetworkRepository {
         }
     }
 
-    suspend fun registration(login: String, password: String, name: String) : AuthResponse {
+    suspend fun registration(login: String, password: String, name: String) : AuthResponseModel {
         try {
-            return apiService.registration(RegisterationRequest(login, password, name))
+            return apiService.registration(RegisterationRequestModel(login, password, name))
         } catch (e: HttpException) {
             when(e.code()) {
                 400 -> throw BadRequestException("Некорректный запрос: ${e.message}")
@@ -83,11 +80,11 @@ class NetworkRepository {
 
     }
 
-    suspend fun getComicById(id: String, token: String) : ComicsFromNetwork {
+    suspend fun getComicById(id: String, token: String) : ComicsCoverNetworkModel {
         return apiService.getComicPages(id, "Bearer $token")
     }
 
-    suspend fun getComicPages(id: String, token: String) : MutableList<PageFromNetwork>? {
+    suspend fun getComicPages(id: String, token: String) : MutableList<PageFromNetworkModel>? {
         try {
             return apiService.getComicPages(id, "Bearer $token").pages
         } catch (e: HttpException) {
@@ -103,7 +100,7 @@ class NetworkRepository {
 
     }
 
-    suspend fun postComics(token: String, comics: ComicsFromNetwork)  {
+    suspend fun postComics(token: String, comics: ComicsCoverNetworkModel)  {
         try {
             apiService.postComics("Bearer $token", comics)
         } catch (e: HttpException) {
@@ -227,7 +224,7 @@ class NetworkRepository {
         }
     }
 
-    suspend fun getPage(pageId: String, token: String) : PageFromNetwork {
+    suspend fun getPage(pageId: String, token: String) : PageFromNetworkModel {
         try {
             return apiService.getPage(pageId, "Bearer $token")
         } catch (e: HttpException) {

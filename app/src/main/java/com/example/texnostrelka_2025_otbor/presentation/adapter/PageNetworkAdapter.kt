@@ -8,10 +8,10 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.texnostrelka_2025_otbor.R
 import com.example.texnostrelka_2025_otbor.presentation.adapter.PageNetworkAdapter.PageNetworkViewHolder
-import com.example.texnostrelka_2025_otbor.data.remote.model.page.PageFromNetwork
+import com.example.texnostrelka_2025_otbor.data.remote.model.page.PageFromNetworkModel
 
 class PageNetworkAdapter(
-    private var pages: MutableList<PageFromNetwork>,
+    private var pages: MutableList<PageFromNetworkModel>,
     private val context: Context
 ) : RecyclerView.Adapter<PageNetworkViewHolder>() {
 
@@ -27,7 +27,7 @@ class PageNetworkAdapter(
 
     override fun getItemCount(): Int = pages.size
 
-    fun updateData(newPages: MutableList<PageFromNetwork>) {
+    fun updateData(newPages: MutableList<PageFromNetworkModel>) {
         pages = newPages.toMutableList()
         notifyDataSetChanged()
     }
@@ -46,7 +46,7 @@ class PageNetworkAdapter(
             imageRecyclerView.adapter = adapter
         }
 
-        fun bind(item: PageFromNetwork) {
+        fun bind(item: PageFromNetworkModel) {
             // Обновляем только данные адаптера
             val columns = if (item.columns == 0) 1 else item.columns
             imageRecyclerView.layoutManager = GridLayoutManager(context, columns)

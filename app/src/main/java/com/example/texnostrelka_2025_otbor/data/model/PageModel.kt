@@ -4,7 +4,7 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class Page(
+data class PageModel(
     val pageId: String,
     val comicsId: String,
     val number: Int,

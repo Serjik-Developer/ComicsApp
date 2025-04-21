@@ -10,14 +10,11 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.texnostrelka_2025_otbor.R
 import com.example.texnostrelka_2025_otbor.data.mapper.convertNetworkToModel
-import com.example.texnostrelka_2025_otbor.data.model.ImageModel
-import com.example.texnostrelka_2025_otbor.data.remote.model.image.response.ImageNetworkModel
-import com.example.texnostrelka_2025_otbor.data.remote.model.page.PageFromNetwork
+import com.example.texnostrelka_2025_otbor.data.remote.model.page.PageFromNetworkModel
 import com.example.texnostrelka_2025_otbor.presentation.adapter.EditNetworkAdapter.EditNetworkViewHolder
 import com.example.texnostrelka_2025_otbor.presentation.listener.OnItemClickListener
-import com.example.texnostrelka_2025_otbor.presentation.utils.base64ToBitmap
 
-class EditNetworkAdapter(private var pages: MutableList<PageFromNetwork>, private val context: Context, private val listener: OnItemClickListener): RecyclerView.Adapter<EditNetworkViewHolder>() {
+class EditNetworkAdapter(private var pages: MutableList<PageFromNetworkModel>, private val context: Context, private val listener: OnItemClickListener): RecyclerView.Adapter<EditNetworkViewHolder>() {
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
@@ -31,7 +28,7 @@ class EditNetworkAdapter(private var pages: MutableList<PageFromNetwork>, privat
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun updateData (newPages: MutableList<PageFromNetwork>) {
+    fun updateData (newPages: MutableList<PageFromNetworkModel>) {
         pages = newPages
         notifyDataSetChanged()
     }
@@ -43,7 +40,7 @@ class EditNetworkAdapter(private var pages: MutableList<PageFromNetwork>, privat
         private val editBtn: ImageButton = itemView.findViewById(R.id.edit_page_btn)
         private val deleteBtn: ImageButton = itemView.findViewById(R.id.delete_page_btn)
 
-        fun bind(page: PageFromNetwork) {
+        fun bind(page: PageFromNetworkModel) {
             val pageId = page.pageId
             val imageNetworkList = page.images
             val imageModelList = convertNetworkToModel(imageNetworkList, pageId)

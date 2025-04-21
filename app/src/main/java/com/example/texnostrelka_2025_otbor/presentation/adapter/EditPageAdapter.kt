@@ -2,25 +2,20 @@ package com.example.texnostrelka_2025_otbor.presentation.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.media.Image
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
-import android.widget.ImageView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.texnostrelka_2025_otbor.R
 import com.example.texnostrelka_2025_otbor.data.mapper.convertNetworkToModel
-import com.example.texnostrelka_2025_otbor.data.model.ImageModel
-import com.example.texnostrelka_2025_otbor.data.remote.model.page.PageFromNetwork
+import com.example.texnostrelka_2025_otbor.data.remote.model.page.PageFromNetworkModel
 import com.example.texnostrelka_2025_otbor.presentation.adapter.EditPageAdapter.EditPageViewHolder
-import com.example.texnostrelka_2025_otbor.presentation.listener.OnItemClickListener
 import com.example.texnostrelka_2025_otbor.presentation.listener.OnItemEditPageNetworkClickListener
 
 class EditPageAdapter(
-    private var pages: MutableList<PageFromNetwork>,
+    private var pages: MutableList<PageFromNetworkModel>,
     private val listener: OnItemEditPageNetworkClickListener
 ) : RecyclerView.Adapter<EditPageViewHolder>() {
 
@@ -42,7 +37,7 @@ class EditPageAdapter(
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun updateData(newPages: MutableList<PageFromNetwork>) {
+    fun updateData(newPages: MutableList<PageFromNetworkModel>) {
         Log.w("ADAPTER", "Updating data with ${newPages.size} pages")
         pages = newPages
         notifyDataSetChanged()
@@ -55,7 +50,7 @@ class EditPageAdapter(
     ) : RecyclerView.ViewHolder(itemView) {
         private val recyclerView = itemView.findViewById<RecyclerView>(R.id.editImageRecyclerView)
 
-        fun bind(page: PageFromNetwork) {
+        fun bind(page: PageFromNetworkModel) {
             Log.w("DATA-ADAPTER", "Binding page: ${page.pageId}")
             val imageList = convertNetworkToModel(page.images, page.pageId)
             Log.w("DATA-ADAPTER", "Images count: ${imageList.size}, Columns: ${page.columns}")

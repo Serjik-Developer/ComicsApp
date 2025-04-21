@@ -9,8 +9,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.texnostrelka_2025_otbor.R
 import com.example.texnostrelka_2025_otbor.presentation.listener.OnItemPageClickListener
-import com.example.texnostrelka_2025_otbor.data.model.Page
-import com.example.texnostrelka_2025_otbor.data.model.PageWithImages
+import com.example.texnostrelka_2025_otbor.data.model.PageModel
+import com.example.texnostrelka_2025_otbor.data.model.PageWithImagesModel
 import com.example.texnostrelka_2025_otbor.domain.repository.ComicsRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -19,7 +19,7 @@ import kotlinx.coroutines.withContext
 
 class PagesAdapter(
     private val context: Context,
-    private var items: MutableList<Page>,
+    private var items: MutableList<PageModel>,
     private val listener: OnItemPageClickListener,
     private val comicsRepository: ComicsRepository,
     private val coroutineScope: CoroutineScope
@@ -33,7 +33,7 @@ class PagesAdapter(
     override fun onBindViewHolder(holder: PageViewHolder, position: Int) {
         holder.bind(items[position])
     }
-    fun updateData(newItems: MutableList<Page>) {
+    fun updateData(newItems: MutableList<PageModel>) {
         items = newItems
         notifyDataSetChanged() // Уведомляем адаптер об изменениях
     }
@@ -51,7 +51,7 @@ class PagesAdapter(
         private val editBtn: ImageButton = itemView.findViewById(R.id.edit_page_btn)
         private val deleteBtn: ImageButton = itemView.findViewById(R.id.delete_page_btn)
 
-        fun bind(item: Page) {
+        fun bind(item: PageModel) {
             coroutineScope.launch {
                 val imageList = comicsRepository.getAllImagesOnPage(item.pageId)
 
@@ -62,7 +62,7 @@ class PagesAdapter(
                         listener.onDeleteClick(item.pageId)
                     }
                     editBtn.setOnClickListener {
-                        listener.onEditClick(PageWithImages(item, imageList))
+                        listener.onEditClick(PageWithImagesModel(item, imageList))
                     }
                 }
             }
