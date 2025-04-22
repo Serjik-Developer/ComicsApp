@@ -10,7 +10,6 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.texnostrelka_2025_otbor.presentation.adapter.PageNetworkAdapter
 import com.example.texnostrelka_2025_otbor.data.local.preferences.PreferencesManager
-import com.example.texnostrelka_2025_otbor.presentation.factory.ComicNetworkViewModelFactory
 import com.example.texnostrelka_2025_otbor.AppData
 import com.example.texnostrelka_2025_otbor.data.remote.repository.NetworkRepository
 import com.example.texnostrelka_2025_otbor.databinding.ActivityComicNetworkBinding
