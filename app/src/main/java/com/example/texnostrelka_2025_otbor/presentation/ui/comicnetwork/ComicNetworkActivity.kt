@@ -16,14 +16,15 @@ import com.example.texnostrelka_2025_otbor.data.remote.repository.NetworkReposit
 import com.example.texnostrelka_2025_otbor.databinding.ActivityComicNetworkBinding
 import com.example.texnostrelka_2025_otbor.presentation.ui.auth.AuthActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 
+
+@AndroidEntryPoint
 class ComicNetworkActivity : AppCompatActivity() {
     private lateinit var binding: ActivityComicNetworkBinding
     private lateinit var pageNetworkAdapter: PageNetworkAdapter
     private lateinit var comicsId: String
-    private val viewModel: ComicNetworkViewModel by viewModels {
-        ComicNetworkViewModelFactory(NetworkRepository(), PreferencesManager(this))
-    }
+    private val viewModel: ComicNetworkViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         pageNetworkAdapter = PageNetworkAdapter(mutableListOf(), this)

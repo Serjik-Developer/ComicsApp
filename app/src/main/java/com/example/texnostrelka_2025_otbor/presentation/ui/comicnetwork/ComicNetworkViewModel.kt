@@ -12,9 +12,15 @@ import com.example.texnostrelka_2025_otbor.data.remote.exception.NotAuthorizedEx
 import com.example.texnostrelka_2025_otbor.data.remote.exception.NotFoundException
 import com.example.texnostrelka_2025_otbor.data.remote.model.page.PageFromNetworkModel
 import com.example.texnostrelka_2025_otbor.data.remote.repository.NetworkRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ComicNetworkViewModel(private val networkRepository: NetworkRepository, private val preferencesManager: PreferencesManager) : ViewModel() {
+@HiltViewModel
+class ComicNetworkViewModel @Inject constructor(
+    private val networkRepository: NetworkRepository,
+    private val preferencesManager: PreferencesManager
+)  : ViewModel() {
     private val _pages = MutableLiveData<MutableList<PageFromNetworkModel>>()
     val pages : LiveData<MutableList<PageFromNetworkModel>> get() = _pages
     private val _error = MutableLiveData<String?>(null)
