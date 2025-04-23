@@ -23,15 +23,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
 
-class NetworkRepository {
-
-    private val apiService: RetrofitApiService by lazy {
-        Retrofit.Builder()
-            .baseUrl("https://comicsapp-backend.onrender.com/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-            .create(RetrofitApiService::class.java)
-    }
+class NetworkRepository(private val apiService: RetrofitApiService) {
 
     suspend fun authenticate(login: String, password: String) : AuthResponseModel {
         try {
