@@ -9,8 +9,6 @@ import com.example.texnostrelka_2025_otbor.presentation.ui.main.MainContainerAct
 import com.example.texnostrelka_2025_otbor.presentation.ui.registration.RegistrationActivity
 import com.example.texnostrelka_2025_otbor.data.local.preferences.PreferencesManager
 import com.example.texnostrelka_2025_otbor.databinding.ActivityAuthBinding
-import com.example.texnostrelka_2025_otbor.presentation.factory.AuthViewModelFactory
-import com.example.texnostrelka_2025_otbor.data.remote.repository.NetworkRepository
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 

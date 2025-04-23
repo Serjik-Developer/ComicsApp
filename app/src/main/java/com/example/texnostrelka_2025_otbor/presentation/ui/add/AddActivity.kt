@@ -14,9 +14,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.texnostrelka_2025_otbor.presentation.ui.editpage.EditPageActivity
 import com.example.texnostrelka_2025_otbor.presentation.view.PaintView
 import com.example.texnostrelka_2025_otbor.R
-import com.example.texnostrelka_2025_otbor.data.local.database.ComicsDatabase
-import com.example.texnostrelka_2025_otbor.domain.repository.ComicsRepository
-import com.example.texnostrelka_2025_otbor.presentation.factory.AddViewModelFactory
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
