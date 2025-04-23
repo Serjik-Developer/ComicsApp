@@ -9,9 +9,12 @@ import com.example.texnostrelka_2025_otbor.data.remote.exception.BadRequestExcep
 import com.example.texnostrelka_2025_otbor.data.remote.exception.ConflictException
 import com.example.texnostrelka_2025_otbor.data.remote.exception.NetworkException
 import com.example.texnostrelka_2025_otbor.data.remote.repository.NetworkRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class RegistrationViewModel(
+@HiltViewModel
+class RegistrationViewModel @Inject constructor(
     private val networkRepository: NetworkRepository,
     private val preferencesManager: PreferencesManager
 ) : ViewModel(){

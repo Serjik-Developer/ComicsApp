@@ -14,9 +14,15 @@ import com.example.texnostrelka_2025_otbor.data.remote.exception.NotFoundExcepti
 import com.example.texnostrelka_2025_otbor.data.remote.model.page.PageFromNetworkModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.page.request.PageAddRequestModel
 import com.example.texnostrelka_2025_otbor.data.remote.repository.NetworkRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class EditNetworkViewModel(private val networkRepository: NetworkRepository, private val preferencesManager: PreferencesManager) : ViewModel() {
+@HiltViewModel
+class EditNetworkViewModel @Inject constructor(
+    private val preferencesManager: PreferencesManager,
+    private val networkRepository: NetworkRepository
+) : ViewModel() {
     private val _pages = MutableLiveData<MutableList<PageFromNetworkModel>>()
     val pages : LiveData<MutableList<PageFromNetworkModel>> get() = _pages
 

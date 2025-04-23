@@ -13,20 +13,17 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Observer
 import com.example.texnostrelka_2025_otbor.presentation.ui.edit.EditActivity
 import com.example.texnostrelka_2025_otbor.R
-import com.example.texnostrelka_2025_otbor.data.local.database.ComicsDatabase
-import com.example.texnostrelka_2025_otbor.presentation.factory.EditPageViewModelFactory
 import com.example.texnostrelka_2025_otbor.data.model.ImageModel
 import com.example.texnostrelka_2025_otbor.data.model.PageWithImagesIdsModel
-import com.example.texnostrelka_2025_otbor.domain.repository.ComicsRepository
 import com.example.texnostrelka_2025_otbor.presentation.ui.add.AddActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class EditPageActivity : AppCompatActivity() {
 
     private lateinit var gridLayout: GridLayout
     private lateinit var pageId: String
-    private val viewModel : EditPageViewModel by viewModels {
-        EditPageViewModelFactory(pageId, ComicsRepository(ComicsDatabase(this)))
-    }
+    private val viewModel : EditPageViewModel by viewModels ()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -62,8 +59,8 @@ class EditPageActivity : AppCompatActivity() {
             renderImages(pageWithImages)
         })
 
-        viewModel.fetchPageWithImages()
-        viewModel.fetchImages()
+        viewModel.fetchPageWithImages(pageId)
+        viewModel.fetchImages(pageId)
     }
 
     private fun renderImages(pageWithImages: PageWithImagesIdsModel) {
@@ -87,7 +84,7 @@ class EditPageActivity : AppCompatActivity() {
 
                 // Если изображение есть, загружаем его
                 if (i < imageIds.size) {
-                    viewModel.fetchImages()
+                    viewModel.fetchImages(pageId)
                 } else {
                     setBackgroundResource(android.R.color.darker_gray)
                 }
@@ -149,6 +146,6 @@ class EditPageActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        viewModel.fetchPageWithImages()
+        viewModel.fetchPageWithImages(pageId)
     }
 }

@@ -12,26 +12,20 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.texnostrelka_2025_otbor.R
-import com.example.texnostrelka_2025_otbor.data.local.preferences.PreferencesManager
-import com.example.texnostrelka_2025_otbor.data.remote.repository.NetworkRepository
 import com.example.texnostrelka_2025_otbor.databinding.ActivityEditNetworkBinding
-import com.example.texnostrelka_2025_otbor.domain.repository.ComicsRepository
 import com.example.texnostrelka_2025_otbor.presentation.adapter.EditNetworkAdapter
-import com.example.texnostrelka_2025_otbor.presentation.factory.EditNetworkViewModelFactory
 import com.example.texnostrelka_2025_otbor.presentation.listener.OnItemClickListener
 import com.example.texnostrelka_2025_otbor.presentation.ui.auth.AuthActivity
-import com.example.texnostrelka_2025_otbor.presentation.ui.edit.EditActivity
 import com.example.texnostrelka_2025_otbor.presentation.ui.editpagenetwork.EditPageNetworkActivity
 import com.example.texnostrelka_2025_otbor.presentation.ui.main.MainContainerActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class EditNetworkActivity: AppCompatActivity(), OnItemClickListener {
     private lateinit var adapter: EditNetworkAdapter
-    private val viewModel: EditNetworkViewModel by viewModels {
-        EditNetworkViewModelFactory(NetworkRepository(), PreferencesManager(this))
-    }
+    private val viewModel: EditNetworkViewModel by viewModels ()
     private lateinit var binding: ActivityEditNetworkBinding
     private var comicsId: String = ""
 

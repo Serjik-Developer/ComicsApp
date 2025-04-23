@@ -8,21 +8,18 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.texnostrelka_2025_otbor.data.local.preferences.PreferencesManager
-import com.example.texnostrelka_2025_otbor.data.remote.repository.NetworkRepository
 import com.example.texnostrelka_2025_otbor.databinding.ActivityEditPageNetworkBinding
 import com.example.texnostrelka_2025_otbor.presentation.adapter.EditPageAdapter
-import com.example.texnostrelka_2025_otbor.presentation.factory.EditPageNetworkViewModelFactory
 import com.example.texnostrelka_2025_otbor.presentation.listener.OnItemEditPageNetworkClickListener
 import com.example.texnostrelka_2025_otbor.presentation.ui.auth.AuthActivity
 import com.example.texnostrelka_2025_otbor.presentation.ui.editimagenetwork.EditImageNetworkActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class EditPageNetworkActivity : AppCompatActivity(), OnItemEditPageNetworkClickListener {
     private lateinit var binding: ActivityEditPageNetworkBinding
-    private val viewModel : EditPageNetworkViewModel by viewModels() {
-        EditPageNetworkViewModelFactory(NetworkRepository(), PreferencesManager(this))
-    }
+    private val viewModel : EditPageNetworkViewModel by viewModels()
     private lateinit var adapter: EditPageAdapter
     private var pageId : String = ""
 

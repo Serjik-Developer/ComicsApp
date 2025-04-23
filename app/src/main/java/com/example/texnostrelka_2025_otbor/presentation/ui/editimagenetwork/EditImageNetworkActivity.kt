@@ -15,20 +15,19 @@ import com.example.texnostrelka_2025_otbor.data.remote.model.image.request.Image
 import com.example.texnostrelka_2025_otbor.data.remote.repository.NetworkRepository
 import com.example.texnostrelka_2025_otbor.databinding.ActivityEditImageNetworkBinding
 import com.example.texnostrelka_2025_otbor.databinding.ActivityEditNetworkBinding
-import com.example.texnostrelka_2025_otbor.presentation.factory.EditImageNetworkViewModelFactory
 import com.example.texnostrelka_2025_otbor.presentation.ui.auth.AuthActivity
 import com.example.texnostrelka_2025_otbor.presentation.ui.editpage.EditPageActivity
 import com.example.texnostrelka_2025_otbor.presentation.ui.editpagenetwork.EditPageNetworkActivity
 import com.example.texnostrelka_2025_otbor.presentation.utils.toBase64
 import com.example.texnostrelka_2025_otbor.presentation.view.PaintView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class EditImageNetworkActivity : AppCompatActivity() {
     private lateinit var paintView: PaintView
     private lateinit var binding: ActivityEditImageNetworkBinding
-    private val viewModel : EditImageNetworkViewModel by viewModels {
-        EditImageNetworkViewModelFactory(NetworkRepository(), PreferencesManager(this))
-    }
+    private val viewModel : EditImageNetworkViewModel by viewModels ()
     private var pageId = ""
     private var imageId = ""
     private var mode = 0

@@ -8,25 +8,21 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.example.texnostrelka_2025_otbor.data.local.preferences.PreferencesManager
 import com.example.texnostrelka_2025_otbor.databinding.ActivityRegistrationBinding
-import com.example.texnostrelka_2025_otbor.presentation.factory.RegistrationViewModelFactory
 import com.example.texnostrelka_2025_otbor.data.remote.repository.NetworkRepository
 import com.example.texnostrelka_2025_otbor.presentation.ui.auth.AuthActivity
 import com.example.texnostrelka_2025_otbor.presentation.ui.main.MainContainerActivity
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class RegistrationActivity : AppCompatActivity() {
-    private lateinit var preferencesManager: PreferencesManager
+    @Inject lateinit var preferencesManager: PreferencesManager
     private lateinit var binding: ActivityRegistrationBinding
-    private val viewModel: RegistrationViewModel by viewModels {
-        RegistrationViewModelFactory(
-            NetworkRepository(),
-            PreferencesManager(this)
-        )
-    }
+    private val viewModel: RegistrationViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityRegistrationBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        preferencesManager = PreferencesManager(this)
         setupObservers()
         setupClickListeners()
     }

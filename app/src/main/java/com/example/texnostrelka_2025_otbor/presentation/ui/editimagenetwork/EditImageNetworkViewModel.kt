@@ -13,9 +13,14 @@ import com.example.texnostrelka_2025_otbor.data.remote.exception.NotAuthorizedEx
 import com.example.texnostrelka_2025_otbor.data.remote.exception.NotFoundException
 import com.example.texnostrelka_2025_otbor.data.remote.model.image.request.ImageRequestModel
 import com.example.texnostrelka_2025_otbor.data.remote.repository.NetworkRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class EditImageNetworkViewModel(private val repository: NetworkRepository, private val preferencesManager: PreferencesManager) : ViewModel() {
+@HiltViewModel
+class EditImageNetworkViewModel @Inject constructor(
+    private val repository: NetworkRepository, private val preferencesManager: PreferencesManager
+) : ViewModel() {
 
     private val _error = MutableLiveData<String?>()
     val error : LiveData<String?> get() = _error
