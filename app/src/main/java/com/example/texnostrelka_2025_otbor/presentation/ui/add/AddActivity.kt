@@ -17,15 +17,15 @@ import com.example.texnostrelka_2025_otbor.R
 import com.example.texnostrelka_2025_otbor.data.local.database.ComicsDatabase
 import com.example.texnostrelka_2025_otbor.domain.repository.ComicsRepository
 import com.example.texnostrelka_2025_otbor.presentation.factory.AddViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class AddActivity : AppCompatActivity() {
     private lateinit var paintView: PaintView
     private lateinit var pageId: String
     private var cellIndex: Int = -1
     private var imageId: String? = null
-    private val viewModel: AddViewModel by viewModels {
-        AddViewModelFactory(ComicsRepository(ComicsDatabase(this)))
-    }
+    private val viewModel: AddViewModel by viewModels ()
 
     // Новый способ обработки выбора изображения
     private val pickImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->

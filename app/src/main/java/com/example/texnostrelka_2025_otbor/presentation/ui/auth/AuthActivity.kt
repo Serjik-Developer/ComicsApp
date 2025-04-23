@@ -11,22 +11,19 @@ import com.example.texnostrelka_2025_otbor.data.local.preferences.PreferencesMan
 import com.example.texnostrelka_2025_otbor.databinding.ActivityAuthBinding
 import com.example.texnostrelka_2025_otbor.presentation.factory.AuthViewModelFactory
 import com.example.texnostrelka_2025_otbor.data.remote.repository.NetworkRepository
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class AuthActivity : AppCompatActivity() {
-    private lateinit var preferencesManager: PreferencesManager
+    @Inject lateinit var preferencesManager: PreferencesManager
     private lateinit var binding: ActivityAuthBinding
-    private val viewModel: AuthViewModel by viewModels {
-        AuthViewModelFactory(
-            NetworkRepository(),
-            PreferencesManager(this)
-        )
-    }
+    private val viewModel: AuthViewModel by viewModels ()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAuthBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        preferencesManager = PreferencesManager(this)
         setupObservers()
         setupClickListeners()
     }

@@ -36,7 +36,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun proviedeComicsRepository(comicsDatabase: ComicsDatabase) : ComicsRepository {
+    fun provideComicsRepository(comicsDatabase: ComicsDatabase) : ComicsRepository {
         return ComicsRepository(comicsDatabase)
     }
 }

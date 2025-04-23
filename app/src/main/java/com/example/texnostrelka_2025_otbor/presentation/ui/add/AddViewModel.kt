@@ -7,9 +7,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.texnostrelka_2025_otbor.data.model.ImageModel
 import com.example.texnostrelka_2025_otbor.domain.repository.ComicsRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class AddViewModel(private val repository: ComicsRepository) : ViewModel() {
+@HiltViewModel
+class AddViewModel @Inject constructor(
+    private val repository: ComicsRepository
+) : ViewModel() {
     private val _image = MutableLiveData<ImageModel>()
     val image : LiveData<ImageModel> get() = _image
 
