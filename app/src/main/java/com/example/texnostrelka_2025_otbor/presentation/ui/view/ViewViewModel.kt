@@ -7,9 +7,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.texnostrelka_2025_otbor.data.model.PageModel
 import com.example.texnostrelka_2025_otbor.domain.repository.ComicsRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@HiltViewModel
 class ViewViewModel @Inject constructor(private val repository: ComicsRepository) : ViewModel() {
     private val _pages = MutableLiveData<MutableList<PageModel>>()
     val pages : LiveData<MutableList<PageModel>> get() = _pages

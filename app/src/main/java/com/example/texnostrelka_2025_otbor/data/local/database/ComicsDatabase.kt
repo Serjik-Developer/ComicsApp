@@ -17,10 +17,11 @@ import com.example.texnostrelka_2025_otbor.data.model.PageModel
 import com.example.texnostrelka_2025_otbor.presentation.utils.toBase64
 import java.io.ByteArrayOutputStream
 import java.util.UUID
+import javax.inject.Inject
 
-class ComicsDatabase(context: Context) {
-
-    private val databaseHelper = DatabaseHelper(context)
+class ComicsDatabase @Inject constructor(
+    private val databaseHelper: DatabaseHelper
+) {
     private lateinit var image: ImageModel
 
     fun insert(id: String, text: String, description: String) {

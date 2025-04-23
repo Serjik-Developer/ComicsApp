@@ -15,10 +15,13 @@ import android.util.Log
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.example.texnostrelka_2025_otbor.R
+import com.example.texnostrelka_2025_otbor.data.local.database.DatabaseHelper
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class ViewActivity : AppCompatActivity() {
+    @Inject lateinit var repository: ComicsRepository
     private val viewModel : ViewViewModel by viewModels()
     private lateinit var comicsId: String
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,8 +35,6 @@ class ViewActivity : AppCompatActivity() {
         }
         comicsId = intent.getStringExtra("COMICS_ID") ?: throw IllegalArgumentException("COMICS_ID ARE REQUIRED")
         Log.w("COMICS_ID", comicsId)
-        val database = ComicsDatabase(this)
-        val repository = ComicsRepository(database)
         viewModel.pages.observe( this, Observer { pages ->
             val recyclerView = findViewById<RecyclerView>(R.id.RecyclerViewView)
             recyclerView.layoutManager = LinearLayoutManager(this)

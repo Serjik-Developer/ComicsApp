@@ -2,6 +2,7 @@ package com.example.texnostrelka_2025_otbor.di
 
 import android.content.Context
 import com.example.texnostrelka_2025_otbor.data.local.database.ComicsDatabase
+import com.example.texnostrelka_2025_otbor.data.local.database.DatabaseHelper
 import com.example.texnostrelka_2025_otbor.data.local.preferences.PreferencesManager
 import com.example.texnostrelka_2025_otbor.data.remote.api.RetrofitApiService
 import com.example.texnostrelka_2025_otbor.data.remote.repository.NetworkRepository
@@ -33,8 +34,8 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideComicsDatabase(@ApplicationContext context: Context) : ComicsDatabase {
-        return ComicsDatabase(context)
+    fun provideComicsDatabase(databaseHelper: DatabaseHelper) : ComicsDatabase {
+        return ComicsDatabase(databaseHelper)
     }
 
     @Provides
@@ -51,5 +52,10 @@ object AppModule {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(RetrofitApiService::class.java)
+    }
+    @Provides
+    @Singleton
+    fun provideDatabaseHelper(@ApplicationContext context: Context): DatabaseHelper {
+        return DatabaseHelper(context)
     }
 }
