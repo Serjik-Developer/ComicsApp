@@ -19,6 +19,7 @@ import com.example.texnostrelka_2025_otbor.presentation.listener.OnItemClickList
 import com.example.texnostrelka_2025_otbor.presentation.ui.auth.AuthActivity
 import com.example.texnostrelka_2025_otbor.presentation.ui.editpagenetwork.EditPageNetworkActivity
 import com.example.texnostrelka_2025_otbor.presentation.ui.main.MainContainerActivity
+import com.example.texnostrelka_2025_otbor.presentation.utils.DialogHelper.showErrorDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -94,14 +95,6 @@ class EditNetworkActivity: AppCompatActivity(), OnItemClickListener {
                 viewModel.addPage(comicsId, rows, columns)
             }
             .setNegativeButton("Отмена", null)
-            .show()
-    }
-
-    private fun showErrorDialog(message: String) {
-        MaterialAlertDialogBuilder(this)
-            .setTitle("Ошибка")
-            .setMessage(message)
-            .setPositiveButton("OK") {dialog,_, -> dialog.dismiss()}
             .show()
     }
 

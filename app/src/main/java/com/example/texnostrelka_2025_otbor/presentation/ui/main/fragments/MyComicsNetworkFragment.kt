@@ -25,6 +25,7 @@ import com.example.texnostrelka_2025_otbor.presentation.ui.auth.AuthActivity
 import com.example.texnostrelka_2025_otbor.presentation.ui.editnetwork.EditNetworkActivity
 import com.example.texnostrelka_2025_otbor.presentation.ui.main.fragments.viewmodels.MyComicsViewModel
 import com.example.texnostrelka_2025_otbor.presentation.ui.comicnetwork.ComicNetworkActivity
+import com.example.texnostrelka_2025_otbor.presentation.utils.DialogHelper.showErrorDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -88,14 +89,6 @@ class MyComicsNetworkFragment : Fragment(), OnItemComicsListener {
     override fun onResume() {
         super.onResume()
         viewModel.fetchComics()
-    }
-
-    private fun showErrorDialog(message: String) {
-        MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Ошибка")
-            .setMessage(message)
-            .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
-            .show()
     }
 
     override fun onItemClick(id: String) {

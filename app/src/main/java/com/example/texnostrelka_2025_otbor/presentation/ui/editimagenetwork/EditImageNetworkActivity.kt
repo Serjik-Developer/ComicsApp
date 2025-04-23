@@ -18,6 +18,7 @@ import com.example.texnostrelka_2025_otbor.databinding.ActivityEditNetworkBindin
 import com.example.texnostrelka_2025_otbor.presentation.ui.auth.AuthActivity
 import com.example.texnostrelka_2025_otbor.presentation.ui.editpage.EditPageActivity
 import com.example.texnostrelka_2025_otbor.presentation.ui.editpagenetwork.EditPageNetworkActivity
+import com.example.texnostrelka_2025_otbor.presentation.utils.DialogHelper.showErrorDialog
 import com.example.texnostrelka_2025_otbor.presentation.utils.toBase64
 import com.example.texnostrelka_2025_otbor.presentation.view.PaintView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -122,13 +123,5 @@ class EditImageNetworkActivity : AppCompatActivity() {
                 throw IllegalArgumentException("Unknowm mode")
             }
         }
-    }
-
-    private fun showErrorDialog(message: String) {
-        MaterialAlertDialogBuilder(this)
-            .setTitle("Ошибка")
-            .setMessage(message)
-            .setPositiveButton("OK") {dialog,_, -> dialog.dismiss()}
-            .show()
     }
 }

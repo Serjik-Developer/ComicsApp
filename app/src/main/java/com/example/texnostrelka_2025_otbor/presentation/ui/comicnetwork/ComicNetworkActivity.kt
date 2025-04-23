@@ -14,6 +14,7 @@ import com.example.texnostrelka_2025_otbor.AppData
 import com.example.texnostrelka_2025_otbor.data.remote.repository.NetworkRepository
 import com.example.texnostrelka_2025_otbor.databinding.ActivityComicNetworkBinding
 import com.example.texnostrelka_2025_otbor.presentation.ui.auth.AuthActivity
+import com.example.texnostrelka_2025_otbor.presentation.utils.DialogHelper.showErrorDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -54,13 +55,6 @@ class ComicNetworkActivity : AppCompatActivity() {
             }
         })
         viewModel.fetchPages(comicsId)
-    }
-    private fun showErrorDialog(message: String) {
-        MaterialAlertDialogBuilder(this)
-            .setTitle("Ошибка")
-            .setMessage(message)
-            .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
-            .show()
     }
 
     override fun onResume() {

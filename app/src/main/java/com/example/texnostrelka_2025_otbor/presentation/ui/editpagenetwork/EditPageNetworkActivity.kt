@@ -13,6 +13,7 @@ import com.example.texnostrelka_2025_otbor.presentation.adapter.EditPageAdapter
 import com.example.texnostrelka_2025_otbor.presentation.listener.OnItemEditPageNetworkClickListener
 import com.example.texnostrelka_2025_otbor.presentation.ui.auth.AuthActivity
 import com.example.texnostrelka_2025_otbor.presentation.ui.editimagenetwork.EditImageNetworkActivity
+import com.example.texnostrelka_2025_otbor.presentation.utils.DialogHelper.showErrorDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -64,14 +65,6 @@ class EditPageNetworkActivity : AppCompatActivity(), OnItemEditPageNetworkClickL
             }
         })
         viewModel.fetchPage(pageId)
-    }
-
-    private fun showErrorDialog(message: String) {
-        MaterialAlertDialogBuilder(this)
-            .setTitle("Ошибка")
-            .setMessage(message)
-            .setPositiveButton("OK") {dialog,_, -> dialog.dismiss()}
-            .show()
     }
 
     override fun onDeleteClick(id: String) {

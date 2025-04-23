@@ -24,6 +24,7 @@ import com.example.texnostrelka_2025_otbor.presentation.ui.auth.AuthActivity
 import com.example.texnostrelka_2025_otbor.presentation.ui.edit.EditActivity
 import com.example.texnostrelka_2025_otbor.presentation.ui.view.ViewActivity
 import com.example.texnostrelka_2025_otbor.presentation.ui.main.fragments.viewmodels.MainViewModel
+import com.example.texnostrelka_2025_otbor.presentation.utils.DialogHelper.showErrorDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -70,13 +71,6 @@ class MainComicsFragment : Fragment(), OnItemClickListener {
                 }
             }
         }
-    }
-    private fun showErrorDialog(message: String) {
-        MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Ошибка")
-            .setMessage(message)
-            .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
-            .show()
     }
 
     private fun showAddComicsDialog() {
