@@ -56,4 +56,13 @@ interface RetrofitApiService {
 
     @GET("/api/comics/pages/{pageId}")
     suspend fun getPage(@Path("pageId") pageId: String, @Header("Authorization") token: String) : PageFromNetworkModel
+
+    @POST("/api/comics/{id}/like")
+    suspend fun postLike(@Path("id") id: String, @Header("Authorization") token: String)
+
+    @POST("/api/comics/{id}/favorite")
+    suspend fun postFavorite(@Path("id") id: String, @Header("Authorization") token: String)
+
+    @GET("/api/user/favorites")
+    suspend fun getFavorites(@Header("Authorization") token: String) : MutableList<ComicsCoverNetworkModel>
 }

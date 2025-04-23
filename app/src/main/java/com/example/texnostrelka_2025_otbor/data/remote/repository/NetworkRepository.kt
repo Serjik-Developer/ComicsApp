@@ -228,4 +228,49 @@ class NetworkRepository(private val apiService: RetrofitApiService) {
             throw NetworkException("Ошибка сети: ${e.message}")
         }
     }
+
+    suspend fun postLike(id: String, token: String) {
+        try {
+            apiService.postLike(id, "Bearer $token")
+        } catch (e: HttpException) {
+            when(e.code()) {
+                400 -> throw BadRequestException("Некорректный запрос: ${e.message}")
+                401 -> throw NotAuthorizedException("Не авторизован.")
+                404 -> throw NotFoundException("Комикс не найден.")
+                else -> throw ApiException("Ошибка сервера ${e.code()}")
+            }
+        } catch (e: IOException) {
+            throw NetworkException("Ошибка сети: ${e.message}")
+        }
+    }
+
+    suspend fun postFavorite(id: String, token: String) {
+        try {
+            apiService.postFavorite(id, "Bearer $token")
+        } catch (e: HttpException) {
+            when(e.code()) {
+                400 -> throw BadRequestException("Некорректный запрос: ${e.message}")
+                401 -> throw NotAuthorizedException("Не авторизован.")
+                404 -> throw NotFoundException("Комикс не найден.")
+                else -> throw ApiException("Ошибка сервера ${e.code()}")
+            }
+        } catch (e: IOException) {
+            throw NetworkException("Ошибка сети: ${e.message}")
+        }
+    }
+
+    suspend fun getFavorites(token: String): MutableList<ComicsCoverNetworkModel> {
+        try {
+            return apiService.getFavorites("Bearer $token")
+        } catch (e: HttpException) {
+            when(e.code()) {
+                400 -> throw BadRequestException("Некорректный запрос: ${e.message}")
+                401 -> throw NotAuthorizedException("Не авторизован.")
+                404 -> throw NotFoundException("Комиксы не найдены.")
+                else -> throw ApiException("Ошибка сервера ${e.code()}")
+            }
+        } catch (e: IOException) {
+            throw NetworkException("Ошибка сети: ${e.message}")
+        }
+    }
 }
