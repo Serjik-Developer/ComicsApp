@@ -15,24 +15,19 @@ import com.example.texnostrelka_2025_otbor.data.remote.repository.NetworkReposit
 import com.example.texnostrelka_2025_otbor.databinding.FragmentViewNetworkBinding
 import com.example.texnostrelka_2025_otbor.domain.repository.ComicsRepository
 import com.example.texnostrelka_2025_otbor.presentation.adapter.ComicsNetworkAdapter
-import com.example.texnostrelka_2025_otbor.presentation.factory.ViewNetworkViewModelFactory
 import com.example.texnostrelka_2025_otbor.presentation.listener.OnItemClickListener
 import com.example.texnostrelka_2025_otbor.presentation.listener.OnItemComicsListener
 import com.example.texnostrelka_2025_otbor.presentation.ui.auth.AuthActivity
 import com.example.texnostrelka_2025_otbor.presentation.ui.comicnetwork.ComicNetworkActivity
 import com.example.texnostrelka_2025_otbor.presentation.ui.main.fragments.viewmodels.ViewNetworkViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ViewNetworkFragment : Fragment(), OnItemComicsListener {
     private var _binding : FragmentViewNetworkBinding? = null
     private val binding get() = _binding!!
-    private val viewModel : ViewNetworkViewModel by activityViewModels {
-        ViewNetworkViewModelFactory(
-            NetworkRepository(),
-            PreferencesManager(requireContext()),
-            ComicsRepository(ComicsDatabase(requireContext()))
-        )
-    }
+    private val viewModel : ViewNetworkViewModel by activityViewModels ()
     private lateinit var comicsNetworkAdapter: ComicsNetworkAdapter
 
     override fun onCreateView(

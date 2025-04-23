@@ -17,9 +17,12 @@ import com.example.texnostrelka_2025_otbor.data.remote.model.comic.ComicsCoverNe
 import com.example.texnostrelka_2025_otbor.data.remote.model.comic.ComicsNetworkModel
 import com.example.texnostrelka_2025_otbor.data.remote.repository.NetworkRepository
 import com.example.texnostrelka_2025_otbor.domain.repository.ComicsRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MyComicsViewModel(
+@HiltViewModel
+class MyComicsViewModel @Inject constructor(
     private val networkRepository: NetworkRepository,
     private val preferencesManager: PreferencesManager,
     private val repository: ComicsRepository

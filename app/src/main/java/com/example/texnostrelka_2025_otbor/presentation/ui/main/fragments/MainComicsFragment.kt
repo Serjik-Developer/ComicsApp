@@ -19,23 +19,19 @@ import com.example.texnostrelka_2025_otbor.data.remote.repository.NetworkReposit
 import com.example.texnostrelka_2025_otbor.databinding.FragmentMainComicsBinding
 import com.example.texnostrelka_2025_otbor.domain.repository.ComicsRepository
 import com.example.texnostrelka_2025_otbor.presentation.adapter.ComicsAdapter
-import com.example.texnostrelka_2025_otbor.presentation.factory.MainViewModelFactory
 import com.example.texnostrelka_2025_otbor.presentation.listener.OnItemClickListener
 import com.example.texnostrelka_2025_otbor.presentation.ui.auth.AuthActivity
 import com.example.texnostrelka_2025_otbor.presentation.ui.edit.EditActivity
 import com.example.texnostrelka_2025_otbor.presentation.ui.view.ViewActivity
 import com.example.texnostrelka_2025_otbor.presentation.ui.main.fragments.viewmodels.MainViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainComicsFragment : Fragment(), OnItemClickListener {
     private var _binding : FragmentMainComicsBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: MainViewModel by activityViewModels {
-        MainViewModelFactory(
-            ComicsRepository(ComicsDatabase(requireContext())), NetworkRepository(),
-            PreferencesManager(requireContext())
-        )
-    }
+    private val viewModel: MainViewModel by activityViewModels ()
     private lateinit var adapter: ComicsAdapter
 
     override fun onCreateView(

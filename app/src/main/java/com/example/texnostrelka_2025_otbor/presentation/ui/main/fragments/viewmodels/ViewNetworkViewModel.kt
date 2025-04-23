@@ -14,9 +14,12 @@ import com.example.texnostrelka_2025_otbor.data.remote.exception.NotFoundExcepti
 import com.example.texnostrelka_2025_otbor.data.remote.model.comic.ComicsCoverNetworkModel
 import com.example.texnostrelka_2025_otbor.data.remote.repository.NetworkRepository
 import com.example.texnostrelka_2025_otbor.domain.repository.ComicsRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ViewNetworkViewModel(
+@HiltViewModel
+class ViewNetworkViewModel @Inject constructor(
     private val networkRepository: NetworkRepository,
     private val preferencesManager: PreferencesManager,
     private val repository: ComicsRepository

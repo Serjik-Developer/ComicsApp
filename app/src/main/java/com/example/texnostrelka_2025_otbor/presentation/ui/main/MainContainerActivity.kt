@@ -8,7 +8,9 @@ import com.example.texnostrelka_2025_otbor.databinding.ActivityMainContainerBind
 import com.example.texnostrelka_2025_otbor.presentation.ui.main.fragments.MainComicsFragment
 import com.example.texnostrelka_2025_otbor.presentation.ui.main.fragments.MyComicsNetworkFragment
 import com.example.texnostrelka_2025_otbor.presentation.ui.main.fragments.ViewNetworkFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainContainerActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainContainerBinding
 
