@@ -23,8 +23,6 @@ class AddActivity : AppCompatActivity() {
     private var cellIndex: Int = -1
     private var imageId: String? = null
     private val viewModel: AddViewModel by viewModels ()
-
-    // Новый способ обработки выбора изображения
     private val pickImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         uri?.let {
             paintView.addImageFromUri(it)

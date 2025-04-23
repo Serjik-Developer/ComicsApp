@@ -18,7 +18,6 @@ import com.example.texnostrelka_2025_otbor.presentation.ui.main.MainContainerAct
 import com.example.texnostrelka_2025_otbor.R
 import com.example.texnostrelka_2025_otbor.presentation.adapter.PagesAdapter
 import com.example.texnostrelka_2025_otbor.data.local.database.ComicsDatabase
-import com.example.texnostrelka_2025_otbor.presentation.factory.EditViewModelFactory
 import com.example.texnostrelka_2025_otbor.presentation.listener.OnItemPageClickListener
 import com.example.texnostrelka_2025_otbor.data.model.PageWithImagesModel
 import com.example.texnostrelka_2025_otbor.data.model.PageWithImagesIdsModel
@@ -26,15 +25,17 @@ import com.example.texnostrelka_2025_otbor.AppData
 import com.example.texnostrelka_2025_otbor.domain.repository.ComicsRepository
 import com.example.texnostrelka_2025_otbor.presentation.ui.editpage.EditPageActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 
+@AndroidEntryPoint
 class EditActivity : AppCompatActivity(), OnItemPageClickListener {
-    private val database: ComicsDatabase = ComicsDatabase(this)
+    @Inject lateinit var database: ComicsDatabase
     private lateinit var comicsId: String
     private lateinit var pageAdapter: PagesAdapter
-    private val viewModel: EditViewModel by viewModels {
-        EditViewModelFactory(comicsId, ComicsRepository(database))
-    }
+    @Inject lateinit var repository: ComicsRepository
+    private val viewModel: EditViewModel by viewModels ()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,7 +46,7 @@ class EditActivity : AppCompatActivity(), OnItemPageClickListener {
         val recyclerView = findViewById<RecyclerView>(R.id.RecyclerViewPages)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        pageAdapter = PagesAdapter(this, mutableListOf(), this, ComicsRepository(database), lifecycleScope)
+        pageAdapter = PagesAdapter(this, mutableListOf(), this, repository, lifecycleScope)
         recyclerView.adapter = pageAdapter
 
         viewModel.pages.observe(this, Observer { pages ->
@@ -78,7 +79,7 @@ class EditActivity : AppCompatActivity(), OnItemPageClickListener {
             .setPositiveButton("Сохранить") { _, _ ->
                 val rows = inputRows.text.toString().toIntOrNull() ?: 1
                 val columns = inputColumns.text.toString().toIntOrNull() ?: 1
-                viewModel.addPage(rows, columns, pageAdapter.itemCount)
+                viewModel.addPage(rows, columns, pageAdapter.itemCount, comicsId)
             }
             .setNegativeButton("Отмена", null)
             .show()
@@ -95,17 +96,17 @@ class EditActivity : AppCompatActivity(), OnItemPageClickListener {
     }
     @SuppressLint("NotifyDataSetChanged")
     override fun onDeleteClick(pageId: String) {
-        viewModel.deletePage(pageId)
+        viewModel.deletePage(pageId, comicsId)
     }
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onResume() {
         super.onResume()
-        viewModel.fetchPages()
+        viewModel.fetchPages(comicsId)
     }
 
     override fun onStart() {
         super.onStart()
-        viewModel.fetchPages()
+        viewModel.fetchPages(comicsId)
     }
 }
