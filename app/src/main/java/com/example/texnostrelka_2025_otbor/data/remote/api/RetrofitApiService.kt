@@ -5,6 +5,8 @@ import com.example.texnostrelka_2025_otbor.data.remote.model.comic.ComicsCoverNe
 import com.example.texnostrelka_2025_otbor.data.remote.model.authentication.request.AuthRequestModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.authentication.response.AuthResponseModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.authentication.request.RegisterationRequestModel
+import com.example.texnostrelka_2025_otbor.data.remote.model.comic.ComicsInfoNetworkResponseModel
+import com.example.texnostrelka_2025_otbor.data.remote.model.comment.request.CommentRequestModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.image.request.ImageRequestModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.image.request.UpdateImageRequestModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.page.PageFromNetworkModel
@@ -65,4 +67,13 @@ interface RetrofitApiService {
 
     @GET("/api/user/favorites")
     suspend fun getFavorites(@Header("Authorization") token: String) : MutableList<ComicsCoverNetworkModel>
+
+    @POST("/api/comics/{comicsId}/comments")
+    suspend fun postComment(@Path("comicsId") comicsId: String, @Header("Authorization") token: String, request: CommentRequestModel)
+
+    @DELETE("/api/comments/{commentId}")
+    suspend fun deleteComment(@Path("commentId") commentId: String, @Header("Authorization") token: String)
+
+    @GET("/api/comics/{comicsId}/info")
+    suspend fun getInfoAboutComics(@Path("comicsId") comicsId: String, @Header("Authorization") token: String) : ComicsInfoNetworkResponseModel
 }

@@ -1,5 +1,6 @@
 package com.example.texnostrelka_2025_otbor.data.remote.repository
 
+import androidx.annotation.StyleRes
 import com.example.texnostrelka_2025_otbor.data.remote.api.RetrofitApiService
 import com.example.texnostrelka_2025_otbor.data.remote.exception.ApiException
 import com.example.texnostrelka_2025_otbor.data.remote.exception.BadRequestException
@@ -15,6 +16,8 @@ import com.example.texnostrelka_2025_otbor.data.remote.model.page.PageFromNetwor
 import com.example.texnostrelka_2025_otbor.data.remote.model.authentication.request.AuthRequestModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.authentication.response.AuthResponseModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.authentication.request.RegisterationRequestModel
+import com.example.texnostrelka_2025_otbor.data.remote.model.comic.ComicsInfoNetworkResponseModel
+import com.example.texnostrelka_2025_otbor.data.remote.model.comment.request.CommentRequestModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.image.request.ImageRequestModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.image.request.UpdateImageRequestModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.page.request.PageAddRequestModel
@@ -267,6 +270,51 @@ class NetworkRepository(private val apiService: RetrofitApiService) {
                 400 -> throw BadRequestException("Некорректный запрос: ${e.message}")
                 401 -> throw NotAuthorizedException("Не авторизован.")
                 404 -> throw NotFoundException("Комиксы не найдены.")
+                else -> throw ApiException("Ошибка сервера ${e.code()}")
+            }
+        } catch (e: IOException) {
+            throw NetworkException("Ошибка сети: ${e.message}")
+        }
+    }
+
+    suspend fun postComment(comicsId: String, token: String, request: CommentRequestModel) {
+        try {
+            apiService.postComment(comicsId, "Bearer $token", request)
+        } catch (e: HttpException) {
+            when(e.code()) {
+                400 -> throw BadRequestException("Некорректный запрос: ${e.message}")
+                401 -> throw NotAuthorizedException("Не авторизован.")
+                404 -> throw NotFoundException("Комикс не найден.")
+                else -> throw ApiException("Ошибка сервера ${e.code()}")
+            }
+        } catch (e: IOException) {
+            throw NetworkException("Ошибка сети: ${e.message}")
+        }
+    }
+
+    suspend fun deleteComment(commentId: String, token: String) {
+        try {
+            apiService.deleteComment(commentId, "Bearer $token")
+        } catch (e: HttpException) {
+            when(e.code()) {
+                400 -> throw BadRequestException("Некорректный запрос: ${e.message}")
+                401 -> throw NotAuthorizedException("Не авторизован.")
+                404 -> throw NotFoundException("Комментарий не найден.")
+                else -> throw ApiException("Ошибка сервера ${e.code()}")
+            }
+        } catch (e: IOException) {
+            throw NetworkException("Ошибка сети: ${e.message}")
+        }
+    }
+
+    suspend fun getInfoAboutComics(comicsId: String, token: String) : ComicsInfoNetworkResponseModel {
+        try {
+            return apiService.getInfoAboutComics(comicsId, "Bearer $token")
+        } catch (e: HttpException) {
+            when(e.code()) {
+                400 -> throw BadRequestException("Некорректный запрос: ${e.message}")
+                401 -> throw NotAuthorizedException("Не авторизован.")
+                404 -> throw NotFoundException("Комикс не найден.")
                 else -> throw ApiException("Ошибка сервера ${e.code()}")
             }
         } catch (e: IOException) {
