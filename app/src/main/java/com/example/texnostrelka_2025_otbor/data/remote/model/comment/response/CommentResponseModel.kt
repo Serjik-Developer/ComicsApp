@@ -5,5 +5,6 @@ data class CommentResponseModel (
     val text: String,
     val created_at: String,
     val user_id: String,
-    val user_name: String
+    val user_name: String,
+    val isCommentMy: Boolean
 )
