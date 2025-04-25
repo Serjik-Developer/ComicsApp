@@ -42,7 +42,7 @@ class InfoComicActivity : AppCompatActivity(), OnItemCommentClickListener {
             adapterComments.updateComments(comics.comments)
             binding.authorName.text = comics.creator_name
             binding.authorName.setOnClickListener {
-                startActivity(Intent(this, UserInfoActivity::class.java).putExtra("USER-ID", comics.creator))
+                Toast.makeText(this, comics.creator.toString(), Toast.LENGTH_LONG).show()
             }
             binding.likesCount.text = comics.likesCount.toString()
             if (comics.userLiked) {
@@ -71,12 +71,20 @@ class InfoComicActivity : AppCompatActivity(), OnItemCommentClickListener {
                 Toast.makeText(this, it, Toast.LENGTH_LONG).show()
             }
         }
+        viewModel.isFavorite.observe(this) { isFavorite ->
+            if (isFavorite) binding.favoriteButton.setImageResource(R.drawable.ic_favorite_yellow)
+            else binding.favoriteButton.setImageResource(R.drawable.ic_favorite)
+        }
+        viewModel.isLiked.observe(this) { isLiked ->
+            if(isLiked) binding.likeButton.setImageResource(R.drawable.ic_like_red)
+            else binding.likeButton.setImageResource(R.drawable.ic_like)
+        }
         viewModel.fetchInfo(comicsId)
         binding.favoriteButton.setOnClickListener {
-
+            viewModel.postFavorite(comicsId)
         }
         binding.likeButton.setOnClickListener {
-
+            viewModel.postLike(comicsId)
         }
     }
 
@@ -85,6 +93,6 @@ class InfoComicActivity : AppCompatActivity(), OnItemCommentClickListener {
     }
 
     override fun onUserClick(userId: String) {
-        TODO("Not yet implemented")
+        Toast.makeText(this, userId, Toast.LENGTH_LONG).show()
     }
 }
