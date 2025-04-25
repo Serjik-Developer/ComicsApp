@@ -1,6 +1,5 @@
 package com.example.texnostrelka_2025_otbor.data.remote.repository
 
-import androidx.annotation.StyleRes
 import com.example.texnostrelka_2025_otbor.data.remote.api.RetrofitApiService
 import com.example.texnostrelka_2025_otbor.data.remote.exception.ApiException
 import com.example.texnostrelka_2025_otbor.data.remote.exception.BadRequestException
@@ -18,12 +17,12 @@ import com.example.texnostrelka_2025_otbor.data.remote.model.authentication.resp
 import com.example.texnostrelka_2025_otbor.data.remote.model.authentication.request.RegisterationRequestModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.comic.ComicsInfoNetworkResponseModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.comment.request.CommentRequestModel
+import com.example.texnostrelka_2025_otbor.data.remote.model.emotions.favorite.FavoriteResponseModel
+import com.example.texnostrelka_2025_otbor.data.remote.model.emotions.like.LikeResponseModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.image.request.ImageRequestModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.image.request.UpdateImageRequestModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.page.request.PageAddRequestModel
 import retrofit2.HttpException
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
 
 class NetworkRepository(private val apiService: RetrofitApiService) {
@@ -232,9 +231,9 @@ class NetworkRepository(private val apiService: RetrofitApiService) {
         }
     }
 
-    suspend fun postLike(id: String, token: String) {
+    suspend fun postLike(id: String, token: String) : LikeResponseModel {
         try {
-            apiService.postLike(id, "Bearer $token")
+            return apiService.postLike(id, "Bearer $token")
         } catch (e: HttpException) {
             when(e.code()) {
                 400 -> throw BadRequestException("Некорректный запрос: ${e.message}")
@@ -247,9 +246,9 @@ class NetworkRepository(private val apiService: RetrofitApiService) {
         }
     }
 
-    suspend fun postFavorite(id: String, token: String) {
+    suspend fun postFavorite(id: String, token: String) : FavoriteResponseModel {
         try {
-            apiService.postFavorite(id, "Bearer $token")
+            return apiService.postFavorite(id, "Bearer $token")
         } catch (e: HttpException) {
             when(e.code()) {
                 400 -> throw BadRequestException("Некорректный запрос: ${e.message}")

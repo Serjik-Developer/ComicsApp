@@ -7,6 +7,8 @@ import com.example.texnostrelka_2025_otbor.data.remote.model.authentication.resp
 import com.example.texnostrelka_2025_otbor.data.remote.model.authentication.request.RegisterationRequestModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.comic.ComicsInfoNetworkResponseModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.comment.request.CommentRequestModel
+import com.example.texnostrelka_2025_otbor.data.remote.model.emotions.favorite.FavoriteResponseModel
+import com.example.texnostrelka_2025_otbor.data.remote.model.emotions.like.LikeResponseModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.image.request.ImageRequestModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.image.request.UpdateImageRequestModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.page.PageFromNetworkModel
@@ -60,10 +62,10 @@ interface RetrofitApiService {
     suspend fun getPage(@Path("pageId") pageId: String, @Header("Authorization") token: String) : PageFromNetworkModel
 
     @POST("/api/comics/{id}/like")
-    suspend fun postLike(@Path("id") id: String, @Header("Authorization") token: String)
+    suspend fun postLike(@Path("id") id: String, @Header("Authorization") token: String) : LikeResponseModel
 
     @POST("/api/comics/{id}/favorite")
-    suspend fun postFavorite(@Path("id") id: String, @Header("Authorization") token: String)
+    suspend fun postFavorite(@Path("id") id: String, @Header("Authorization") token: String) : FavoriteResponseModel
 
     @GET("/api/user/favorites")
     suspend fun getFavorites(@Header("Authorization") token: String) : MutableList<ComicsCoverNetworkModel>

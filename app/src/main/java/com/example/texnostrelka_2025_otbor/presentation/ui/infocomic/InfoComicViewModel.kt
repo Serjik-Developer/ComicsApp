@@ -25,7 +25,10 @@ class InfoComicViewModel @Inject constructor(private val repository: NetworkRepo
     val error : LiveData<String?> get() = _error
     private val _success = MutableLiveData<String?>()
     val success : LiveData<String?> get() = _success
-
+    private val _isLiked = MutableLiveData<Boolean>()
+    val isLiked : LiveData<Boolean> get() = _isLiked
+    private val _isFavorite = MutableLiveData<Boolean>()
+    val isFavorite : LiveData<Boolean> get() = _isFavorite
     fun fetchInfo(comicsId: String) {
         viewModelScope.launch {
             _error.value = null
@@ -94,6 +97,62 @@ class InfoComicViewModel @Inject constructor(private val repository: NetworkRepo
                 }
                 repository.deleteComment(commentId, token)
                 _success.value = "Успешно удалено!"
+            } catch (e: NotAuthorizedException) {
+                _error.value = "Не авторизован."
+                preferencesManager.clearName()
+                preferencesManager.clearAuthToken()
+            } catch (e: BadRequestException) {
+                _error.value = "Некорректный запрос"
+            } catch (e: NetworkException) {
+                _error.value = "Проблемы с интернетом"
+            } catch (e: NotFoundException) {
+                _error.value = "Комикс не найден"
+            } catch (e: Exception) {
+                _error.value = "Неизвестная ошибка"
+                Log.e("MyComicsViewModel", "Unknown error", e)
+            }
+        }
+    }
+
+    fun postLike(comicsId: String) {
+        _error.value = null
+        viewModelScope.launch {
+            try {
+                val token = preferencesManager.getAuthToken()
+                if (token.isNullOrEmpty()) {
+                    _error.value = "Не авторизован."
+                    return@launch
+                }
+                val response = repository.postLike(comicsId, token)
+                _isLiked.postValue(response.liked)
+            } catch (e: NotAuthorizedException) {
+                _error.value = "Не авторизован."
+                preferencesManager.clearName()
+                preferencesManager.clearAuthToken()
+            } catch (e: BadRequestException) {
+                _error.value = "Некорректный запрос"
+            } catch (e: NetworkException) {
+                _error.value = "Проблемы с интернетом"
+            } catch (e: NotFoundException) {
+                _error.value = "Комикс не найден"
+            } catch (e: Exception) {
+                _error.value = "Неизвестная ошибка"
+                Log.e("MyComicsViewModel", "Unknown error", e)
+            }
+        }
+    }
+
+    fun postFavorite(comicsId: String) {
+        _error.value = null
+        viewModelScope.launch {
+            try {
+                val token = preferencesManager.getAuthToken()
+                if (token.isNullOrEmpty()) {
+                    _error.value = "Не авторизован."
+                    return@launch
+                }
+                val response = repository.postFavorite(comicsId, token)
+                _isFavorite.postValue(response.favorited)
             } catch (e: NotAuthorizedException) {
                 _error.value = "Не авторизован."
                 preferencesManager.clearName()
