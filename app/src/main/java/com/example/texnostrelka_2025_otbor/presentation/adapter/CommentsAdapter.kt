@@ -7,11 +7,10 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.texnostrelka_2025_otbor.R
-import com.example.texnostrelka_2025_otbor.data.local.preferences.PreferencesManager
 import com.example.texnostrelka_2025_otbor.data.remote.model.comment.response.CommentResponseModel
 import com.example.texnostrelka_2025_otbor.presentation.listener.OnItemCommentClickListener
 
-class CommentsAdapter(private var comments: MutableList<CommentResponseModel>, private val preferencesManager: PreferencesManager, private val listener: OnItemCommentClickListener) : RecyclerView.Adapter<CommentsAdapter.CommentsViewHolder>() {
+class CommentsAdapter(private var comments: MutableList<CommentResponseModel>, private val listener: OnItemCommentClickListener) : RecyclerView.Adapter<CommentsAdapter.CommentsViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CommentsViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_comment, parent, false)

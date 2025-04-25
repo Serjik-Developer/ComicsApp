@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.texnostrelka_2025_otbor.R
 import com.example.texnostrelka_2025_otbor.databinding.ActivityInfoComicBinding
 import com.example.texnostrelka_2025_otbor.presentation.adapter.ComicsNetworkAdapter
 import com.example.texnostrelka_2025_otbor.presentation.adapter.CommentsAdapter
@@ -26,12 +28,33 @@ class InfoComicActivity : AppCompatActivity(), OnItemCommentClickListener {
         super.onCreate(savedInstanceState)
         binding = ActivityInfoComicBinding.inflate(layoutInflater)
         comicsId = intent.getStringExtra("COMICS_ID") ?: throw IllegalArgumentException("COMICS_ID is required")
-        binding.RV.setOnClickListener {
+        adapterPage = PageNetworkAdapter(mutableListOf(), this)
+        adapterComments = CommentsAdapter(mutableListOf(), this)
+        binding.comicsFirstPageRecycler.layoutManager = LinearLayoutManager(this)
+        binding.comicsFirstPageRecycler.adapter = adapterPage
+        binding.commentsRecycler.layoutManager = LinearLayoutManager(this)
+        binding.commentsRecycler.adapter = adapterComments
+        binding.comicsFirstPageRecycler.setOnClickListener {
             startActivity(Intent(this, ComicNetworkActivity::class.java).putExtra("COMICS_ID", comicsId))
         }
         viewModel.comics.observe(this) { comics ->
             adapterPage.updateData(mutableListOf(comics.firstPage))
             adapterComments.updateComments(comics.comments)
+            binding.authorName.text = comics.creator_name
+            binding.authorName.setOnClickListener {
+                startActivity(Intent(this, UserInfoActivity::class.java).putExtra("USER-ID", comics.creator))
+            }
+            binding.likesCount.text = comics.likesCount.toString()
+            if (comics.userLiked) {
+                binding.likeButton.setImageResource(R.drawable.ic_like_red)
+            } else {
+                binding.likeButton.setImageResource(R.drawable.ic_like)
+            }
+            if (comics.userFavorited) {
+                binding.favoriteButton.setImageResource(R.drawable.ic_favorite_yellow)
+            } else {
+                binding.favoriteButton.setImageResource(R.drawable.ic_favorite)
+            }
         }
         viewModel.error.observe(this) { error ->
             error?.let {
@@ -49,6 +72,12 @@ class InfoComicActivity : AppCompatActivity(), OnItemCommentClickListener {
             }
         }
         viewModel.fetchInfo(comicsId)
+        binding.favoriteButton.setOnClickListener {
+
+        }
+        binding.likeButton.setOnClickListener {
+
+        }
     }
 
     override fun onDeleteClick(commentId: String) {
