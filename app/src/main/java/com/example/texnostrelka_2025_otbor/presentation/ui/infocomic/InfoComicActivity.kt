@@ -6,10 +6,12 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.texnostrelka_2025_otbor.databinding.ActivityInfoComicBinding
+import com.example.texnostrelka_2025_otbor.presentation.adapter.ComicsNetworkAdapter
 import com.example.texnostrelka_2025_otbor.presentation.adapter.CommentsAdapter
 import com.example.texnostrelka_2025_otbor.presentation.adapter.PageNetworkAdapter
 import com.example.texnostrelka_2025_otbor.presentation.listener.OnItemCommentClickListener
 import com.example.texnostrelka_2025_otbor.presentation.ui.auth.AuthActivity
+import com.example.texnostrelka_2025_otbor.presentation.ui.comicnetwork.ComicNetworkActivity
 import com.example.texnostrelka_2025_otbor.presentation.utils.DialogHelper.showErrorDialog
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -23,8 +25,10 @@ class InfoComicActivity : AppCompatActivity(), OnItemCommentClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityInfoComicBinding.inflate(layoutInflater)
-        adapterPage = PageNetworkAdapter(mutableListOf(), this)
         comicsId = intent.getStringExtra("COMICS_ID") ?: throw IllegalArgumentException("COMICS_ID is required")
+        binding.RV.setOnClickListener {
+            startActivity(Intent(this, ComicNetworkActivity::class.java).putExtra("COMICS_ID", comicsId))
+        }
         viewModel.comics.observe(this) { comics ->
             adapterPage.updateData(mutableListOf(comics.firstPage))
             adapterComments.updateComments(comics.comments)

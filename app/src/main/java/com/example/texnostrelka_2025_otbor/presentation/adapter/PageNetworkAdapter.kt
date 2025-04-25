@@ -18,7 +18,7 @@ class PageNetworkAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PageNetworkViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.pages_item_view, parent, false)
-        return PageNetworkViewHolder(view, context)
+        return PageNetworkViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: PageNetworkViewHolder, position: Int) {
@@ -32,9 +32,8 @@ class PageNetworkAdapter(
         notifyDataSetChanged()
     }
 
-    class PageNetworkViewHolder(
-        itemView: View,
-        private val context: Context
+    inner class PageNetworkViewHolder(
+        itemView: View
     ) : RecyclerView.ViewHolder(itemView) {
         private val imageRecyclerView: RecyclerView = itemView.findViewById(R.id.imageRecyclerViewView)
         private var adapter: ImageNetworkAdapter? = null
