@@ -9,6 +9,7 @@ data class ComicsInfoNetworkResponseModel (
     val text: String? = null,
     val description:  String? = null,
     val creator: String? = null,
+    val creator_name: String? = null,
     val firstPage : PageFromNetworkModel,
     val likesCount : Int = 0,
     val userLiked: Boolean,
