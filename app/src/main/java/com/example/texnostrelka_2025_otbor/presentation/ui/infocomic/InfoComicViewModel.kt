@@ -29,6 +29,9 @@ class InfoComicViewModel @Inject constructor(private val repository: NetworkRepo
     val isLiked : LiveData<Boolean> get() = _isLiked
     private val _isFavorite = MutableLiveData<Boolean>()
     val isFavorite : LiveData<Boolean> get() = _isFavorite
+    private val _refreshTrigger = MutableLiveData<Boolean>()
+    val refreshTrigger: LiveData<Boolean> = _refreshTrigger
+
     fun fetchInfo(comicsId: String) {
         viewModelScope.launch {
             _error.value = null
@@ -68,6 +71,7 @@ class InfoComicViewModel @Inject constructor(private val repository: NetworkRepo
                 }
                 val request = CommentRequestModel(text)
                 repository.postComment(comicsId, token, request)
+                _refreshTrigger.postValue(true)
             } catch (e: NotAuthorizedException) {
                 _error.value = "Не авторизован."
                 preferencesManager.clearName()
@@ -97,6 +101,7 @@ class InfoComicViewModel @Inject constructor(private val repository: NetworkRepo
                 }
                 repository.deleteComment(commentId, token)
                 _success.value = "Успешно удалено!"
+                _refreshTrigger.postValue(true)
             } catch (e: NotAuthorizedException) {
                 _error.value = "Не авторизован."
                 preferencesManager.clearName()
@@ -168,5 +173,9 @@ class InfoComicViewModel @Inject constructor(private val repository: NetworkRepo
                 Log.e("MyComicsViewModel", "Unknown error", e)
             }
         }
+    }
+
+    fun resetRefreshTrigger() {
+        _refreshTrigger.postValue(false)
     }
 }

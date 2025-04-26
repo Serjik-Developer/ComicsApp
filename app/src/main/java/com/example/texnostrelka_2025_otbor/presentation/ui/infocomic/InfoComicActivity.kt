@@ -90,6 +90,12 @@ class InfoComicActivity : AppCompatActivity(), OnItemCommentClickListener {
                 binding.likesCount.text = "${binding.likesCount.text.toString().toInt() - 1}"
             }
         }
+        viewModel.refreshTrigger.observe(this) { shouldRefresh ->
+            if(shouldRefresh) {
+                viewModel.fetchInfo(comicsId)
+                viewModel.resetRefreshTrigger()
+            }
+        }
         viewModel.fetchInfo(comicsId)
         binding.favoriteButton.setOnClickListener {
             viewModel.postFavorite(comicsId)
