@@ -1,5 +1,6 @@
 package com.example.texnostrelka_2025_otbor.presentation.ui.infocomic
 
+import android.database.sqlite.SQLiteConstraintException
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -13,12 +14,17 @@ import com.example.texnostrelka_2025_otbor.data.remote.exception.NotFoundExcepti
 import com.example.texnostrelka_2025_otbor.data.remote.model.comic.ComicsInfoNetworkResponseModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.comment.request.CommentRequestModel
 import com.example.texnostrelka_2025_otbor.data.remote.repository.NetworkRepository
+import com.example.texnostrelka_2025_otbor.domain.repository.ComicsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class InfoComicViewModel @Inject constructor(private val repository: NetworkRepository, private val preferencesManager: PreferencesManager) : ViewModel(){
+class InfoComicViewModel @Inject constructor(
+    private val repository: NetworkRepository,
+    private val preferencesManager: PreferencesManager,
+    private val comicsRepository: ComicsRepository
+) : ViewModel(){
     private val _comics = MutableLiveData<ComicsInfoNetworkResponseModel>()
     val comics : LiveData<ComicsInfoNetworkResponseModel> get() = _comics
     private val _error = MutableLiveData<String?>()
@@ -31,7 +37,6 @@ class InfoComicViewModel @Inject constructor(private val repository: NetworkRepo
     val isFavorite : LiveData<Boolean> get() = _isFavorite
     private val _refreshTrigger = MutableLiveData<Boolean>()
     val refreshTrigger: LiveData<Boolean> = _refreshTrigger
-
     fun fetchInfo(comicsId: String) {
         viewModelScope.launch {
             _error.value = null
@@ -55,7 +60,7 @@ class InfoComicViewModel @Inject constructor(private val repository: NetworkRepo
                 _error.value = "Комикс не найден"
             } catch (e: Exception) {
                 _error.value = "Неизвестная ошибка"
-                Log.e("MyComicsViewModel", "Unknown error", e)
+                Log.e("InfoComicViewModel", "Unknown error", e)
             }
         }
     }
@@ -84,7 +89,7 @@ class InfoComicViewModel @Inject constructor(private val repository: NetworkRepo
                 _error.value = "Комикс не найден"
             } catch (e: Exception) {
                 _error.value = "Неизвестная ошибка"
-                Log.e("MyComicsViewModel", "Unknown error", e)
+                Log.e("InfoComicViewModel", "Unknown error", e)
             }
         }
     }
@@ -114,7 +119,7 @@ class InfoComicViewModel @Inject constructor(private val repository: NetworkRepo
                 _error.value = "Комикс не найден"
             } catch (e: Exception) {
                 _error.value = "Неизвестная ошибка"
-                Log.e("MyComicsViewModel", "Unknown error", e)
+                Log.e("InfoComicViewModel", "Unknown error", e)
             }
         }
     }
@@ -142,7 +147,7 @@ class InfoComicViewModel @Inject constructor(private val repository: NetworkRepo
                 _error.value = "Комикс не найден"
             } catch (e: Exception) {
                 _error.value = "Неизвестная ошибка"
-                Log.e("MyComicsViewModel", "Unknown error", e)
+                Log.e("InfoComicViewModel", "Unknown error", e)
             }
         }
     }
@@ -170,7 +175,42 @@ class InfoComicViewModel @Inject constructor(private val repository: NetworkRepo
                 _error.value = "Комикс не найден"
             } catch (e: Exception) {
                 _error.value = "Неизвестная ошибка"
-                Log.e("MyComicsViewModel", "Unknown error", e)
+                Log.e("InfoComicViewModel", "Unknown error", e)
+            }
+        }
+    }
+
+    fun downloadComic(id: String) {
+        viewModelScope.launch {
+            _success.value = null
+            _error.value = null
+            try {
+                val token = preferencesManager.getAuthToken()
+                if (token.isNullOrEmpty()) {
+                    _error.value = "Не авторизован."
+                    return@launch
+                }
+                val comic = repository.getComicById(id, token)
+                if (comic == null) {
+                    _error.value = "Комикс не найден"
+                }
+                comicsRepository.downloadComicFromNetwork(comic)
+                _success.value = "Успешно загружено."
+            } catch (e: NotAuthorizedException) {
+                _error.value = "Не авторизован."
+                preferencesManager.clearName()
+                preferencesManager.clearAuthToken()
+            } catch (e: BadRequestException) {
+                _error.value = "Некорректный запрос"
+            } catch (e: NetworkException) {
+                _error.value = "Проблемы с интернетом"
+            } catch (e: NotFoundException) {
+                _error.value = "Комикс не найден"
+            } catch (e: SQLiteConstraintException) {
+                _error.value = "Комикс уже скачан!"
+            } catch (e: Exception) {
+                _error.value = "Неизвестная ошибка"
+                Log.e("InfoComicViewModel", "Unknown error", e)
             }
         }
     }

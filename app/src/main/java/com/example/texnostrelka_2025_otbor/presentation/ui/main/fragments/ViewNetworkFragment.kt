@@ -49,10 +49,6 @@ class ViewNetworkFragment : Fragment(), OnItemComicsListener {
         viewModel.comics.observe( viewLifecycleOwner) { comics ->
             comicsNetworkAdapter.updateData(comics)
         }
-        viewModel.downloadSuccess.observe(viewLifecycleOwner) { success ->
-            if(success) Toast.makeText(requireContext(), "Успешно загруженно!", Toast.LENGTH_LONG).show()
-            viewModel.resetDownloadSuccess()
-        }
         viewModel.error.observe(viewLifecycleOwner) { error ->
             error?.let {
                 if (it == "Не авторизован.") {
@@ -91,6 +87,6 @@ class ViewNetworkFragment : Fragment(), OnItemComicsListener {
     }
 
     override fun onDownloadClick(id: String) {
-        viewModel.downloadComic(id)
+        TODO("Not yet implemented")
     }
 }

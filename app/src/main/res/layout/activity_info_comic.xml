@@ -45,7 +45,19 @@
                 android:textSize="16sp"
                 android:textStyle="bold"
                 tools:text="Автор комикса" />
-
+            <!-- Кнопка лайка -->
+            <ImageView
+                android:id="@+id/download_button"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginEnd="8dp"
+                app:srcCompat="@drawable/baseline_file_download_24_black" />            <!-- Кнопка лайка -->
+            <ImageView
+                android:id="@+id/view_button"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginEnd="8dp"
+                android:src="@drawable/ic_see_comic" />
             <!-- Кнопка лайка -->
             <ImageView
                 android:id="@+id/like_button"
@@ -86,8 +98,8 @@
         <!-- Кнопка добавления нового комментария -->
         <ImageButton
             android:id="@+id/add_comment_button"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="Добавить комментарий"
             android:scaleType="centerInside"

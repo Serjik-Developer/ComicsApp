@@ -43,9 +43,6 @@ class InfoComicActivity : AppCompatActivity(), OnItemCommentClickListener {
             override fun canScrollVertically(): Boolean = false
         }
         binding.commentsRecycler.adapter = adapterComments
-        binding.comicsFirstPageRecycler.setOnClickListener {
-            startActivity(Intent(this, ComicNetworkActivity::class.java).putExtra("COMICS_ID", comicsId))
-        }
         viewModel.comics.observe(this) { comics ->
             Log.w("DATA-COMICS", comics.toString())
             adapterPage.updateData(mutableListOf(comics.firstPage))
@@ -110,6 +107,12 @@ class InfoComicActivity : AppCompatActivity(), OnItemCommentClickListener {
         }
         binding.addCommentButton.setOnClickListener {
             addCommentDialog()
+        }
+        binding.viewButton.setOnClickListener {
+            startActivity(Intent(this, ComicNetworkActivity::class.java).putExtra("COMICS_ID", comicsId))
+        }
+        binding.downloadButton.setOnClickListener {
+            viewModel.downloadComic(comicsId)
         }
     }
 
