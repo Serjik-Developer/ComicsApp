@@ -13,6 +13,9 @@ import com.example.texnostrelka_2025_otbor.data.remote.model.image.request.Image
 import com.example.texnostrelka_2025_otbor.data.remote.model.image.request.UpdateImageRequestModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.page.PageFromNetworkModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.page.request.PageAddRequestModel
+import com.example.texnostrelka_2025_otbor.data.remote.model.subscribe.SubscribeResponseModel
+import com.example.texnostrelka_2025_otbor.data.remote.model.subscribe.SubscribeUsersResponseModel
+import com.example.texnostrelka_2025_otbor.data.remote.model.user.InfoUserResponseModel
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -78,4 +81,16 @@ interface RetrofitApiService {
 
     @GET("/api/comics/{comicsId}/info")
     suspend fun getInfoAboutComics(@Path("comicsId") comicsId: String, @Header("Authorization") token: String) : ComicsInfoNetworkResponseModel
+
+    @GET("/api/users/{userId}")
+    suspend fun getInfoAboutUser(@Path("userId") userId: String, @Header("Authorization") token: String) : InfoUserResponseModel
+
+    @POST("/api/users/{userId}/subscribe")
+    suspend fun postSubscribe(@Path("userId") userId: String, @Header("Authorization") token: String) : SubscribeResponseModel
+
+    @GET("/api/users/{userId}/subscribers")
+    suspend fun getUserSubscribers(@Path("userId") userId: String, @Header("Authorization") token: String) : MutableList<SubscribeUsersResponseModel>
+
+    @GET("/api/users/{userId}/subscriptions")
+    suspend fun getUserSubscriptions(@Path("userId") userId: String, @Header("Authorization") token: String) : MutableList<SubscribeUsersResponseModel>
 }

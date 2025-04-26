@@ -22,6 +22,9 @@ import com.example.texnostrelka_2025_otbor.data.remote.model.emotions.like.LikeR
 import com.example.texnostrelka_2025_otbor.data.remote.model.image.request.ImageRequestModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.image.request.UpdateImageRequestModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.page.request.PageAddRequestModel
+import com.example.texnostrelka_2025_otbor.data.remote.model.subscribe.SubscribeResponseModel
+import com.example.texnostrelka_2025_otbor.data.remote.model.subscribe.SubscribeUsersResponseModel
+import com.example.texnostrelka_2025_otbor.data.remote.model.user.InfoUserResponseModel
 import retrofit2.HttpException
 import java.io.IOException
 
@@ -314,6 +317,66 @@ class NetworkRepository(private val apiService: RetrofitApiService) {
                 400 -> throw BadRequestException("Некорректный запрос: ${e.message}")
                 401 -> throw NotAuthorizedException("Не авторизован.")
                 404 -> throw NotFoundException("Комикс не найден.")
+                else -> throw ApiException("Ошибка сервера ${e.code()}")
+            }
+        } catch (e: IOException) {
+            throw NetworkException("Ошибка сети: ${e.message}")
+        }
+    }
+
+    suspend fun getInfoAboutUser(userId: String, token: String) : InfoUserResponseModel {
+        try {
+            return apiService.getInfoAboutUser(userId, "Bearer $token")
+        } catch (e: HttpException) {
+            when(e.code()) {
+                400 -> throw BadRequestException("Некорректный запрос: ${e.message}")
+                401 -> throw NotAuthorizedException("Не авторизован.")
+                404 -> throw NotFoundException("Пользователь не найден.")
+                else -> throw ApiException("Ошибка сервера ${e.code()}")
+            }
+        } catch (e: IOException) {
+            throw NetworkException("Ошибка сети: ${e.message}")
+        }
+    }
+
+    suspend fun postSubscribe(userId: String, token: String) : SubscribeResponseModel {
+        try {
+            return apiService.postSubscribe(userId, "Bearer $token")
+        } catch (e: HttpException) {
+            when(e.code()) {
+                400 -> throw BadRequestException("Нельзя подписаться на самого себя.")
+                401 -> throw NotAuthorizedException("Не авторизован.")
+                404 -> throw NotFoundException("Пользователь не найден.")
+                else -> throw ApiException("Ошибка сервера ${e.code()}")
+            }
+        } catch (e: IOException) {
+            throw NetworkException("Ошибка сети: ${e.message}")
+        }
+    }
+
+    suspend fun getUserSubscribers(userId: String, token: String) : MutableList<SubscribeUsersResponseModel> {
+        try {
+            return apiService.getUserSubscribers(userId, "Bearer $token")
+        } catch (e: HttpException) {
+            when(e.code()) {
+                400 -> throw BadRequestException("Некорректный запрос: ${e.message}")
+                401 -> throw NotAuthorizedException("Не авторизован.")
+                404 -> throw NotFoundException("Пользователь не найден.")
+                else -> throw ApiException("Ошибка сервера ${e.code()}")
+            }
+        } catch (e: IOException) {
+            throw NetworkException("Ошибка сети: ${e.message}")
+        }
+    }
+
+    suspend fun getUserSubscriptions(userId: String, token: String) : MutableList<SubscribeUsersResponseModel> {
+        try {
+            return apiService.getUserSubscriptions(userId, "Bearer $token")
+        } catch (e: HttpException) {
+            when(e.code()) {
+                400 -> throw BadRequestException("Некорректный запрос: ${e.message}")
+                401 -> throw NotAuthorizedException("Не авторизован.")
+                404 -> throw NotFoundException("Пользователь не найден.")
                 else -> throw ApiException("Ошибка сервера ${e.code()}")
             }
         } catch (e: IOException) {
