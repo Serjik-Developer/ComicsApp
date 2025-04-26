@@ -71,7 +71,7 @@ interface RetrofitApiService {
     suspend fun getFavorites(@Header("Authorization") token: String) : MutableList<ComicsCoverNetworkModel>
 
     @POST("/api/comics/{comicsId}/comments")
-    suspend fun postComment(@Path("comicsId") comicsId: String, @Header("Authorization") token: String, request: CommentRequestModel)
+    suspend fun postComment(@Path("comicsId") comicsId: String, @Header("Authorization") token: String, @Body request: CommentRequestModel)
 
     @DELETE("/api/comments/{commentId}")
     suspend fun deleteComment(@Path("commentId") commentId: String, @Header("Authorization") token: String)

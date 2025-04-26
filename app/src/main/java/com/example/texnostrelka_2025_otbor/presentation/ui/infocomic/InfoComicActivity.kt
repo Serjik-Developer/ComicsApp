@@ -3,6 +3,8 @@ package com.example.texnostrelka_2025_otbor.presentation.ui.infocomic
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.EditText
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -16,6 +18,7 @@ import com.example.texnostrelka_2025_otbor.presentation.listener.OnItemCommentCl
 import com.example.texnostrelka_2025_otbor.presentation.ui.auth.AuthActivity
 import com.example.texnostrelka_2025_otbor.presentation.ui.comicnetwork.ComicNetworkActivity
 import com.example.texnostrelka_2025_otbor.presentation.utils.DialogHelper.showErrorDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -36,7 +39,9 @@ class InfoComicActivity : AppCompatActivity(), OnItemCommentClickListener {
             override fun canScrollVertically(): Boolean = false
         }
         binding.comicsFirstPageRecycler.adapter = adapterPage
-        binding.commentsRecycler.layoutManager = LinearLayoutManager(this)
+        binding.commentsRecycler.layoutManager = object : LinearLayoutManager(this) {
+            override fun canScrollVertically(): Boolean = false
+        }
         binding.commentsRecycler.adapter = adapterComments
         binding.comicsFirstPageRecycler.setOnClickListener {
             startActivity(Intent(this, ComicNetworkActivity::class.java).putExtra("COMICS_ID", comicsId))
@@ -103,6 +108,29 @@ class InfoComicActivity : AppCompatActivity(), OnItemCommentClickListener {
         binding.likeButton.setOnClickListener {
             viewModel.postLike(comicsId)
         }
+        binding.addCommentButton.setOnClickListener {
+            addCommentDialog()
+        }
+    }
+
+    private fun addCommentDialog() {
+        val inputText = EditText(this).apply {
+            hint = "Введите текст комментария"
+        }
+
+        MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialog_Rounded)
+            .setTitle("Добавить комментарий")
+            .setView(LinearLayout(this).apply {
+                orientation = LinearLayout.VERTICAL
+                setPadding(50, 20, 50, 20)
+                addView(inputText)
+            })
+            .setPositiveButton("Добавить") { _, _ ->
+                val text = inputText.text.toString()
+                viewModel.postComment(text, comicsId)
+            }
+            .setNegativeButton("Отмена", null)
+            .show()
     }
 
     override fun onDeleteClick(commentId: String) {
