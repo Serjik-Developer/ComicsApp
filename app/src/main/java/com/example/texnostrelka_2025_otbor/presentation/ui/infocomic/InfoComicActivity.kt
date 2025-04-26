@@ -2,6 +2,7 @@ package com.example.texnostrelka_2025_otbor.presentation.ui.infocomic
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -27,10 +28,13 @@ class InfoComicActivity : AppCompatActivity(), OnItemCommentClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityInfoComicBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         comicsId = intent.getStringExtra("COMICS_ID") ?: throw IllegalArgumentException("COMICS_ID is required")
         adapterPage = PageNetworkAdapter(mutableListOf(), this)
         adapterComments = CommentsAdapter(mutableListOf(), this)
-        binding.comicsFirstPageRecycler.layoutManager = LinearLayoutManager(this)
+        binding.comicsFirstPageRecycler.layoutManager = object : LinearLayoutManager(this) {
+            override fun canScrollVertically(): Boolean = false
+        }
         binding.comicsFirstPageRecycler.adapter = adapterPage
         binding.commentsRecycler.layoutManager = LinearLayoutManager(this)
         binding.commentsRecycler.adapter = adapterComments
@@ -38,6 +42,7 @@ class InfoComicActivity : AppCompatActivity(), OnItemCommentClickListener {
             startActivity(Intent(this, ComicNetworkActivity::class.java).putExtra("COMICS_ID", comicsId))
         }
         viewModel.comics.observe(this) { comics ->
+            Log.w("DATA-COMICS", comics.toString())
             adapterPage.updateData(mutableListOf(comics.firstPage))
             adapterComments.updateComments(comics.comments)
             binding.authorName.text = comics.creator_name
@@ -76,8 +81,14 @@ class InfoComicActivity : AppCompatActivity(), OnItemCommentClickListener {
             else binding.favoriteButton.setImageResource(R.drawable.ic_favorite)
         }
         viewModel.isLiked.observe(this) { isLiked ->
-            if(isLiked) binding.likeButton.setImageResource(R.drawable.ic_like_red)
-            else binding.likeButton.setImageResource(R.drawable.ic_like)
+            if(isLiked) {
+                binding.likeButton.setImageResource(R.drawable.ic_like_red)
+                binding.likesCount.text = "${binding.likesCount.text.toString().toInt() + 1}"
+            }
+            else {
+                binding.likeButton.setImageResource(R.drawable.ic_like)
+                binding.likesCount.text = "${binding.likesCount.text.toString().toInt() - 1}"
+            }
         }
         viewModel.fetchInfo(comicsId)
         binding.favoriteButton.setOnClickListener {

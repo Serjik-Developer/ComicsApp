@@ -25,6 +25,7 @@ class CommentsAdapter(private var comments: MutableList<CommentResponseModel>, p
 
     fun updateComments(newComments: MutableList<CommentResponseModel>) {
         comments = newComments
+        notifyDataSetChanged()
     }
 
     inner class CommentsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
