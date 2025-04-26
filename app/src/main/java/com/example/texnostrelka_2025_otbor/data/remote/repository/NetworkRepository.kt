@@ -78,7 +78,18 @@ class NetworkRepository(private val apiService: RetrofitApiService) {
     }
 
     suspend fun getComicById(id: String, token: String) : ComicsNetworkModel {
-        return apiService.getComicPages(id, "Bearer $token")
+        try {
+            return apiService.getComicPages(id, "Bearer $token")
+        } catch (e: HttpException) {
+            when(e.code()) {
+                400 -> throw BadRequestException("Некорректный запрос: ${e.message}")
+                401 -> throw NotAuthorizedException("Не авторизован.")
+                404 -> throw NotFoundException("Комикс не найден.")
+                else -> throw ApiException("Ошибка сервера ${e.code()}")
+            }
+        } catch (e: IOException) {
+            throw NetworkException("Ошибка сети: ${e.message}")
+        }
     }
 
     suspend fun getComicPages(id: String, token: String) : MutableList<PageFromNetworkModel>? {
