@@ -54,6 +54,9 @@
             android:name=".presentation.ui.infocomic.InfoComicActivity"
             android:exported="false" />
         <activity
+            android:name=".presentation.ui.userinfo.UserInfoActivity"
+            android:exported="false" />
+        <activity
             android:name=".presentation.ui.main.MainContainerActivity"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar"
             android:exported="true">
