@@ -16,6 +16,7 @@ import com.example.texnostrelka_2025_otbor.data.remote.model.page.request.PageAd
 import com.example.texnostrelka_2025_otbor.data.remote.model.subscribe.SubscribeResponseModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.subscribe.SubscribeUsersResponseModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.user.InfoUserResponseModel
+import com.example.texnostrelka_2025_otbor.data.remote.model.user.avatar.AvatarRequestModel
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -93,4 +94,10 @@ interface RetrofitApiService {
 
     @GET("/api/users/{userId}/subscriptions")
     suspend fun getUserSubscriptions(@Path("userId") userId: String, @Header("Authorization") token: String) : MutableList<SubscribeUsersResponseModel>
+
+    @POST("/api/user/avatar")
+    suspend fun postUserAvatar(@Header("Authorization") token: String, @Body request: AvatarRequestModel)
+
+    @DELETE("/api/user/avatar")
+    suspend fun deleteUserAvatar(@Header("Authorization") token: String)
 }

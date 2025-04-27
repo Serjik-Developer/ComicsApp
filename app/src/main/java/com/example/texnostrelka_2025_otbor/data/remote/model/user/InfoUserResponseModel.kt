@@ -5,6 +5,7 @@ import com.example.texnostrelka_2025_otbor.data.remote.model.comic.ComicsCoverNe
 data class InfoUserResponseModel(
     val id: String,
     val name: String,
+    val avatar: String? = null,
     val total_likes: Int,
     val subscribers_count: Int,
     val subscriptions_count: Int,

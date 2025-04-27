@@ -25,6 +25,7 @@ import com.example.texnostrelka_2025_otbor.data.remote.model.page.request.PageAd
 import com.example.texnostrelka_2025_otbor.data.remote.model.subscribe.SubscribeResponseModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.subscribe.SubscribeUsersResponseModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.user.InfoUserResponseModel
+import com.example.texnostrelka_2025_otbor.data.remote.model.user.avatar.AvatarRequestModel
 import retrofit2.HttpException
 import java.io.IOException
 
@@ -388,6 +389,34 @@ class NetworkRepository(private val apiService: RetrofitApiService) {
                 400 -> throw BadRequestException("Некорректный запрос: ${e.message}")
                 401 -> throw NotAuthorizedException("Не авторизован.")
                 404 -> throw NotFoundException("Пользователь не найден.")
+                else -> throw ApiException("Ошибка сервера ${e.code()}")
+            }
+        } catch (e: IOException) {
+            throw NetworkException("Ошибка сети: ${e.message}")
+        }
+    }
+
+    suspend fun postUserAvatar(token: String, avatar: String) {
+        try {
+            apiService.postUserAvatar("Bearer $token", AvatarRequestModel(avatar))
+        } catch (e: HttpException) {
+            when(e.code()) {
+                400 -> throw BadRequestException("Некорректный запрос: ${e.message}")
+                401 -> throw NotAuthorizedException("Не авторизован.")
+                else -> throw ApiException("Ошибка сервера ${e.code()}")
+            }
+        } catch (e: IOException) {
+            throw NetworkException("Ошибка сети: ${e.message}")
+        }
+    }
+
+    suspend fun deleteUserAvatar(token: String) {
+        try {
+            apiService.deleteUserAvatar("Bearer $token")
+        } catch (e: HttpException) {
+            when(e.code()) {
+                400 -> throw BadRequestException("Некорректный запрос: ${e.message}")
+                401 -> throw NotAuthorizedException("Не авторизован.")
                 else -> throw ApiException("Ошибка сервера ${e.code()}")
             }
         } catch (e: IOException) {
