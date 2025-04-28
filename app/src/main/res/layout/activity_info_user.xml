@@ -1,6 +1,161 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:padding="16dp">
+
+    <!-- Аватарка пользователя с круглой формой и тенью -->
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/imageViewAvatar"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginTop="24dp"
+        android:scaleType="centerCrop"
+        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full"
+        android:textColor="@android:color/darker_gray"
+        app:strokeWidth="1dp"
+        android:elevation="4dp"
+        android:src="@drawable/ic_avatar_placeholder"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <!-- Имя пользователя -->
+    <TextView
+        android:id="@+id/textViewUsername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Имя пользователя"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/black"
+        app:layout_constraintTop_toBottomOf="@id/imageViewAvatar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Строка с подписчиками и подписками -->
+    <LinearLayout
+        android:id="@+id/statsLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/textViewUsername"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- Подписчики -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:layout_marginEnd="32dp"
+            android:padding="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true">
+
+            <TextView
+                android:id="@+id/textViewSubscribersCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="123"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/purple_500" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Подписчики"
+                android:textSize="14sp"
+                android:textColor="@android:color/darker_gray" />
+        </LinearLayout>
+
+        <!-- Подписки -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:padding="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true">
+
+            <TextView
+                android:id="@+id/textViewFollowingCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="456"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/purple_500" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Подписки"
+                android:textSize="14sp"
+                android:textColor="@android:color/darker_gray" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Кнопка Подписаться с Material Design -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnSubscribe"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginHorizontal="32dp"
+        android:text="Подписаться"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        app:strokeColor="@color/purple_500"
+        app:strokeWidth="1dp"
+        android:textColor="@color/purple_500"
+        android:textSize="16sp"
+        app:cornerRadius="8dp"
+        app:icon="@drawable/ic_subscribe"
+        app:iconGravity="textStart"
+        app:iconTint="@color/purple_500"
+        app:layout_constraintTop_toBottomOf="@id/statsLayout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Заголовок для списка комиксов -->
+    <TextView
+        android:id="@+id/textViewComicsTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginStart="8dp"
+        android:text="Комиксы"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/black"
+        app:layout_constraintTop_toBottomOf="@id/btnSubscribe"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <!-- RecyclerView для списка комиксов -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewComics"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:clipToPadding="false"
+        android:paddingBottom="16dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintTop_toBottomOf="@id/textViewComicsTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
