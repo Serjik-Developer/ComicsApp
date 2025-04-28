@@ -9,7 +9,7 @@
     android:padding="16dp">
 
     <!-- Аватарка пользователя с круглой формой и тенью -->
-    <com.google.android.material.imageview.ShapeableImageView
+        <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/imageViewAvatar"
         android:layout_width="120dp"
         android:layout_height="120dp"
@@ -22,8 +22,7 @@
         android:src="@drawable/ic_avatar_placeholder"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:srcCompat="@tools:sample/avatars" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- Имя пользователя -->
     <TextView
