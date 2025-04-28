@@ -17,6 +17,7 @@ import com.example.texnostrelka_2025_otbor.presentation.adapter.PageNetworkAdapt
 import com.example.texnostrelka_2025_otbor.presentation.listener.OnItemCommentClickListener
 import com.example.texnostrelka_2025_otbor.presentation.ui.auth.AuthActivity
 import com.example.texnostrelka_2025_otbor.presentation.ui.comicnetwork.ComicNetworkActivity
+import com.example.texnostrelka_2025_otbor.presentation.ui.userinfo.UserInfoActivity
 import com.example.texnostrelka_2025_otbor.presentation.utils.DialogHelper.showErrorDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
@@ -49,7 +50,7 @@ class InfoComicActivity : AppCompatActivity(), OnItemCommentClickListener {
             adapterComments.updateComments(comics.comments)
             binding.authorName.text = comics.creator_name
             binding.authorName.setOnClickListener {
-                Toast.makeText(this, comics.creator.toString(), Toast.LENGTH_LONG).show()
+                startActivity(Intent(this, UserInfoActivity::class.java).putExtra("USER-ID", comics.creator))
             }
             binding.likesCount.text = comics.likesCount.toString()
             if (comics.userLiked) {
@@ -141,6 +142,6 @@ class InfoComicActivity : AppCompatActivity(), OnItemCommentClickListener {
     }
 
     override fun onUserClick(userId: String) {
-        Toast.makeText(this, userId, Toast.LENGTH_LONG).show()
+        startActivity(Intent(this, UserInfoActivity::class.java).putExtra("USER-ID", userId))
     }
 }

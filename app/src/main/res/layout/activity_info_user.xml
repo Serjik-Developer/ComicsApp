@@ -53,6 +53,7 @@
 
         <!-- Подписчики -->
         <LinearLayout
+            android:id="@+id/SubscribersCountLinearLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -64,7 +65,7 @@
             android:focusable="true">
 
             <TextView
-                android:id="@+id/textViewSubscribersCount"
+                    android:id="@+id/textViewSubscribersCount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="123"
@@ -82,6 +83,7 @@
 
         <!-- Подписки -->
         <LinearLayout
+            android:id="@+id/FollowingCountLinearLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
