@@ -9,6 +9,6 @@ data class InfoUserResponseModel(
     val total_likes: Int,
     val subscribers_count: Int,
     val subscriptions_count: Int,
-    val is_subscribed: Boolean,
+    val is_subscribed: Boolean? = null,
     val comics: MutableList<ComicsCoverNetworkModel>
 )

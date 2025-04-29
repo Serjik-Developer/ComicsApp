@@ -59,8 +59,8 @@ class SubscribeAdapter(private var users: MutableList<SubscribeUsersResponseMode
                 btnSubscribe.visibility = View.GONE
             }
             btnSubscribe.setOnClickListener {
-                val isSubscribed = !user.is_subscribed_by_me!!
-                btnSubscribe.text = if (isSubscribed) "Отписаться" else "Подписаться"
+                val isSubscribed = btnSubscribe.text == "Отписаться"
+                btnSubscribe.text = if (isSubscribed) "Подписаться" else "Отписаться"
                 listener.onButtonSubscribeClick(user.id)
             }
         }

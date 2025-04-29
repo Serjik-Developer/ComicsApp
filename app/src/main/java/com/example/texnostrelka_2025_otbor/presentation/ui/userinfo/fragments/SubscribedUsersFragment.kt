@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.texnostrelka_2025_otbor.R
 import com.example.texnostrelka_2025_otbor.data.remote.model.subscribe.SubscriptionMode
 import com.example.texnostrelka_2025_otbor.databinding.FragmentSubscribedUsersBinding
 import com.example.texnostrelka_2025_otbor.presentation.adapter.SubscribeAdapter
@@ -60,7 +61,9 @@ class SubscribedUsersFragment : Fragment(), OnItemSubscribedClickListener {
             SubscriptionMode.FOLLOWING -> viewModel.fetchSubscriptionsUsers(userId)
         }
         binding.buttonBack.setOnClickListener {
-            activity?.onBackPressedDispatcher?.onBackPressed()
+                requireActivity().supportFragmentManager.popBackStack()
+                requireActivity().findViewById<View>(R.id.activity_main_container)?.visibility = View.VISIBLE
+                requireActivity().findViewById<View>(R.id.fragment_container)?.visibility = View.GONE
         }
 
     }

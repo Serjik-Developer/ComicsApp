@@ -29,6 +29,8 @@ class UserInfoViewModel @Inject constructor(private val repository: NetworkRepos
     val isSubscribed : LiveData<Boolean> get() = _isSubscribed
     private val _subscribeUsers = MutableLiveData<MutableList<SubscribeUsersResponseModel>>()
     val subscribeUsers : LiveData<MutableList<SubscribeUsersResponseModel>> get() = _subscribeUsers
+    private val _refreshTrigger = MutableLiveData<Boolean>()
+    val refreshTrigger: LiveData<Boolean> = _refreshTrigger
     fun fecthUserdata(userId: String) {
         _error.value = null
         viewModelScope.launch {
@@ -66,6 +68,7 @@ class UserInfoViewModel @Inject constructor(private val repository: NetworkRepos
                     return@launch
                 }
                 _isSubscribed.value = repository.postSubscribe(userId, token).subscribed
+                _refreshTrigger.postValue(true)
             } catch (e: NotAuthorizedException) {
                 _error.value = "Не авторизован."
                 preferencesManager.clearName()
@@ -137,5 +140,8 @@ class UserInfoViewModel @Inject constructor(private val repository: NetworkRepos
                 Log.e("InfoComicViewModel", "Unknown error", e)
             }
         }
+    }
+    fun resetRefreshTrigger() {
+        _refreshTrigger.postValue(false)
     }
 }
