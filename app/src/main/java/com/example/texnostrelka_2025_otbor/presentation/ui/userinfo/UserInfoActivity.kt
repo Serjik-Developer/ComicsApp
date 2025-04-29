@@ -6,10 +6,12 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.texnostrelka_2025_otbor.R
+import com.example.texnostrelka_2025_otbor.data.remote.model.subscribe.SubscriptionMode
 import com.example.texnostrelka_2025_otbor.databinding.ActivityInfoUserBinding
 import com.example.texnostrelka_2025_otbor.presentation.adapter.ComicsNetworkAdapter
 import com.example.texnostrelka_2025_otbor.presentation.listener.OnItemComicsListener
 import com.example.texnostrelka_2025_otbor.presentation.ui.comicnetwork.ComicNetworkActivity
+import com.example.texnostrelka_2025_otbor.presentation.ui.userinfo.fragments.SubscribedUsersFragment
 import com.example.texnostrelka_2025_otbor.presentation.utils.DialogHelper.showErrorDialog
 import com.example.texnostrelka_2025_otbor.presentation.utils.base64ToBitmap
 import dagger.hilt.android.AndroidEntryPoint
@@ -49,10 +51,16 @@ class UserInfoActivity : AppCompatActivity(), OnItemComicsListener {
             else binding.btnSubscribe.text = "Подписаться"
         }
         binding.FollowingCountLinearLayout.setOnClickListener {
-
+            supportFragmentManager.beginTransaction()
+                .add(android.R.id.content, SubscribedUsersFragment.newInstance(SubscriptionMode.FOLLOWING))
+                .addToBackStack(null)
+                .commit()
         }
         binding.SubscribersCountLinearLayout.setOnClickListener {
-
+            supportFragmentManager.beginTransaction()
+                .add(android.R.id.content, SubscribedUsersFragment.newInstance(SubscriptionMode.SUBSCRIBERS))
+                .addToBackStack(null)
+                .commit()
         }
         binding.btnSubscribe.setOnClickListener {
             viewModel.postSubscribe(userId)
