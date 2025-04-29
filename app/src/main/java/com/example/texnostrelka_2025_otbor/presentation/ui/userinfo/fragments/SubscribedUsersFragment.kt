@@ -1,5 +1,6 @@
 package com.example.texnostrelka_2025_otbor.presentation.ui.userinfo.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -58,9 +59,21 @@ class SubscribedUsersFragment : Fragment(), OnItemSubscribedClickListener {
             SubscriptionMode.SUBSCRIBERS -> viewModel.fetchSubscribersUsers(userId)
             SubscriptionMode.FOLLOWING -> viewModel.fetchSubscriptionsUsers(userId)
         }
+        binding.buttonBack.setOnClickListener {
+            activity?.onBackPressedDispatcher?.onBackPressed()
+        }
+
     }
 
     override fun onButtonSubscribeClick(userId: String) {
         viewModel.postSubscribe(userId)
+    }
+
+    override fun onItemClickListener(userId: String) {
+        val intent = Intent(requireContext(), UserInfoActivity::class.java).apply {
+            putExtra("USER-ID", userId)
+        }
+        startActivity(intent)
+        activity?.finish()
     }
 }

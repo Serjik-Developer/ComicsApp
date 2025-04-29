@@ -35,6 +35,12 @@ class SubscribeAdapter(private var users: MutableList<SubscribeUsersResponseMode
         private val userName: TextView = itemView.findViewById(R.id.textViewUsername)
         private val btnSubscribe: Button = itemView.findViewById(R.id.buttonSubscribe)
         fun bind(user: SubscribeUsersResponseModel) {
+            itemView.setOnClickListener {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    listener.onItemClickListener(user.id)
+                }
+            }
             user.avatar?.let {
                 userAvatar.setImageBitmap(it.base64ToBitmap())
             } ?: run {
@@ -53,6 +59,8 @@ class SubscribeAdapter(private var users: MutableList<SubscribeUsersResponseMode
                 btnSubscribe.visibility = View.GONE
             }
             btnSubscribe.setOnClickListener {
+                val isSubscribed = !user.is_subscribed_by_me!!
+                btnSubscribe.text = if (isSubscribed) "Отписаться" else "Подписаться"
                 listener.onButtonSubscribeClick(user.id)
             }
         }

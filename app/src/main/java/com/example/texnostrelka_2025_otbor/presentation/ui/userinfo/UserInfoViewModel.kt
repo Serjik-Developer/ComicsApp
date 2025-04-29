@@ -29,7 +29,6 @@ class UserInfoViewModel @Inject constructor(private val repository: NetworkRepos
     val isSubscribed : LiveData<Boolean> get() = _isSubscribed
     private val _subscribeUsers = MutableLiveData<MutableList<SubscribeUsersResponseModel>>()
     val subscribeUsers : LiveData<MutableList<SubscribeUsersResponseModel>> get() = _subscribeUsers
-
     fun fecthUserdata(userId: String) {
         _error.value = null
         viewModelScope.launch {
