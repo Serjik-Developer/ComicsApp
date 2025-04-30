@@ -15,6 +15,7 @@ import com.example.texnostrelka_2025_otbor.data.remote.model.page.PageFromNetwor
 import com.example.texnostrelka_2025_otbor.data.remote.model.page.request.PageAddRequestModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.subscribe.SubscribeResponseModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.subscribe.SubscribeUsersResponseModel
+import com.example.texnostrelka_2025_otbor.data.remote.model.user.CurrentUserInfoResponseModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.user.InfoUserResponseModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.user.avatar.AvatarRequestModel
 import retrofit2.http.Body
@@ -100,4 +101,7 @@ interface RetrofitApiService {
 
     @DELETE("/api/user/avatar")
     suspend fun deleteUserAvatar(@Header("Authorization") token: String)
+
+    @GET("/api/user")
+    suspend fun getInfoAboutCurrentUser(@Header("Authorization") token: String) : CurrentUserInfoResponseModel
 }

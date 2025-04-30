@@ -24,6 +24,7 @@ import com.example.texnostrelka_2025_otbor.data.remote.model.image.request.Updat
 import com.example.texnostrelka_2025_otbor.data.remote.model.page.request.PageAddRequestModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.subscribe.SubscribeResponseModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.subscribe.SubscribeUsersResponseModel
+import com.example.texnostrelka_2025_otbor.data.remote.model.user.CurrentUserInfoResponseModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.user.InfoUserResponseModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.user.avatar.AvatarRequestModel
 import retrofit2.HttpException
@@ -413,6 +414,20 @@ class NetworkRepository(private val apiService: RetrofitApiService) {
     suspend fun deleteUserAvatar(token: String) {
         try {
             apiService.deleteUserAvatar("Bearer $token")
+        } catch (e: HttpException) {
+            when(e.code()) {
+                400 -> throw BadRequestException("Некорректный запрос: ${e.message}")
+                401 -> throw NotAuthorizedException("Не авторизован.")
+                else -> throw ApiException("Ошибка сервера ${e.code()}")
+            }
+        } catch (e: IOException) {
+            throw NetworkException("Ошибка сети: ${e.message}")
+        }
+    }
+
+    suspend fun getInfoAboutCurrentUser(token: String) : CurrentUserInfoResponseModel {
+        try {
+            return apiService.getInfoAboutCurrentUser(token)
         } catch (e: HttpException) {
             when(e.code()) {
                 400 -> throw BadRequestException("Некорректный запрос: ${e.message}")
