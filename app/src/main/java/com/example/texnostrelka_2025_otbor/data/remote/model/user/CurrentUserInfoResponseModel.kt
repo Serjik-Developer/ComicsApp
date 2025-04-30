@@ -4,5 +4,5 @@ data class CurrentUserInfoResponseModel(
     val id: String,
     val login: String,
     val name: String,
-    val avatar: String
+    val avatar: String? = null
 )

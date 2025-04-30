@@ -22,6 +22,10 @@ class SettingsViewModel @Inject constructor(private val repository: NetworkRepos
     val userData : LiveData<CurrentUserInfoResponseModel> get() = _userData
     private val _error = MutableLiveData<String?>()
     val error : LiveData<String?> get() = _error
+    private val _postAvatarSuccess = MutableLiveData<Boolean>()
+    val postAvatarSuccess : LiveData<Boolean> get() = _postAvatarSuccess
+    private val _deleteAvatarSuccess = MutableLiveData<Boolean>()
+    val deleteAvatarSuccess : LiveData<Boolean> get() = _deleteAvatarSuccess
 
     fun fetchUserData() {
         viewModelScope.launch {
@@ -59,6 +63,7 @@ class SettingsViewModel @Inject constructor(private val repository: NetworkRepos
                     return@launch
                 }
                 repository.postUserAvatar(token, avatar)
+                _postAvatarSuccess.postValue(true)
             } catch (e: NotAuthorizedException) {
                 preferencesManager.clearName()
                 preferencesManager.clearAuthToken()
@@ -85,6 +90,7 @@ class SettingsViewModel @Inject constructor(private val repository: NetworkRepos
                     return@launch
                 }
                 repository.deleteUserAvatar(token)
+                _deleteAvatarSuccess.postValue(true)
             } catch (e: NotAuthorizedException) {
                 preferencesManager.clearName()
                 preferencesManager.clearAuthToken()
@@ -100,5 +106,13 @@ class SettingsViewModel @Inject constructor(private val repository: NetworkRepos
                 Log.e("SettingsViewModel", "Unknown error", e)
             }
         }
+    }
+
+    fun resetDeleteAvatarSuccess() {
+        _deleteAvatarSuccess.postValue(false)
+    }
+
+    fun resetPostAvatarSuccess() {
+        _postAvatarSuccess.postValue(false)
     }
 }
