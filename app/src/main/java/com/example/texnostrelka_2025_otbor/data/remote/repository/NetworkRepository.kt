@@ -5,6 +5,7 @@ import com.example.texnostrelka_2025_otbor.data.remote.exception.ApiException
 import com.example.texnostrelka_2025_otbor.data.remote.exception.BadRequestException
 import com.example.texnostrelka_2025_otbor.data.remote.exception.ConflictException
 import com.example.texnostrelka_2025_otbor.data.remote.exception.ForbiddenException
+import com.example.texnostrelka_2025_otbor.data.remote.exception.InvalidPasswordException
 import com.example.texnostrelka_2025_otbor.data.remote.exception.NetworkException
 import com.example.texnostrelka_2025_otbor.data.remote.exception.NotAuthorizedException
 import com.example.texnostrelka_2025_otbor.data.remote.exception.NotFoundException
@@ -27,6 +28,7 @@ import com.example.texnostrelka_2025_otbor.data.remote.model.subscribe.Subscribe
 import com.example.texnostrelka_2025_otbor.data.remote.model.user.CurrentUserInfoResponseModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.user.InfoUserResponseModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.user.avatar.AvatarRequestModel
+import com.example.texnostrelka_2025_otbor.data.remote.model.user.password.UpdateUserPasswordRequestModel
 import retrofit2.HttpException
 import java.io.IOException
 
@@ -432,6 +434,26 @@ class NetworkRepository(private val apiService: RetrofitApiService) {
             when(e.code()) {
                 400 -> throw BadRequestException("Некорректный запрос: ${e.message}")
                 401 -> throw NotAuthorizedException("Не авторизован.")
+                else -> throw ApiException("Ошибка сервера ${e.code()}")
+            }
+        } catch (e: IOException) {
+            throw NetworkException("Ошибка сети: ${e.message}")
+        }
+    }
+
+    suspend fun updatePassword(token: String, request: UpdateUserPasswordRequestModel) {
+        try {
+            apiService.updatePassword(token, request)
+        } catch (e: HttpException) {
+            when(e.code()) {
+                400 -> throw BadRequestException("Некорректный запрос: ${e.message}")
+                401 -> {
+                    when (e.message()) {
+                        "Current password is incorrect" -> throw InvalidPasswordException("Неправильный пароль")
+                        "Not authorized" -> throw NotAuthorizedException("Не авторизован")
+                    }
+                }
+                404 -> throw NotFoundException("Пользователь не найден")
                 else -> throw ApiException("Ошибка сервера ${e.code()}")
             }
         } catch (e: IOException) {
