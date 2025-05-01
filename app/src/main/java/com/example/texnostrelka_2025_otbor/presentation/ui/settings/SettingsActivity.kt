@@ -1,6 +1,7 @@
 package com.example.texnostrelka_2025_otbor.presentation.ui.settings
 
 import android.app.AlertDialog
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
@@ -13,6 +14,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.texnostrelka_2025_otbor.R
 import com.example.texnostrelka_2025_otbor.databinding.ActivitySettingsBinding
+import com.example.texnostrelka_2025_otbor.presentation.ui.auth.AuthActivity
 import com.example.texnostrelka_2025_otbor.presentation.utils.DialogHelper.showErrorDialog
 import com.example.texnostrelka_2025_otbor.presentation.utils.base64ToBitmap
 import com.example.texnostrelka_2025_otbor.presentation.utils.toBase64
@@ -45,6 +47,17 @@ class SettingsActivity : AppCompatActivity() {
         }
         binding.cardChangePassword.setOnClickListener {
             showChangePasswordDialog()
+        }
+        viewModel.error.observe(this) { error ->
+            error?.let {
+                if (it == "Не авторизован.") {
+                    Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+                    startActivity(Intent(this, AuthActivity::class.java))
+                }
+                else {
+                    showErrorDialog(error)
+                }
+            }
         }
         viewModel.postAvatarSuccess.observe(this) { isSuccess->
             if (isSuccess) {
