@@ -78,7 +78,13 @@ class SettingsActivity : AppCompatActivity() {
                 binding.imageViewAvatarSettings.setImageResource(R.drawable.ic_avatar_placeholder)
             }
         }
-
+        viewModel.changeSuccess.observe(this) { isSuccess ->
+            if(isSuccess) {
+                Toast.makeText(this, "Успешно обновлен пароль!", Toast.LENGTH_LONG).show()
+                viewModel.resetChangeSuccess()
+            }
+        }
+        viewModel.fetchUserData()
     }
 
     private fun showChangePasswordDialog() {

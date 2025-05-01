@@ -29,7 +29,8 @@ class SettingsViewModel @Inject constructor(private val repository: NetworkRepos
     val postAvatarSuccess : LiveData<Boolean> get() = _postAvatarSuccess
     private val _deleteAvatarSuccess = MutableLiveData<Boolean>()
     val deleteAvatarSuccess : LiveData<Boolean> get() = _deleteAvatarSuccess
-
+    private val _changeSuccess = MutableLiveData<Boolean>()
+    val changeSuccess : LiveData<Boolean> get() = _changeSuccess
     fun fetchUserData() {
         viewModelScope.launch {
             try {
@@ -120,6 +121,7 @@ class SettingsViewModel @Inject constructor(private val repository: NetworkRepos
                     return@launch
                 }
                 repository.updatePassword(token, UpdateUserPasswordRequestModel(currentPassword, newPassword))
+                _changeSuccess.value = true
             }catch (e: NotAuthorizedException) {
                 preferencesManager.clearName()
                 preferencesManager.clearAuthToken()
@@ -149,5 +151,9 @@ class SettingsViewModel @Inject constructor(private val repository: NetworkRepos
 
     fun resetPostAvatarSuccess() {
         _postAvatarSuccess.postValue(false)
+    }
+
+    fun resetChangeSuccess() {
+        _changeSuccess.postValue(false)
     }
 }

@@ -429,7 +429,7 @@ class NetworkRepository(private val apiService: RetrofitApiService) {
 
     suspend fun getInfoAboutCurrentUser(token: String) : CurrentUserInfoResponseModel {
         try {
-            return apiService.getInfoAboutCurrentUser(token)
+            return apiService.getInfoAboutCurrentUser("Bearer $token")
         } catch (e: HttpException) {
             when(e.code()) {
                 400 -> throw BadRequestException("Некорректный запрос: ${e.message}")
@@ -443,16 +443,11 @@ class NetworkRepository(private val apiService: RetrofitApiService) {
 
     suspend fun updatePassword(token: String, request: UpdateUserPasswordRequestModel) {
         try {
-            apiService.updatePassword(token, request)
+            apiService.updatePassword("Bearer $token", request)
         } catch (e: HttpException) {
             when(e.code()) {
                 400 -> throw BadRequestException("Некорректный запрос: ${e.message}")
-                401 -> {
-                    when (e.message()) {
-                        "Current password is incorrect" -> throw InvalidPasswordException("Неправильный пароль")
-                        "Not authorized" -> throw NotAuthorizedException("Не авторизован")
-                    }
-                }
+                401 -> throw InvalidPasswordException("Неправильный пароль")
                 404 -> throw NotFoundException("Пользователь не найден")
                 else -> throw ApiException("Ошибка сервера ${e.code()}")
             }
