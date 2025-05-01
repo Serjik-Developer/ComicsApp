@@ -27,10 +27,30 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class ViewNetworkFragment : Fragment(), OnItemComicsListener {
-    private var _binding : FragmentViewNetworkBinding? = null
+    private var _binding: FragmentViewNetworkBinding? = null
     private val binding get() = _binding!!
-    private val viewModel : ViewNetworkViewModel by activityViewModels ()
+    private val viewModel: ViewNetworkViewModel by activityViewModels()
     private lateinit var comicsNetworkAdapter: ComicsNetworkAdapter
+    private var isFavoriteMode: Boolean = false
+
+    companion object {
+        private const val ARG_FAVORITE_MODE = "favorite_mode"
+
+        fun newInstance(isFavoriteMode: Boolean): ViewNetworkFragment {
+            return ViewNetworkFragment().apply {
+                arguments = Bundle().apply {
+                    putBoolean(ARG_FAVORITE_MODE, isFavoriteMode)
+                }
+            }
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            isFavoriteMode = it.getBoolean(ARG_FAVORITE_MODE, false)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,26 +66,36 @@ class ViewNetworkFragment : Fragment(), OnItemComicsListener {
         comicsNetworkAdapter = ComicsNetworkAdapter(mutableListOf(), this)
         binding.RecyclerViewNetwork.layoutManager = LinearLayoutManager(requireContext())
         binding.RecyclerViewNetwork.adapter = comicsNetworkAdapter
-        viewModel.comics.observe( viewLifecycleOwner) { comics ->
+
+        viewModel.comics.observe(viewLifecycleOwner) { comics ->
             comicsNetworkAdapter.updateData(comics)
         }
+
         viewModel.error.observe(viewLifecycleOwner) { error ->
             error?.let {
                 if (it == "Не авторизован.") {
                     Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
                     startActivity(Intent(requireContext(), AuthActivity::class.java))
-                }
-                else {
+                } else {
                     showErrorDialog(error)
                 }
             }
         }
-        viewModel.fetchComics()
+
+        if (isFavoriteMode) {
+            viewModel.fetchFavoriteComics()
+        } else {
+            viewModel.fetchComics()
+        }
     }
 
     override fun onResume() {
         super.onResume()
-        viewModel.fetchComics()
+        if (isFavoriteMode) {
+            viewModel.fetchFavoriteComics()
+        } else {
+            viewModel.fetchComics()
+        }
     }
 
     override fun onItemClick(id: String) {

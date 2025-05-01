@@ -20,7 +20,9 @@ class MainContainerActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setupBottomNavigation()
-
+        binding.FavoriteComicsBtn.setOnClickListener {
+            loadViewNetworkFragment(true)
+        }
         if (savedInstanceState == null) {
             binding.bottomNav.selectedItemId = R.id.nav_main
         }
@@ -58,9 +60,10 @@ class MainContainerActivity : AppCompatActivity() {
             .commit()
     }
 
-    private fun loadViewNetworkFragment() {
+    private fun loadViewNetworkFragment(isFavoriteMode: Boolean = false) {
+        val fragment = ViewNetworkFragment.newInstance(isFavoriteMode)
         supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, ViewNetworkFragment())
+            .replace(R.id.fragment_container, fragment)
             .commit()
     }
 }
