@@ -19,7 +19,6 @@ import com.example.texnostrelka_2025_otbor.data.remote.model.user.CurrentUserInf
 import com.example.texnostrelka_2025_otbor.data.remote.model.user.InfoUserResponseModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.user.avatar.AvatarRequestModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.user.password.UpdateUserPasswordRequestModel
-import com.example.texnostrelka_2025_otbor.data.remote.model.user.password.UpdateUserPasswordResponseModel
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
