@@ -18,6 +18,7 @@ import com.example.texnostrelka_2025_otbor.data.remote.model.subscribe.Subscribe
 import com.example.texnostrelka_2025_otbor.data.remote.model.user.CurrentUserInfoResponseModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.user.InfoUserResponseModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.user.avatar.AvatarRequestModel
+import com.example.texnostrelka_2025_otbor.data.remote.model.user.name.UpdateNameUserRequestModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.user.password.UpdateUserPasswordRequestModel
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -108,4 +109,7 @@ interface RetrofitApiService {
 
     @PUT("/api/user/password")
     suspend fun updatePassword(@Header("Authorization") token: String, @Body request: UpdateUserPasswordRequestModel)
+
+    @PUT("/api/user/name")
+    suspend fun updateName(@Header("Authorization") token: String, @Body request: UpdateNameUserRequestModel)
 }

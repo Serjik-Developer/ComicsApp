@@ -13,6 +13,7 @@ import com.example.texnostrelka_2025_otbor.data.remote.exception.NetworkExceptio
 import com.example.texnostrelka_2025_otbor.data.remote.exception.NotAuthorizedException
 import com.example.texnostrelka_2025_otbor.data.remote.exception.NotFoundException
 import com.example.texnostrelka_2025_otbor.data.remote.model.user.CurrentUserInfoResponseModel
+import com.example.texnostrelka_2025_otbor.data.remote.model.user.name.UpdateNameUserRequestModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.user.password.UpdateUserPasswordRequestModel
 import com.example.texnostrelka_2025_otbor.data.remote.repository.NetworkRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -121,6 +122,33 @@ class SettingsViewModel @Inject constructor(private val repository: NetworkRepos
                     return@launch
                 }
                 repository.updatePassword(token, UpdateUserPasswordRequestModel(currentPassword, newPassword))
+                _changeSuccess.value = true
+            }catch (e: NotAuthorizedException) {
+                preferencesManager.clearName()
+                preferencesManager.clearAuthToken()
+                _error.value = e.message
+            } catch (e: InvalidPasswordException) {
+                _error.value = e.message
+            } catch (e: NotFoundException) {
+                _error.value = e.message
+            } catch (e: NetworkException) {
+                _error.value = "Проблемы с интернетом"
+            } catch (e: Exception) {
+                _error.value = "Неизвестная ошибка"
+                Log.e("SettingsViewModel", "Unknown error", e)
+            }
+        }
+    }
+
+    fun updateName(newName: String) {
+        viewModelScope.launch {
+            try {
+                val token = preferencesManager.getAuthToken()
+                if(token.isNullOrEmpty()) {
+                    _error.value = "Не авторизован."
+                    return@launch
+                }
+                repository.updateName(token, UpdateNameUserRequestModel(newName))
                 _changeSuccess.value = true
             }catch (e: NotAuthorizedException) {
                 preferencesManager.clearName()

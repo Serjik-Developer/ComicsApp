@@ -108,9 +108,8 @@
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
-    <!-- Кнопка смены пароля -->
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cardChangePassword"
+        android:id="@+id/cardChangeName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -125,11 +124,34 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:text="Сменить имя пользователя"
+                android:textSize="16sp"
+                android:gravity="center_vertical"/>
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+    <!-- Кнопка смены пароля -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardChangePassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:cardCornerRadius="8dp"
+        app:layout_constraintTop_toBottomOf="@id/cardChangeName">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:text="Сменить пароль"
                 android:textSize="16sp"
                 android:gravity="center_vertical"/>
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
+
 
     <!-- Кнопка выхода из аккаунта -->
     <com.google.android.material.card.MaterialCardView

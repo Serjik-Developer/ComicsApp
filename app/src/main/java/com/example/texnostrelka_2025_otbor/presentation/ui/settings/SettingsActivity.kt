@@ -48,6 +48,9 @@ class SettingsActivity : AppCompatActivity() {
         binding.cardChangePassword.setOnClickListener {
             showChangePasswordDialog()
         }
+        binding.cardChangeName.setOnClickListener {
+            showChangeNameDialog()
+        }
         viewModel.error.observe(this) { error ->
             error?.let {
                 if (it == "Не авторизован.") {
@@ -80,12 +83,43 @@ class SettingsActivity : AppCompatActivity() {
         }
         viewModel.changeSuccess.observe(this) { isSuccess ->
             if(isSuccess) {
-                Toast.makeText(this, "Успешно обновлен пароль!", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Успешно обновлено!", Toast.LENGTH_LONG).show()
                 viewModel.resetChangeSuccess()
             }
         }
         viewModel.fetchUserData()
     }
+
+    private fun showChangeNameDialog() {
+        val inputNewName = EditText(this).apply {
+            hint = "Введите новое имя пользователя"
+            setTextAppearance(R.style.TextAppearance_MaterialComponents_Body1)
+        }
+        val container = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(50, 20, 50, 20)
+            addView(inputNewName)
+        }
+        val dialog = MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialog_Rounded)
+            .setTitle("Обновить пароль")
+            .setView(container)
+            .setPositiveButton("Сохранить") { _, _ ->
+                val newName = inputNewName.text.toString()
+                if (newName.isNotEmpty()) {
+                    viewModel.updateName(newName)
+                }
+            }
+            .setNegativeButton("Отмена") { _, _ -> }
+            .create()
+        dialog.setOnShowListener {
+            val positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+            val negativeButton = dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
+            positiveButton.setTextAppearance(R.style.TextAppearance_MaterialComponents_Button)
+            negativeButton.setTextAppearance(R.style.TextAppearance_MaterialComponents_Button)
+        }
+        dialog.show()
+    }
+
 
     private fun showChangePasswordDialog() {
         val inputCurrentPassword = EditText(this).apply {
