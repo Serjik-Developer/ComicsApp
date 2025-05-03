@@ -14,6 +14,7 @@ import com.example.texnostrelka_2025_otbor.data.remote.exception.NotAuthorizedEx
 import com.example.texnostrelka_2025_otbor.data.remote.exception.NotFoundException
 import com.example.texnostrelka_2025_otbor.data.remote.model.user.CurrentUserInfoResponseModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.user.name.UpdateNameUserRequestModel
+import com.example.texnostrelka_2025_otbor.data.remote.model.user.notification.UserNotificationTokenModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.user.password.UpdateUserPasswordRequestModel
 import com.example.texnostrelka_2025_otbor.data.remote.repository.NetworkRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -166,7 +167,6 @@ class SettingsViewModel @Inject constructor(private val repository: NetworkRepos
             }
         }
     }
-
     fun logOut() {
         preferencesManager.clearName()
         preferencesManager.clearAuthToken()

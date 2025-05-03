@@ -13,7 +13,7 @@ import com.example.texnostrelka_2025_otbor.data.local.preferences.PreferencesMan
 import com.example.texnostrelka_2025_otbor.AppData
 import com.example.texnostrelka_2025_otbor.data.remote.repository.NetworkRepository
 import com.example.texnostrelka_2025_otbor.databinding.ActivityComicNetworkBinding
-import com.example.texnostrelka_2025_otbor.presentation.ui.auth.AuthActivity
+import com.example.texnostrelka_2025_otbor.presentation.ui.auth.AuthContainerActivity
 import com.example.texnostrelka_2025_otbor.presentation.utils.DialogHelper.showErrorDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
@@ -46,7 +46,7 @@ class ComicNetworkActivity : AppCompatActivity() {
             error?.let {
                 if (it == "Не авторизован.") {
                     Toast.makeText(this, it, Toast.LENGTH_LONG).show()
-                    startActivity(Intent(this, AuthActivity::class.java))
+                    startActivity(Intent(this, AuthContainerActivity::class.java))
                     finish()
                 }
                 else {

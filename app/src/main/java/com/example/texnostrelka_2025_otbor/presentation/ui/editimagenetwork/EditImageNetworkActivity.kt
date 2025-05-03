@@ -14,8 +14,7 @@ import com.example.texnostrelka_2025_otbor.data.local.preferences.PreferencesMan
 import com.example.texnostrelka_2025_otbor.data.remote.model.image.request.ImageRequestModel
 import com.example.texnostrelka_2025_otbor.data.remote.repository.NetworkRepository
 import com.example.texnostrelka_2025_otbor.databinding.ActivityEditImageNetworkBinding
-import com.example.texnostrelka_2025_otbor.databinding.ActivityEditNetworkBinding
-import com.example.texnostrelka_2025_otbor.presentation.ui.auth.AuthActivity
+import com.example.texnostrelka_2025_otbor.presentation.ui.auth.AuthContainerActivity
 import com.example.texnostrelka_2025_otbor.presentation.ui.editpage.EditPageActivity
 import com.example.texnostrelka_2025_otbor.presentation.ui.editpagenetwork.EditPageNetworkActivity
 import com.example.texnostrelka_2025_otbor.presentation.utils.DialogHelper.showErrorDialog
@@ -68,7 +67,7 @@ class EditImageNetworkActivity : AppCompatActivity() {
             error?.let{
                 if(it.toString() == "Не авторизован.") {
                     Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
-                    startActivity(Intent(this, AuthActivity::class.java))
+                    startActivity(Intent(this, AuthContainerActivity::class.java))
                 }
                 else {
                     showErrorDialog(error)

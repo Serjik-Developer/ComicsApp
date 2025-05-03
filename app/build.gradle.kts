@@ -47,7 +47,9 @@ dependencies {
     implementation(libs.firebase.messaging)
     kapt(libs.hilt.compiler)
     implementation(libs.hilt.navigation.compose)
-
+    implementation("androidx.work:work-runtime-ktx:2.9.0")
+    implementation("androidx.hilt:hilt-work:1.1.0")
+    kapt("androidx.hilt:hilt-compiler:1.1.0")
     implementation("androidx.fragment:fragment-ktx:1.6.2")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.squareup.retrofit2:retrofit:2.9.0")

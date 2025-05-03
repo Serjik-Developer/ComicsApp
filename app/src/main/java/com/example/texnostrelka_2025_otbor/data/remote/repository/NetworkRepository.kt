@@ -476,7 +476,7 @@ class NetworkRepository(private val apiService: RetrofitApiService) {
 
     suspend fun postNotificationToken(token: String, request: UserNotificationTokenModel) {
         try {
-            apiService.postNotificationToken(token, request)
+            apiService.postNotificationToken("Bearer $token", request)
         } catch (e: HttpException) {
             when(e.code()) {
                 400 -> throw BadRequestException("Некорректный запрос: ${e.message}")
@@ -491,7 +491,7 @@ class NetworkRepository(private val apiService: RetrofitApiService) {
 
     suspend fun updateNotificationSettings(token: String, request: NotificationSettingsModel) {
         try {
-            apiService.updateNotificationSettings(token, request)
+            apiService.updateNotificationSettings("Bearer $token", request)
         } catch (e: HttpException) {
             when(e.code()) {
                 400 -> throw BadRequestException("Некорректный запрос: ${e.message}")

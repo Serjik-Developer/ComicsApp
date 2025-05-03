@@ -24,4 +24,7 @@ class PreferencesManager(context: Context) {
     fun clearName() {
         sharedPreferences.edit().remove("user_name").apply()
     }
+    fun savePendingFcmToken(token: String) {
+        sharedPreferences.edit().putString("fcm_token", token).apply()
+    }
 }

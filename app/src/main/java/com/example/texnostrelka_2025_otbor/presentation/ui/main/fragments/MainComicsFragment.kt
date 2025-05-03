@@ -20,7 +20,7 @@ import com.example.texnostrelka_2025_otbor.databinding.FragmentMainComicsBinding
 import com.example.texnostrelka_2025_otbor.domain.repository.ComicsRepository
 import com.example.texnostrelka_2025_otbor.presentation.adapter.ComicsAdapter
 import com.example.texnostrelka_2025_otbor.presentation.listener.OnItemClickListener
-import com.example.texnostrelka_2025_otbor.presentation.ui.auth.AuthActivity
+import com.example.texnostrelka_2025_otbor.presentation.ui.auth.AuthContainerActivity
 import com.example.texnostrelka_2025_otbor.presentation.ui.edit.EditActivity
 import com.example.texnostrelka_2025_otbor.presentation.ui.view.ViewActivity
 import com.example.texnostrelka_2025_otbor.presentation.ui.main.fragments.viewmodels.MainViewModel
@@ -64,7 +64,7 @@ class MainComicsFragment : Fragment(), OnItemClickListener {
             error?.let {
                 if (error == "Не авторизован.") {
                     Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
-                    startActivity(Intent(requireContext(), AuthActivity::class.java))
+                    startActivity(Intent(requireContext(), AuthContainerActivity::class.java))
                 }
                 else {
                     showErrorDialog(error)

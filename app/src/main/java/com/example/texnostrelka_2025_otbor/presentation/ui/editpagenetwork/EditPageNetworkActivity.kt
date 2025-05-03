@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.texnostrelka_2025_otbor.databinding.ActivityEditPageNetworkBinding
 import com.example.texnostrelka_2025_otbor.presentation.adapter.EditPageAdapter
 import com.example.texnostrelka_2025_otbor.presentation.listener.OnItemEditPageNetworkClickListener
-import com.example.texnostrelka_2025_otbor.presentation.ui.auth.AuthActivity
+import com.example.texnostrelka_2025_otbor.presentation.ui.auth.AuthContainerActivity
 import com.example.texnostrelka_2025_otbor.presentation.ui.editimagenetwork.EditImageNetworkActivity
 import com.example.texnostrelka_2025_otbor.presentation.utils.DialogHelper.showErrorDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -57,7 +57,7 @@ class EditPageNetworkActivity : AppCompatActivity(), OnItemEditPageNetworkClickL
             error?.let{
                 if(it.toString() == "Не авторизован.") {
                     Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
-                    startActivity(Intent(this, AuthActivity::class.java))
+                    startActivity(Intent(this, AuthContainerActivity::class.java))
                 }
                 else {
                     showErrorDialog(error)

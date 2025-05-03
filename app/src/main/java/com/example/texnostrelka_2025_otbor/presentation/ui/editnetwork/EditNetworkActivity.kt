@@ -16,7 +16,7 @@ import com.example.texnostrelka_2025_otbor.R
 import com.example.texnostrelka_2025_otbor.databinding.ActivityEditNetworkBinding
 import com.example.texnostrelka_2025_otbor.presentation.adapter.EditNetworkAdapter
 import com.example.texnostrelka_2025_otbor.presentation.listener.OnItemClickListener
-import com.example.texnostrelka_2025_otbor.presentation.ui.auth.AuthActivity
+import com.example.texnostrelka_2025_otbor.presentation.ui.auth.AuthContainerActivity
 import com.example.texnostrelka_2025_otbor.presentation.ui.editpagenetwork.EditPageNetworkActivity
 import com.example.texnostrelka_2025_otbor.presentation.ui.main.MainContainerActivity
 import com.example.texnostrelka_2025_otbor.presentation.utils.DialogHelper.showErrorDialog
@@ -57,7 +57,7 @@ class EditNetworkActivity: AppCompatActivity(), OnItemClickListener {
             error?.let{
                 if(it.toString() == "Не авторизован.") {
                     Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
-                    startActivity(Intent(this, AuthActivity::class.java))
+                    startActivity(Intent(this, AuthContainerActivity::class.java))
                 }
                 else {
                     showErrorDialog(error)

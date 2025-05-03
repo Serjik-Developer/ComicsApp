@@ -7,6 +7,7 @@ import com.example.texnostrelka_2025_otbor.data.local.preferences.PreferencesMan
 import com.example.texnostrelka_2025_otbor.data.remote.api.RetrofitApiService
 import com.example.texnostrelka_2025_otbor.data.remote.repository.NetworkRepository
 import com.example.texnostrelka_2025_otbor.domain.repository.ComicsRepository
+import com.google.firebase.messaging.FirebaseMessaging
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -57,5 +58,11 @@ object AppModule {
     @Singleton
     fun provideDatabaseHelper(@ApplicationContext context: Context): DatabaseHelper {
         return DatabaseHelper(context)
+    }
+
+    @Provides
+    @Singleton
+    fun provideFirebaseMessaging(): FirebaseMessaging {
+        return FirebaseMessaging.getInstance()
     }
 }

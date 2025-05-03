@@ -15,7 +15,7 @@ import com.example.texnostrelka_2025_otbor.presentation.adapter.ComicsNetworkAda
 import com.example.texnostrelka_2025_otbor.presentation.adapter.CommentsAdapter
 import com.example.texnostrelka_2025_otbor.presentation.adapter.PageNetworkAdapter
 import com.example.texnostrelka_2025_otbor.presentation.listener.OnItemCommentClickListener
-import com.example.texnostrelka_2025_otbor.presentation.ui.auth.AuthActivity
+import com.example.texnostrelka_2025_otbor.presentation.ui.auth.AuthContainerActivity
 import com.example.texnostrelka_2025_otbor.presentation.ui.comicnetwork.ComicNetworkActivity
 import com.example.texnostrelka_2025_otbor.presentation.ui.userinfo.UserInfoActivity
 import com.example.texnostrelka_2025_otbor.presentation.utils.DialogHelper.showErrorDialog
@@ -68,7 +68,7 @@ class InfoComicActivity : AppCompatActivity(), OnItemCommentClickListener {
             error?.let {
                 if (it == "Не авторизован.") {
                     Toast.makeText(this, it, Toast.LENGTH_LONG).show()
-                    startActivity(Intent(this, AuthActivity::class.java))
+                    startActivity(Intent(this, AuthContainerActivity::class.java))
                 } else {
                     showErrorDialog(it)
                 }
