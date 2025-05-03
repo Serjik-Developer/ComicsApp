@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.texnostrelka_2025_otbor.MyFirebaseMessagingService.Companion.COMICS_ID
 import com.example.texnostrelka_2025_otbor.R
 import com.example.texnostrelka_2025_otbor.databinding.ActivityInfoComicBinding
 import com.example.texnostrelka_2025_otbor.presentation.adapter.ComicsNetworkAdapter
@@ -33,7 +34,10 @@ class InfoComicActivity : AppCompatActivity(), OnItemCommentClickListener {
         super.onCreate(savedInstanceState)
         binding = ActivityInfoComicBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        comicsId = intent.getStringExtra("COMICS_ID") ?: throw IllegalArgumentException("COMICS_ID is required")
+        comicsId = intent.getStringExtra(COMICS_ID)
+            ?: intent.data?.getQueryParameter("id")
+                    ?: throw IllegalArgumentException("COMICS_ID is required")
+        Log.w("COMICS-ID", comicsId)
         adapterPage = PageNetworkAdapter(mutableListOf(), this)
         adapterComments = CommentsAdapter(mutableListOf(), this)
         binding.comicsFirstPageRecycler.layoutManager = object : LinearLayoutManager(this) {
@@ -143,5 +147,9 @@ class InfoComicActivity : AppCompatActivity(), OnItemCommentClickListener {
 
     override fun onUserClick(userId: String) {
         startActivity(Intent(this, UserInfoActivity::class.java).putExtra("USER-ID", userId))
+    }
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        comicsId = intent?.getStringExtra(COMICS_ID) ?: comicsId
     }
 }

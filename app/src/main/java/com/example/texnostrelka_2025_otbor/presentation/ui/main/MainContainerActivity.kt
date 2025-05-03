@@ -1,10 +1,15 @@
 package com.example.texnostrelka_2025_otbor.presentation.ui.main
 
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.example.texnostrelka_2025_otbor.MyFirebaseMessagingService
+import com.example.texnostrelka_2025_otbor.MyFirebaseMessagingService.Companion.COMICS_ID
 import com.example.texnostrelka_2025_otbor.R
 import com.example.texnostrelka_2025_otbor.databinding.ActivityMainContainerBinding
+import com.example.texnostrelka_2025_otbor.presentation.ui.infocomic.InfoComicActivity
 import com.example.texnostrelka_2025_otbor.presentation.ui.main.fragments.MainComicsFragment
 import com.example.texnostrelka_2025_otbor.presentation.ui.main.fragments.MyComicsNetworkFragment
 import com.example.texnostrelka_2025_otbor.presentation.ui.main.fragments.ViewNetworkFragment
@@ -16,6 +21,7 @@ class MainContainerActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        handleIncomingIntent(intent)
         binding = ActivityMainContainerBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -65,5 +71,23 @@ class MainContainerActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, fragment)
             .commit()
+    }
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        handleIncomingIntent(intent)
+    }
+
+    private fun handleIncomingIntent(intent: Intent?) {
+        val comicsId = intent?.getStringExtra(MyFirebaseMessagingService.COMICS_ID)
+        Log.d("MainContainerActivity", "Received comicsId: $comicsId")
+        comicsId?.let { id ->
+            startActivity(
+                Intent(this, InfoComicActivity::class.java).apply {
+                    putExtra(MyFirebaseMessagingService.COMICS_ID, id)
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                }
+            )
+            finish()
+        }
     }
 }

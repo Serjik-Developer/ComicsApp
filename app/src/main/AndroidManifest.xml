@@ -53,21 +53,26 @@
             android:name=".presentation.ui.editpagenetwork.EditPageNetworkActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.ui.main.MainContainerActivity"
+            android:name=".presentation.ui.settings.SettingsActivity"
             android:exported="false" />
         <activity
             android:name=".presentation.ui.infocomic.InfoComicActivity"
-            android:exported="false" />
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:parentActivityName=".presentation.ui.main.MainContainerActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".presentation.ui.main.MainContainerActivity" />
+        </activity>
         <activity
             android:name=".presentation.ui.userinfo.UserInfoActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.ui.settings.SettingsActivity"
+            android:name=".presentation.ui.main.MainContainerActivity"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

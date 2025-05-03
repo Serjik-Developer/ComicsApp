@@ -8,12 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.example.texnostrelka_2025_otbor.data.local.preferences.PreferencesManager
 import com.example.texnostrelka_2025_otbor.databinding.ActivityAuthBinding
 import com.example.texnostrelka_2025_otbor.presentation.ui.auth.AuthContainerActivity
-import com.example.texnostrelka_2025_otbor.presentation.ui.auth.AuthContainerViewModel
 import com.example.texnostrelka_2025_otbor.presentation.ui.main.MainContainerActivity
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
@@ -65,7 +63,6 @@ class AuthFragment : Fragment() {
             if (task.isSuccessful) {
                 val token = task.result
                 Log.d("FirebaseTokenCheck", "Token: $token")
-                val viewModel: AuthContainerViewModel by activityViewModels()
                 viewModel.postNotificationToken(token)
                 startActivity(Intent(requireContext(), MainContainerActivity::class.java))
                 activity?.finish()
