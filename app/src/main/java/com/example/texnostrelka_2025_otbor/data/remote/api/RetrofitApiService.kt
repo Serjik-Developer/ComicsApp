@@ -19,6 +19,8 @@ import com.example.texnostrelka_2025_otbor.data.remote.model.user.CurrentUserInf
 import com.example.texnostrelka_2025_otbor.data.remote.model.user.InfoUserResponseModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.user.avatar.AvatarRequestModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.user.name.UpdateNameUserRequestModel
+import com.example.texnostrelka_2025_otbor.data.remote.model.user.notification.NotificationSettingsModel
+import com.example.texnostrelka_2025_otbor.data.remote.model.user.notification.UserNotificationTokenModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.user.password.UpdateUserPasswordRequestModel
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -112,4 +114,10 @@ interface RetrofitApiService {
 
     @PUT("/api/user/name")
     suspend fun updateName(@Header("Authorization") token: String, @Body request: UpdateNameUserRequestModel)
+
+    @POST("/api/user/fcm_token")
+    suspend fun postNotificationToken(@Header("Authorization") token: String, @Body request: UserNotificationTokenModel)
+
+    @PUT("/api/user/notification_settings")
+    suspend fun updateNotificationSettings(@Header("Authorization") token: String, @Body request: NotificationSettingsModel)
 }
