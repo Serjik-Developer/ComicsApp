@@ -14,6 +14,7 @@ import com.example.texnostrelka_2025_otbor.data.remote.exception.NotAuthorizedEx
 import com.example.texnostrelka_2025_otbor.data.remote.exception.NotFoundException
 import com.example.texnostrelka_2025_otbor.data.remote.model.user.CurrentUserInfoResponseModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.user.name.UpdateNameUserRequestModel
+import com.example.texnostrelka_2025_otbor.data.remote.model.user.notification.NotificationSettingsModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.user.notification.UserNotificationTokenModel
 import com.example.texnostrelka_2025_otbor.data.remote.model.user.password.UpdateUserPasswordRequestModel
 import com.example.texnostrelka_2025_otbor.data.remote.repository.NetworkRepository
@@ -167,6 +168,33 @@ class SettingsViewModel @Inject constructor(private val repository: NetworkRepos
             }
         }
     }
+
+    fun updatePushNotificationsMode(enabled: Boolean) {
+        viewModelScope.launch {
+            try {
+                val token = preferencesManager.getAuthToken()
+                if(token.isNullOrEmpty()) {
+                    _error.value = "Не авторизован."
+                    return@launch
+                }
+                repository.updateNotificationSettings(token, NotificationSettingsModel(enabled))
+            } catch (e: NotAuthorizedException) {
+                preferencesManager.clearName()
+                preferencesManager.clearAuthToken()
+                _error.value = e.message
+            } catch (e: InvalidPasswordException) {
+                _error.value = e.message
+            } catch (e: NotFoundException) {
+                _error.value = e.message
+            } catch (e: NetworkException) {
+                _error.value = "Проблемы с интернетом"
+            } catch (e: Exception) {
+                _error.value = "Неизвестная ошибка"
+                Log.e("SettingsViewModel", "Unknown error", e)
+            }
+        }
+    }
+
     fun logOut() {
         preferencesManager.clearName()
         preferencesManager.clearAuthToken()
