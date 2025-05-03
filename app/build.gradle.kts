@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.hilt.android)
     id("kotlin-parcelize")
     id("kotlin-kapt")
+    alias(libs.plugins.google.gms.google.services)
 }
 
 android {
@@ -43,6 +44,7 @@ android {
 
 dependencies {
     implementation(libs.hilt.android)
+    implementation(libs.firebase.messaging)
     kapt(libs.hilt.compiler)
     implementation(libs.hilt.navigation.compose)
 
