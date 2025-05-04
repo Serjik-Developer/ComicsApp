@@ -53,6 +53,9 @@ class SettingsActivity : AppCompatActivity() {
         binding.cardChangeName.setOnClickListener {
             showChangeNameDialog()
         }
+        binding.switchNotifications.setOnCheckedChangeListener { compoundButton, isChecked ->
+            viewModel.updatePushNotificationsMode(isChecked)
+        }
         viewModel.error.observe(this) { error ->
             error?.let {
                 if (it == "Не авторизован.") {
@@ -82,6 +85,7 @@ class SettingsActivity : AppCompatActivity() {
             } ?: run {
                 binding.imageViewAvatarSettings.setImageResource(R.drawable.ic_avatar_placeholder)
             }
+            binding.switchNotifications.isEnabled = userInfo.isEnebledNotifications
         }
         viewModel.changeSuccess.observe(this) { isSuccess ->
             if(isSuccess) {

@@ -4,5 +4,6 @@ data class CurrentUserInfoResponseModel(
     val id: String,
     val login: String,
     val name: String,
-    val avatar: String? = null
+    val avatar: String? = null,
+    val isEnebledNotifications: Boolean
 )
