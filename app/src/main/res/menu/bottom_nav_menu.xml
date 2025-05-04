@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/nav_main"
         android:icon="@drawable/ic_local"
@@ -14,4 +15,13 @@
         android:id="@+id/nav_view_network"
         android:icon="@drawable/ic_global"
         android:title="Просмотр всех комиксов" />
+    <item
+        android:id="@+id/nav_view_favorite"
+        android:icon="@drawable/ic_favorite"
+        android:title="Избранное" />
+    <item
+        android:id="@+id/nav_settings"
+        android:icon="@drawable/ic_settings"
+        android:title="Настройки"
+        app:showAsAction="never" />
 </menu>
