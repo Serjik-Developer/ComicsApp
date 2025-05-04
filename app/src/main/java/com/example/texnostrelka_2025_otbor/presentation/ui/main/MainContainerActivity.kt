@@ -13,6 +13,7 @@ import com.example.texnostrelka_2025_otbor.presentation.ui.infocomic.InfoComicAc
 import com.example.texnostrelka_2025_otbor.presentation.ui.main.fragments.MainComicsFragment
 import com.example.texnostrelka_2025_otbor.presentation.ui.main.fragments.MyComicsNetworkFragment
 import com.example.texnostrelka_2025_otbor.presentation.ui.main.fragments.ViewNetworkFragment
+import com.example.texnostrelka_2025_otbor.presentation.ui.settings.SettingsActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -26,9 +27,6 @@ class MainContainerActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setupBottomNavigation()
-        binding.FavoriteComicsBtn.setOnClickListener {
-            loadViewNetworkFragment(true)
-        }
         if (savedInstanceState == null) {
             binding.bottomNav.selectedItemId = R.id.nav_main
         }
@@ -47,6 +45,14 @@ class MainContainerActivity : AppCompatActivity() {
                 }
                 R.id.nav_view_network -> {
                     loadViewNetworkFragment()
+                    true
+                }
+                R.id.nav_view_favorite -> {
+                    loadViewNetworkFragment(true)
+                    true
+                }
+                R.id.nav_settings -> {
+                    startActivity(Intent(this, SettingsActivity::class.java))
                     true
                 }
                 else -> false
