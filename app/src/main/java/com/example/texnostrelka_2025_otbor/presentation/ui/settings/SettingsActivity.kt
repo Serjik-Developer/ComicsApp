@@ -8,6 +8,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.Toast
@@ -85,7 +86,7 @@ class SettingsActivity : AppCompatActivity() {
             } ?: run {
                 binding.imageViewAvatarSettings.setImageResource(R.drawable.ic_avatar_placeholder)
             }
-            binding.switchNotifications.isEnabled = userInfo.isEnebledNotifications
+            binding.switchNotifications.isChecked = userInfo.isEnebledNotifications
         }
         viewModel.changeSuccess.observe(this) { isSuccess ->
             if(isSuccess) {
