@@ -23,7 +23,7 @@ class EditPageAdapter(
         Log.d("ADAPTER", "Creating ViewHolder")
         val itemView = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_edit_image, parent, false)
-        return EditPageViewHolder(itemView, listener, parent.context)
+        return EditPageViewHolder(itemView, listener)
     }
 
     override fun onBindViewHolder(holder: EditPageViewHolder, position: Int) {
@@ -45,8 +45,7 @@ class EditPageAdapter(
 
     inner class EditPageViewHolder(
         itemView: View,
-        private val listener: OnItemEditPageNetworkClickListener,
-        private val context: Context
+        private val listener: OnItemEditPageNetworkClickListener
     ) : RecyclerView.ViewHolder(itemView) {
         private val recyclerView = itemView.findViewById<RecyclerView>(R.id.editImageRecyclerView)
 
@@ -56,7 +55,6 @@ class EditPageAdapter(
             Log.w("DATA-ADAPTER", "Images count: ${imageList.size}, Columns: ${page.columns}")
 
             recyclerView.apply {
-                // Ensure columns > 0
                 val columns = if (page.columns > 0) page.columns else 1
                 val rows = if (page.rows > 0) page.rows else 1
                 layoutManager = GridLayoutManager(context, columns)
