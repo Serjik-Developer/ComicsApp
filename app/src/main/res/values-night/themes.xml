@@ -1,6 +1,6 @@
 <!-- themes.xml (night) -->
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <style name="Base.Theme.Texnostrelka2025otbor" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Theme.Texnostrelka2025otbor" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Primary brand color -->
         <item name="colorPrimary">@color/purple_500_night</item>
         <item name="colorPrimaryContainer">@color/purple_700</item>
@@ -11,15 +11,22 @@
         <item name="colorOnSurfaceVariant">@color/on_surface_variant_night</item>
         <item name="colorError">@color/error_night</item>
         <item name="colorOnError">@color/white</item>
+        <item name="cardStrokeColor">@color/card_stroke</item>
         <item name="cardViewStyle">@style/CardView.Dark</item>
         <item name="android:statusBarColor">?attr/colorSurface</item>
         <item name="android:navigationBarColor">?attr/colorSurface</item>
         <item name="android:windowLightStatusBar">false</item>
         <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">false</item>
     </style>
-
+    <style name="Theme.Texnostrelka2025otbor.Dark">
+        ...
+        <item name="cardStrokeColor">@color/card_stroke_night</item>
+        <item name="colorError">@color/error_night</item>
+        <item name="colorOnSurfaceVariant">@color/on_surface_variant_night</item>
+        ...
+    </style>
     <style name="CardView.Dark" parent="Widget.MaterialComponents.CardView">
-        <item name="strokeColor">@color/card_stroke_night</item>
+        <item name="cardStrokeColor">@color/card_stroke_night</item>
         <item name="strokeWidth">1dp</item>
         <item name="cardBackgroundColor">@color/surface_variant_night</item>
     </style>

@@ -15,6 +15,7 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import com.example.texnostrelka_2025_otbor.R
 import com.example.texnostrelka_2025_otbor.databinding.ActivitySettingsBinding
 import com.example.texnostrelka_2025_otbor.presentation.ui.auth.AuthContainerActivity
@@ -56,6 +57,13 @@ class SettingsActivity : AppCompatActivity() {
         }
         binding.switchNotifications.setOnCheckedChangeListener { compoundButton, isChecked ->
             viewModel.updatePushNotificationsMode(isChecked)
+        }
+        binding.switchDarkTheme.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            }
         }
         viewModel.error.observe(this) { error ->
             error?.let {
