@@ -24,6 +24,7 @@ class UserInfoActivity : AppCompatActivity(), OnItemComicsListener {
     private lateinit var binding: ActivityInfoUserBinding
     private val viewModel: UserInfoViewModel by viewModels()
     private var userId: String = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityInfoUserBinding.inflate(layoutInflater)
