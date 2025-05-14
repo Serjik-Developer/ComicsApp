@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.texnostrelka_2025_otbor.R
+import com.example.texnostrelka_2025_otbor.databinding.ActivityEditBinding
 import com.example.texnostrelka_2025_otbor.databinding.ActivityEditNetworkBinding
 import com.example.texnostrelka_2025_otbor.presentation.adapter.EditNetworkAdapter
 import com.example.texnostrelka_2025_otbor.presentation.listener.OnItemClickListener
@@ -27,19 +28,19 @@ import dagger.hilt.android.AndroidEntryPoint
 class EditNetworkActivity: AppCompatActivity(), OnItemClickListener {
     private lateinit var adapter: EditNetworkAdapter
     private val viewModel: EditNetworkViewModel by viewModels ()
-    private lateinit var binding: ActivityEditNetworkBinding
+    private lateinit var binding: ActivityEditBinding
     private var comicsId: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        binding = ActivityEditNetworkBinding.inflate(layoutInflater)
+        binding = ActivityEditBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         comicsId = intent.getStringExtra("COMICS-ID") ?: throw IllegalArgumentException("comicsId is required")
         adapter = EditNetworkAdapter(mutableListOf(), this, this)
-        binding.buttonAddNetworkPage.setOnClickListener {
+        binding.button.setOnClickListener {
             showAddPageDialog()
         }
-        binding.backButtonMainNetwork.setOnClickListener {
+        binding.backButtonMain.setOnClickListener {
             startActivity(Intent(this, MainContainerActivity::class.java))
         }
         viewModel.refreshTrigger.observe(this, Observer { shouldRefresh ->
@@ -48,14 +49,14 @@ class EditNetworkActivity: AppCompatActivity(), OnItemClickListener {
                 viewModel.resetRefreshTrigger()
             }
         })
-        binding.RecyclerViewNetworkPages.layoutManager = LinearLayoutManager(this)
-        binding.RecyclerViewNetworkPages.adapter = adapter
+        binding.RecyclerViewPages.layoutManager = LinearLayoutManager(this)
+        binding.RecyclerViewPages.adapter = adapter
         viewModel.pages.observe(this, Observer { pages ->
             adapter.updateData(pages)
         })
         viewModel.error.observe(this, Observer{ error ->
             error?.let{
-                if(it.toString() == "Не авторизован.") {
+                if(it == "Не авторизован.") {
                     Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
                     startActivity(Intent(this, AuthContainerActivity::class.java))
                 }
