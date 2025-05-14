@@ -1,31 +1,60 @@
 <!-- themes.xml (night) -->
 <resources xmlns:tools="http://schemas.android.com/tools">
     <style name="Theme.Texnostrelka2025otbor" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Primary brand color -->
-        <item name="colorPrimary">@color/purple_500_night</item>
-        <item name="colorPrimaryContainer">@color/purple_700</item>
-        <item name="colorOnPrimary">@color/white</item>
+        <!-- Primary colors -->
+        <item name="colorPrimary">@color/primary_500_night</item>
+        <item name="colorPrimaryContainer">@color/primary_container_night</item>
+        <item name="colorOnPrimary">@color/black</item>
+
+        <!-- Surface colors -->
         <item name="colorSurface">@color/surface_night</item>
         <item name="colorOnSurface">@color/on_surface_night</item>
         <item name="colorSurfaceVariant">@color/surface_variant_night</item>
         <item name="colorOnSurfaceVariant">@color/on_surface_variant_night</item>
+        <item name="colorSurfaceContainer">@color/surface_container_night</item>
+
+        <!-- Outline -->
+        <item name="colorOutline">@color/outline_night</item>
+
+        <!-- Error colors -->
         <item name="colorError">@color/error_night</item>
-        <item name="colorOnError">@color/white</item>
-        <item name="cardStrokeColor">@color/card_stroke</item>
-        <item name="cardViewStyle">@style/CardView.Dark</item>
+
+        <!-- Bottom Navigation -->
+        <item name="bottomNavigationViewStyle">@style/BottomNavigationViewStyle.Night</item>
+
+        <!-- System bars -->
         <item name="android:statusBarColor">?attr/colorSurface</item>
         <item name="android:navigationBarColor">?attr/colorSurface</item>
         <item name="android:windowLightStatusBar">false</item>
-        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">false</item>
+        <item name="android:windowLightNavigationBar">false</item>
+
+        <!-- CardView -->
+        <item name="cardViewStyle">@style/CardViewStyle.Night</item>
+
+        <!-- Floating Action Button -->
+        <item name="floatingActionButtonStyle">@style/FloatingActionButtonStyle.Night</item>
     </style>
-    <style name="Theme.Texnostrelka2025otbor.Dark">
-        <item name="cardStrokeColor">@color/card_stroke_night</item>
-        <item name="colorError">@color/error_night</item>
-        <item name="colorOnSurfaceVariant">@color/on_surface_variant_night</item>
+
+    <style name="BottomNavigationViewStyle.Night" parent="Widget.Material3.BottomNavigationView">
+        <item name="android:background">?attr/colorSurface</item>
+        <item name="itemIconTint">@drawable/bottom_nav_colors_night</item>
+        <item name="itemTextColor">@drawable/bottom_nav_colors_night</item>
+        <item name="itemRippleColor">?attr/colorPrimaryContainer</item>
+        <item name="android:elevation">8dp</item>
     </style>
-    <style name="CardView.Dark" parent="Widget.MaterialComponents.CardView">
-        <item name="cardStrokeColor">@color/card_stroke_night</item>
+
+    <style name="CardViewStyle.Night" parent="Widget.MaterialComponents.CardView">
+        <item name="cardBackgroundColor">?attr/colorSurfaceContainer</item>
+        <item name="strokeColor">?attr/colorOutline</item>
         <item name="strokeWidth">1dp</item>
-        <item name="cardBackgroundColor">@color/surface_variant_night</item>
+        <item name="cardElevation">4dp</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.Material3.MediumComponent</item>
+    </style>
+
+    <style name="FloatingActionButtonStyle.Night" parent="Widget.Material3.FloatingActionButton">
+        <item name="backgroundTint">?attr/colorPrimary</item>
+        <item name="tint">?attr/colorOnPrimary</item>
+        <item name="elevation">6dp</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.Material3.LargeComponent</item>
     </style>
 </resources>
