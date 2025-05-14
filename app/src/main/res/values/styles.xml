@@ -14,7 +14,20 @@
         <item name="android:textSize">14sp</item>
         <item name="android:textAllCaps">false</item>
     </style>
+    <style name="ShapeAppearance.Material3.SmallComponent" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">4dp</item>
+    </style>
 
+    <style name="ShapeAppearance.Material3.MediumComponent" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">8dp</item>
+    </style>
+
+    <style name="ShapeAppearance.Material3.LargeComponent" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">12dp</item>
+    </style>
     <!-- Диалог -->
     <style name="MaterialAlertDialog_Rounded" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
         <item name="cornerFamily">rounded</item>
