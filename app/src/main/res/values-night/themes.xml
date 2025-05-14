@@ -30,9 +30,6 @@
 
         <!-- CardView -->
         <item name="cardViewStyle">@style/CardViewStyle.Night</item>
-
-        <!-- Floating Action Button -->
-        <item name="floatingActionButtonStyle">@style/FloatingActionButtonStyle.Night</item>
     </style>
 
     <style name="BottomNavigationViewStyle.Night" parent="Widget.Material3.BottomNavigationView">
@@ -51,10 +48,4 @@
         <item name="shapeAppearance">@style/ShapeAppearance.Material3.MediumComponent</item>
     </style>
 
-    <style name="FloatingActionButtonStyle.Night" parent="Widget.Material3.FloatingActionButton">
-        <item name="backgroundTint">?attr/colorPrimary</item>
-        <item name="tint">?attr/colorOnPrimary</item>
-        <item name="elevation">6dp</item>
-        <item name="shapeAppearance">@style/ShapeAppearance.Material3.LargeComponent</item>
-    </style>
 </resources>

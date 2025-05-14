@@ -47,20 +47,16 @@
         <item name="android:paddingEnd">16dp</item>
     </style>
 
-    <!-- Кнопки -->
-    <style name="ModernButtonStyle" parent="Widget.MaterialComponents.Button">
-        <item name="cornerRadius">12dp</item>
+    <style name="ModernButtonStyle" parent="Widget.Material3.Button">
+        <item name="cornerRadius">16dp</item>
         <item name="android:elevation">2dp</item>
         <item name="android:paddingStart">12dp</item>
         <item name="android:paddingEnd">12dp</item>
-        <item name="android:textColor">?attr/colorOnSurface</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
         <item name="backgroundTint">?attr/colorPrimary</item>
+        <item name="iconTint">?attr/colorOnPrimary</item>
         <item name="android:minWidth">0dp</item>
         <item name="android:minHeight">36dp</item>
-        <item name="android:insetTop">0dp</item>
-        <item name="android:insetBottom">0dp</item>
-        <item name="iconSize">20dp</item>
-        <item name="iconPadding">4dp</item>
     </style>
 
     <style name="ErrorButtonStyle" parent="Widget.MaterialComponents.Button">
@@ -92,13 +88,11 @@
         <item name="android:stateListAnimator">@null</item>
     </style>
 
-    <style name="FloatingActionButtonStyle" parent="Widget.MaterialComponents.FloatingActionButton">
-        <item name="backgroundTint">?attr/colorSurface</item>
-        <item name="tint">?attr/colorOnSurface</item>
-        <item name="elevation">6dp</item>
-        <item name="android:elevation">6dp</item>
-        <item name="pressedTranslationZ">4dp</item>
-        <item name="shapeAppearance">@style/ShapeAppearance.MaterialComponents.SmallComponent</item>
+    <style name="FloatingActionButtonStyle" parent="Widget.Material3.FloatingActionButton">
+        <item name="backgroundTint">?attr/colorPrimary</item>
+        <item name="tint">?attr/colorOnPrimary</item>
+        <item name="elevation">8dp</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.Material3.LargeComponent</item>
     </style>
 
     <style name="StrokeWidthSeekBar">
