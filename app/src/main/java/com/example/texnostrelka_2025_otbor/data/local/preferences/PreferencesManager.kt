@@ -27,4 +27,10 @@ class PreferencesManager(context: Context) {
     fun savePendingFcmToken(token: String) {
         sharedPreferences.edit().putString("fcm_token", token).apply()
     }
+    fun saveApplicationTheme(isNight: Boolean) {
+        sharedPreferences.edit().putBoolean("day_theme", isNight).apply()
+    }
+    fun getApplicationTheme() : Boolean {
+        return sharedPreferences.getBoolean("day_theme", false)
+    }
 }

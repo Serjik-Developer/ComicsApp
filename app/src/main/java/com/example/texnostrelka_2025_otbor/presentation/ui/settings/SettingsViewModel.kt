@@ -34,6 +34,8 @@ class SettingsViewModel @Inject constructor(private val repository: NetworkRepos
     val deleteAvatarSuccess : LiveData<Boolean> get() = _deleteAvatarSuccess
     private val _changeSuccess = MutableLiveData<Boolean>()
     val changeSuccess : LiveData<Boolean> get() = _changeSuccess
+    private val _isNightTheme = MutableLiveData<Boolean>()
+    val isNigthTheme : LiveData<Boolean> get() = _isNightTheme
     fun fetchUserData() {
         viewModelScope.launch {
             try {
@@ -199,6 +201,14 @@ class SettingsViewModel @Inject constructor(private val repository: NetworkRepos
         preferencesManager.clearName()
         preferencesManager.clearAuthToken()
         _error.value = "Не авторизован."
+    }
+
+    fun changeTheme(isNightTheme: Boolean) {
+        preferencesManager.saveApplicationTheme(isNightTheme)
+    }
+
+    fun getTheme() {
+        _isNightTheme.value = preferencesManager.getApplicationTheme()
     }
 
     fun resetDeleteAvatarSuccess() {

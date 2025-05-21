@@ -59,6 +59,7 @@ class SettingsActivity : AppCompatActivity() {
             viewModel.updatePushNotificationsMode(isChecked)
         }
         binding.switchDarkTheme.setOnCheckedChangeListener { _, isChecked ->
+            viewModel.changeTheme(isChecked)
             if (isChecked) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
             } else {
@@ -102,7 +103,11 @@ class SettingsActivity : AppCompatActivity() {
                 viewModel.resetChangeSuccess()
             }
         }
+        viewModel.isNigthTheme.observe(this) { isNightTheme ->
+            binding.switchDarkTheme.isChecked = isNightTheme
+        }
         viewModel.fetchUserData()
+        viewModel.getTheme()
     }
 
     private fun showChangeNameDialog() {
