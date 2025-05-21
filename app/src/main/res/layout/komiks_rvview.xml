@@ -4,11 +4,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="120dp"
+    android:layout_height="150dp"
     android:layout_margin="8dp"
-    app:cardBackgroundColor="?attr/colorSurfaceVariant"
+    app:cardBackgroundColor="?attr/colorSurfaceContainer"
     app:cardCornerRadius="12dp"
-    app:cardElevation="6dp"
+    app:cardElevation="2dp"
     app:strokeColor="?attr/colorOutline"
     app:strokeWidth="1dp">
 
@@ -17,16 +17,20 @@
         android:layout_height="match_parent"
         android:padding="8dp">
 
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/imageView"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
+            android:scaleType="centerCrop"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.SmallComponent"
+            app:strokeColor="?attr/colorOutline"
+            app:strokeWidth="1dp"
             tools:srcCompat="@tools:sample/avatars" />
 
         <TextView
@@ -40,6 +44,8 @@
             android:textColor="?attr/colorOnSurface"
             android:textSize="18sp"
             android:textStyle="bold"
+            android:ellipsize="end"
+            android:maxLines="1"
             app:layout_constraintEnd_toStartOf="@+id/delete_comics_btn"
             app:layout_constraintStart_toEndOf="@+id/imageView"
             app:layout_constraintTop_toTopOf="parent" />
@@ -49,48 +55,66 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:text="ОПИСАНИЕ"
             android:textColor="?attr/colorOnSurfaceVariant"
             android:textSize="14sp"
+            android:ellipsize="end"
+            android:maxLines="2"
             app:layout_constraintEnd_toStartOf="@+id/edit_comics_btn"
             app:layout_constraintStart_toEndOf="@+id/imageView"
             app:layout_constraintTop_toBottomOf="@+id/komiks_name" />
 
-        <ImageButton
-            android:id="@+id/delete_comics_btn"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
             android:layout_marginEnd="8dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            app:tint="?attr/selectableItemBackgroundBorderless"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@android:drawable/ic_menu_delete" />
+            app:layout_constraintBottom_toBottomOf="parent">
 
-        <ImageButton
-            android:id="@+id/edit_comics_btn"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            app:tint="?attr/selectableItemBackgroundBorderless"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/delete_comics_btn"
-            app:srcCompat="@android:drawable/ic_menu_edit" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/delete_comics_btn"
+                style="@style/IconButtonStyle"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginBottom="4dp"
+                android:contentDescription="Удалить комикс"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                app:backgroundTint="?attr/colorSurfaceContainerHigh"
+                app:icon="@android:drawable/ic_menu_delete"
+                app:iconSize="20dp"
+                app:iconTint="?attr/colorOnSurfaceVariant" />
 
-        <ImageButton
-            android:id="@+id/upload_comics_btn"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            app:tint="?attr/selectableItemBackgroundBorderless"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edit_comics_btn"
-            app:srcCompat="@android:drawable/ic_menu_send" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/edit_comics_btn"
+                style="@style/IconButtonStyle"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginBottom="4dp"
+                android:contentDescription="Редактировать комикс"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                app:backgroundTint="?attr/colorSurfaceContainerHigh"
+                app:icon="@android:drawable/ic_menu_edit"
+                app:iconSize="20dp"
+                app:iconTint="?attr/colorOnSurfaceVariant" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/upload_comics_btn"
+                style="@style/IconButtonStyle"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:contentDescription="Загрузить комикс"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                app:backgroundTint="?attr/colorSurfaceContainerHigh"
+                app:icon="@android:drawable/ic_menu_send"
+                app:iconSize="20dp"
+                app:iconTint="?attr/colorOnSurfaceVariant" />
+        </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

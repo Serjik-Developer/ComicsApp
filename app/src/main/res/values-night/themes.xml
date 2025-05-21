@@ -19,14 +19,12 @@
         <!-- Error colors -->
         <item name="colorError">@color/error_night</item>
 
-        <!-- Bottom Navigation -->
-        <item name="bottomNavigationViewStyle">@style/BottomNavigationViewStyle.Night</item>
+
 
         <!-- System bars -->
         <item name="android:statusBarColor">?attr/colorSurface</item>
         <item name="android:navigationBarColor">?attr/colorSurface</item>
         <item name="android:windowLightStatusBar">false</item>
-        <item name="android:windowLightNavigationBar">false</item>
 
         <!-- CardView -->
         <item name="cardViewStyle">@style/CardViewStyle.Night</item>

@@ -70,7 +70,7 @@
     </style>
 
     <!-- Карточки -->
-    <style name="CardViewStyle" parent="Widget.MaterialComponents.CardView">
+    <style name="CardViewStyle">
         <item name="strokeWidth">1dp</item>
         <item name="cardBackgroundColor">?attr/colorSurfaceVariant</item>
         <item name="cardElevation">2dp</item>
@@ -88,7 +88,13 @@
         <item name="android:stateListAnimator">@null</item>
     </style>
 
-    <style name="FloatingActionButtonStyle" parent="Widget.Material3.FloatingActionButton">
+
+    <style name="RecyclerViewStyle">
+        <item name="android:background">?attr/colorSurfaceVariant</item>
+        <item name="android:clipToPadding">false</item>
+        <item name="android:padding">8dp</item>
+    </style>
+    <style name="FloatingActionButtonStyle">
         <item name="backgroundTint">?attr/colorPrimary</item>
         <item name="tint">?attr/colorOnPrimary</item>
         <item name="elevation">8dp</item>
@@ -108,13 +114,18 @@
         <item name="android:padding">8dp</item>
     </style>
 
-    <style name="IconButtonStyle">
-        <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
-        <item name="android:tint">?attr/colorOnSurface</item>
-        <item name="android:scaleType">centerInside</item>
-        <item name="android:padding">12dp</item>
-    </style>
 
+    <!-- Добавьте в styles.xml -->
+    <style name="IconButtonStyle">
+        <item name="android:minWidth">0dp</item>
+        <item name="android:minHeight">0dp</item>
+        <item name="android:padding">8dp</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.Material3.SmallComponent</item>
+        <item name="backgroundTint">?attr/colorSurfaceContainerHigh</item>
+        <item name="rippleColor">?attr/colorPrimaryContainer</item>
+        <item name="android:elevation">1dp</item>
+        <item name="android:stateListAnimator">@null</item>
+    </style>
     <style name="TextAppearance.Body2" parent="TextAppearance.Material3.BodyMedium">
         <item name="android:textColor">?attr/colorOnSurfaceVariant</item>
         <item name="android:textSize">14sp</item>

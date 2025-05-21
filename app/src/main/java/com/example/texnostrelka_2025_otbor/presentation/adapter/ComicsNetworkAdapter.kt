@@ -13,6 +13,7 @@ import com.example.texnostrelka_2025_otbor.presentation.listener.OnItemClickList
 import com.example.texnostrelka_2025_otbor.data.remote.model.comic.ComicsCoverNetworkModel
 import com.example.texnostrelka_2025_otbor.presentation.listener.OnItemComicsListener
 import com.example.texnostrelka_2025_otbor.presentation.utils.base64ToBitmap
+import com.google.android.material.button.MaterialButton
 
 class ComicsNetworkAdapter(private var comics: MutableList<ComicsCoverNetworkModel>, private val listener: OnItemComicsListener, private val isMyComics: Boolean = false) : RecyclerView.Adapter<ComicsNetworkAdapter.ComiksViewHolder>() {
 
@@ -20,9 +21,9 @@ class ComicsNetworkAdapter(private var comics: MutableList<ComicsCoverNetworkMod
         val textView: TextView = itemView.findViewById(R.id.comics_network_name)
         val textViewDesc: TextView = itemView.findViewById(R.id.comics_network_description)
         val imageView: ImageView = itemView.findViewById(R.id.imageViewComics)
-        private val deleteBtn: ImageButton = itemView.findViewById(R.id.delete_network_comics_btn)
-        private val editBtn: ImageButton = itemView.findViewById(R.id.edit_netwotk_comics_btn)
-        private val downloadBtn: ImageButton = itemView.findViewById(R.id.download_comics_btn)
+        private val deleteBtn: MaterialButton = itemView.findViewById(R.id.delete_network_comics_btn)
+        private val editBtn: MaterialButton = itemView.findViewById(R.id.edit_netwotk_comics_btn)
+        private val downloadBtn: MaterialButton = itemView.findViewById(R.id.download_comics_btn)
         init {
             if (isMyComics) {
                 downloadBtn.setOnClickListener {

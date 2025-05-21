@@ -13,13 +13,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.texnostrelka_2025_otbor.R
-import com.example.texnostrelka_2025_otbor.data.local.database.ComicsDatabase
-import com.example.texnostrelka_2025_otbor.data.local.preferences.PreferencesManager
-import com.example.texnostrelka_2025_otbor.data.remote.repository.NetworkRepository
-import com.example.texnostrelka_2025_otbor.databinding.FragmentMyComicsBinding
-import com.example.texnostrelka_2025_otbor.domain.repository.ComicsRepository
+import com.example.texnostrelka_2025_otbor.databinding.FragmentMainComicsBinding
 import com.example.texnostrelka_2025_otbor.presentation.adapter.ComicsNetworkAdapter
-import com.example.texnostrelka_2025_otbor.presentation.listener.OnItemClickListener
 import com.example.texnostrelka_2025_otbor.presentation.listener.OnItemComicsListener
 import com.example.texnostrelka_2025_otbor.presentation.ui.auth.AuthContainerActivity
 import com.example.texnostrelka_2025_otbor.presentation.ui.editnetwork.EditNetworkActivity
@@ -31,7 +26,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MyComicsNetworkFragment : Fragment(), OnItemComicsListener {
-    private var _binding : FragmentMyComicsBinding? = null
+    private var _binding : FragmentMainComicsBinding? = null
     private val binding get() = _binding!!
     private val viewModel: MyComicsViewModel by activityViewModels()
     private lateinit var comicsNetworkAdapter: ComicsNetworkAdapter
@@ -41,7 +36,7 @@ class MyComicsNetworkFragment : Fragment(), OnItemComicsListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentMyComicsBinding.inflate(inflater, container, false)
+        _binding = FragmentMainComicsBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -49,12 +44,12 @@ class MyComicsNetworkFragment : Fragment(), OnItemComicsListener {
         super.onViewCreated(view, savedInstanceState)
 
         comicsNetworkAdapter = ComicsNetworkAdapter(mutableListOf(), this, true)
-        binding.RecyclerViewMyComics.layoutManager = LinearLayoutManager(requireContext())
-        binding.RecyclerViewMyComics.adapter = comicsNetworkAdapter
+        binding.rvKomiks.layoutManager = LinearLayoutManager(requireContext())
+        binding.rvKomiks.adapter = comicsNetworkAdapter
         viewModel.comics.observe(viewLifecycleOwner) {comics ->
             comicsNetworkAdapter.updateData(comics)
         }
-        binding.btnAddNewComicsNetwork.setOnClickListener {
+        binding.btnNew.setOnClickListener {
             showAddComicsDialog()
         }
         viewModel.error.observe(viewLifecycleOwner) { error ->

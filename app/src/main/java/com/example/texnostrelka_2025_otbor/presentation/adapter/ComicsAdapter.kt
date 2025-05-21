@@ -11,16 +11,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.texnostrelka_2025_otbor.R
 import com.example.texnostrelka_2025_otbor.presentation.listener.OnItemClickListener
 import com.example.texnostrelka_2025_otbor.data.model.ComicsModel
+import com.google.android.material.button.MaterialButton
 
 class ComicsAdapter(private var comics: MutableList<ComicsModel>, private val listener: OnItemClickListener) : RecyclerView.Adapter<ComicsAdapter.ComiksViewHolder>() {
 
     inner class ComiksViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val textView: TextView = itemView.findViewById(R.id.komiks_name)
         val textViewDesc: TextView = itemView.findViewById(R.id.komiks_description)
-        val delete_btn: ImageButton = itemView.findViewById(R.id.delete_comics_btn)
-        val edit_btn: ImageButton = itemView.findViewById(R.id.edit_comics_btn)
+        val delete_btn: MaterialButton = itemView.findViewById(R.id.delete_comics_btn)
+        val edit_btn: MaterialButton = itemView.findViewById(R.id.edit_comics_btn)
         val imageView: ImageView = itemView.findViewById(R.id.imageView)
-        val uploadButton: ImageButton = itemView.findViewById(R.id.upload_comics_btn)
+        val uploadButton: MaterialButton = itemView.findViewById(R.id.upload_comics_btn)
         init {
             itemView.setOnClickListener {
                 val position = adapterPosition
