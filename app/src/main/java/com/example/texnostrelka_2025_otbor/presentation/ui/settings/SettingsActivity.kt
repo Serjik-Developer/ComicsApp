@@ -115,8 +115,8 @@ class SettingsActivity : AppCompatActivity() {
             setPadding(50, 20, 50, 20)
             addView(inputNewName)
         }
-        val dialog = MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialog_Rounded)
-            .setTitle("Обновить пароль")
+        val dialog = MaterialAlertDialogBuilder(this)
+            .setTitle("Сменить имя")
             .setView(container)
             .setPositiveButton("Сохранить") { _, _ ->
                 val newName = inputNewName.text.toString()
@@ -152,7 +152,7 @@ class SettingsActivity : AppCompatActivity() {
             addView(inputCurrentPassword)
             addView(inputNewPassword)
         }
-        val dialog = MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialog_Rounded)
+        val dialog = MaterialAlertDialogBuilder(this)
             .setTitle("Обновить пароль")
             .setView(container)
             .setPositiveButton("Сохранить") { _, _ ->

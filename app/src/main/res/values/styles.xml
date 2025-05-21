@@ -28,25 +28,13 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">12dp</item>
     </style>
-    <!-- Диалог -->
-    <style name="MaterialAlertDialog_Rounded" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
-        <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">16dp</item>
-        <item name="colorSurface">?attr/colorSurface</item>
-        <item name="colorOnSurface">?attr/colorOnSurface</item>
-        <item name="colorPrimary">?attr/colorPrimary</item>
-        <item name="colorOnPrimary">?attr/colorOnPrimary</item>
-        <item name="buttonBarPositiveButtonStyle">@style/DialogButtonStyle</item>
-        <item name="buttonBarNegativeButtonStyle">@style/DialogButtonStyle</item>
-    </style>
 
-    <style name="DialogButtonStyle" parent="Widget.MaterialComponents.Button.TextButton">
+    <style name="DialogButtonStyle" parent="Widget.Material3.Button.TextButton">
         <item name="android:textColor">?attr/colorPrimary</item>
         <item name="android:textSize">14sp</item>
         <item name="android:paddingStart">16dp</item>
         <item name="android:paddingEnd">16dp</item>
     </style>
-
     <style name="ModernButtonStyle" parent="Widget.Material3.Button">
         <item name="cornerRadius">16dp</item>
         <item name="android:elevation">2dp</item>

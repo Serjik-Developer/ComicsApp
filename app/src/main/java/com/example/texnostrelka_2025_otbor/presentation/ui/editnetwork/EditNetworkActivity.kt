@@ -82,7 +82,7 @@ class EditNetworkActivity: AppCompatActivity(), OnItemClickListener {
             hint = "Введите количество ячеек в ширину"
         }
 
-        MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialog_Rounded)
+        MaterialAlertDialogBuilder(this)
             .setTitle("Создать страницу")
             .setView(LinearLayout(this).apply {
                 orientation = LinearLayout.VERTICAL

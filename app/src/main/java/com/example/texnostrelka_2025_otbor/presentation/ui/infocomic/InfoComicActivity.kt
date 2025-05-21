@@ -58,14 +58,14 @@ class InfoComicActivity : AppCompatActivity(), OnItemCommentClickListener {
             }
             binding.likesCount.text = comics.likesCount.toString()
             if (comics.userLiked) {
-                binding.likeButton.setImageResource(R.drawable.ic_like_red)
+                binding.likeButton.setIconResource(R.drawable.ic_like_red)
             } else {
-                binding.likeButton.setImageResource(R.drawable.ic_like)
+                binding.likeButton.setIconResource(R.drawable.ic_like)
             }
             if (comics.userFavorited) {
-                binding.favoriteButton.setImageResource(R.drawable.ic_favorite_yellow)
+                binding.favoriteButton.setIconResource(R.drawable.ic_favorite_yellow)
             } else {
-                binding.favoriteButton.setImageResource(R.drawable.ic_favorite)
+                binding.favoriteButton.setIconResource(R.drawable.ic_favorite)
             }
         }
         viewModel.error.observe(this) { error ->
@@ -84,16 +84,16 @@ class InfoComicActivity : AppCompatActivity(), OnItemCommentClickListener {
             }
         }
         viewModel.isFavorite.observe(this) { isFavorite ->
-            if (isFavorite) binding.favoriteButton.setImageResource(R.drawable.ic_favorite_yellow)
-            else binding.favoriteButton.setImageResource(R.drawable.ic_favorite)
+            if (isFavorite) binding.favoriteButton.setIconResource(R.drawable.ic_favorite_yellow)
+            else binding.favoriteButton.setIconResource(R.drawable.ic_favorite)
         }
         viewModel.isLiked.observe(this) { isLiked ->
             if(isLiked) {
-                binding.likeButton.setImageResource(R.drawable.ic_like_red)
+                binding.likeButton.setIconResource(R.drawable.ic_like_red)
                 binding.likesCount.text = "${binding.likesCount.text.toString().toInt() + 1}"
             }
             else {
-                binding.likeButton.setImageResource(R.drawable.ic_like)
+                binding.likeButton.setIconResource(R.drawable.ic_like)
                 binding.likesCount.text = "${binding.likesCount.text.toString().toInt() - 1}"
             }
         }
@@ -126,7 +126,7 @@ class InfoComicActivity : AppCompatActivity(), OnItemCommentClickListener {
             hint = "Введите текст комментария"
         }
 
-        MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialog_Rounded)
+        MaterialAlertDialogBuilder(this)
             .setTitle("Добавить комментарий")
             .setView(LinearLayout(this).apply {
                 orientation = LinearLayout.VERTICAL

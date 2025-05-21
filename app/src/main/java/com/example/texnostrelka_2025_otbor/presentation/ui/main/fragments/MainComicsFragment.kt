@@ -93,7 +93,7 @@ class MainComicsFragment : Fragment(), OnItemClickListener {
         }
 
 // Создаем Material диалог
-        val dialog = MaterialAlertDialogBuilder(requireContext(), R.style.MaterialAlertDialog_Rounded)
+        val dialog = MaterialAlertDialogBuilder(requireContext())
             .setTitle("Добавить комикс")
             .setView(container) // Передаем контейнер с EditText
             .setPositiveButton("Сохранить") { _, _ ->

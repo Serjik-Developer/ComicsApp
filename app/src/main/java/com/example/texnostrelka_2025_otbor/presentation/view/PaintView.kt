@@ -547,7 +547,7 @@ class PaintView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
         }
 
         // Создаем Material диалог
-        val dialog = MaterialAlertDialogBuilder(context, R.style.MaterialAlertDialog_Rounded)
+        val dialog = MaterialAlertDialogBuilder(context)
             .setTitle("Редактировать текст")
             .setView(input) // Передаем EditText
             .setPositiveButton("Сохранить") { _, _ ->

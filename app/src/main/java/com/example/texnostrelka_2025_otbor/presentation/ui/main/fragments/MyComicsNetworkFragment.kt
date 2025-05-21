@@ -124,7 +124,7 @@ class MyComicsNetworkFragment : Fragment(), OnItemComicsListener {
             addView(inputName)
             addView(inputDesc)
         }
-        val dialog = MaterialAlertDialogBuilder(requireContext(), R.style.MaterialAlertDialog_Rounded)
+        val dialog = MaterialAlertDialogBuilder(requireContext())
             .setTitle("Добавить комикс")
             .setView(container)
             .setPositiveButton("Сохранить") { _, _ ->
