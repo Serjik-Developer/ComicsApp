@@ -8,4 +8,4 @@ class NotFoundException(message: String) : Exception(message) //404
 class ConflictException(message: String) : Exception(message) //409
 class ForbiddenException(message: String) : Exception(message) //403
 class TooManyRequests(message: String) : Exception(message) //429
-class InvalidPasswordException(message: String) : Exception(message)
+class InvalidPasswordException(message: String) : Exception(message) //INVALID PASSWORD
