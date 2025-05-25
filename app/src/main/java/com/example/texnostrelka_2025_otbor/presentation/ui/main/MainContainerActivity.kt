@@ -5,9 +5,11 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import com.example.texnostrelka_2025_otbor.MyFirebaseMessagingService
 import com.example.texnostrelka_2025_otbor.MyFirebaseMessagingService.Companion.COMICS_ID
 import com.example.texnostrelka_2025_otbor.R
+import com.example.texnostrelka_2025_otbor.data.local.preferences.PreferencesManager
 import com.example.texnostrelka_2025_otbor.databinding.ActivityMainContainerBinding
 import com.example.texnostrelka_2025_otbor.presentation.ui.infocomic.InfoComicActivity
 import com.example.texnostrelka_2025_otbor.presentation.ui.main.fragments.MainComicsFragment
@@ -15,11 +17,12 @@ import com.example.texnostrelka_2025_otbor.presentation.ui.main.fragments.MyComi
 import com.example.texnostrelka_2025_otbor.presentation.ui.main.fragments.ViewNetworkFragment
 import com.example.texnostrelka_2025_otbor.presentation.ui.settings.SettingsActivity
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainContainerActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainContainerBinding
-
+    @Inject lateinit var preferencesManager: PreferencesManager
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         handleIncomingIntent(intent)
@@ -29,6 +32,11 @@ class MainContainerActivity : AppCompatActivity() {
         setupBottomNavigation()
         if (savedInstanceState == null) {
             binding.bottomNav.selectedItemId = R.id.nav_main
+        }
+        if (preferencesManager.getApplicationTheme()) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         }
     }
 
